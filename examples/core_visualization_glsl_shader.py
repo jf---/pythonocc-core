@@ -17,43 +17,62 @@
 
 #-------------------------------------------------------------------------------
 # Example for attaching GLSL shaders to shapes
+# GLSL stands for OpenGL Shader Language
+# Find out more about GLSL here: http://www.lighthouse3d.com/opengl/glsl/
 #-------------------------------------------------------------------------------
 
-import os
+import os, glob
 from OCC.Display.SimpleGui import init_display
 from OCC.BRepPrimAPI import BRepPrimAPI_MakeSphere
-from OCC.Graphic3d import Graphic3d_ShaderProgram, Graphic3d_TOS_VERTEX, Graphic3d_TOS_FRAGMENT, Graphic3d_ShaderObject
+from OCC.Graphic3d import (Graphic3d_ShaderProgram, Graphic3d_TOS_VERTEX, Graphic3d_TOS_FRAGMENT,
+                           Graphic3d_ShaderObject)
 from OCC.TCollection import TCollection_AsciiString
 
 display, start_display, add_menu, add_function_to_menu = init_display()
 my_box = BRepPrimAPI_MakeSphere(20.).Shape()
 
+# render the sphere with default shading attributes ( no GLSL shader attached! )
 anIO = display.DisplayShape(my_box, update=True)
-_phong_vs = "/Users/jelleferinga/miniconda/share/oce-0.16/src/Shaders/PhongShading.vs"
-_phong_fs = "/Users/jelleferinga/miniconda/share/oce-0.16/src/Shaders/PhongShading.fs"
 
-assert os.path.isfile(_phong_fs) and os.path.isfile(_phong_vs), "missing shader programs: {0} or {1}".format(_phong_fs, _phong_vs)
+# returns the directory where OCE stores the GLSL shaders
+_shader_dir = Graphic3d_ShaderProgram.ShadersFolder()
+# convert the returned TCollection_AsciiString to a python string
+shader_dir = "".join([_shader_dir.Value(x+1) for x in range(_shader_dir.Length())])
 
+# look for the shaders stored in the shader folder...
+# only a single vertex (vs) and fragment (fs) shader for the moment
+_phong_vs = glob.glob(os.path.join(shader_dir, "*.vs"))[0] # PhongShading.vs
+_phong_fs = glob.glob(os.path.join(shader_dir, "*.fs"))[0] # PhongShading.fs
+
+# construct TCollection_AsciiString from string
 phong_fs = TCollection_AsciiString(_phong_fs)
 phong_vs = TCollection_AsciiString(_phong_vs)
 
+# construct the shader, load, compile and attach the GLSL programs
 aProgram = Graphic3d_ShaderProgram()
 aProgram.AttachShader(Graphic3d_ShaderObject.CreateFromFile(Graphic3d_TOS_FRAGMENT, phong_fs ) )
 aProgram.AttachShader(Graphic3d_ShaderObject.CreateFromFile(Graphic3d_TOS_VERTEX, phong_vs ) )
 
+# attach the shader to the AIS_Shape representation that renders the sphere
 aspect = anIO.GetObject().Attributes().GetObject().ShadingAspect().GetObject().aspect().GetObject()
-h_aProgram = aspect.ShaderProgram() # returns a Graphic3d_ShaderProgram_Handle
-
+# h_aProgram = aspect.ShaderProgram() # returns a Graphic3d_ShaderProgram_Handle
 #-------------------------------------------------------------------------------
 # h_aProgram -> Graphic3d_ShaderProgram_Handle cannot be cast to a Graphic3d_ShaderProgram
 # aProgram has not method .GetHandle...
 # aspect.SetShader requires a `Graphic3d_ShaderProgram_Handle` instance
 #-------------------------------------------------------------------------------
+sm = display.Context.MainPrsMgr().GetObject().StructureManager()
+global_shader = sm.GetObject().FillArea3dAspect().GetObject().ShaderProgram()
 
-aspect.SetShaderProgram(aspect.ShaderProgram())
+aProgram.This()
 
+# attach to a single shape
+aspect.SetShaderProgram(aProgram.This())
+
+# update the rendering attributes such that the sphere is rendered with the GLSL shader
 display.Context.Redisplay(anIO)
 # type(aspect.ShaderProgram())
 # Out[76]: SwigPyObject
 
+# start the GUI event loop
 start_display()
