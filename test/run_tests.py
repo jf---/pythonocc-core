@@ -27,6 +27,12 @@ try:
     HAVE_OCAF = True
 except:
     HAVE_OCAF = False
+try:  # SMESH unittests launched if and only if SMESH wrapper is found
+    import core_smesh_unittest
+    HAVE_SMESH = True
+except:
+    HAVE_SMESH = False
+
 # Create test suite
 import core_webgl_unittest
 import core_memory_unittest
@@ -42,6 +48,9 @@ tests = [suite0, suite1, suite2, suite3]
 if HAVE_OCAF:
     suite4 = core_ocaf_unittest.suite()
     tests.append(suite4)
+if HAVE_SMESH:
+    suite5 = core_smesh_unittest.suite()
+    tests.append(suite5)
 suite5 = core_webgl_unittest.suite()
 tests.append(suite5)
 # Add test cases
