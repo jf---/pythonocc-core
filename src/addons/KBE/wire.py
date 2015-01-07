@@ -1,5 +1,5 @@
 from OCC.KBE.base import KbeObject
-from OCC.TopoDS import TopoDS_Wire, TopoDS_wire
+from OCC.TopoDS import TopoDS_Wire
 
 
 class Wire(KbeObject, TopoDS_Wire):

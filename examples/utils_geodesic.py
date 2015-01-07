@@ -5,8 +5,8 @@ from OCC.Utils.Topology import Topo
 from OCC.Utils.Construct import geodesic_path
 display, start_display, add_menu, add_function_to_menu = init_display()
 
-directory = os.path.split(__name__)[0]
-pth = os.path.join(directory, "..", "models", "curve_geom_plate.igs")
+directory = os.path.abspath(os.path.split(__name__)[0])
+pth = os.path.join(directory, "models", "curve_geom_plate.igs")
 shape = file_to_shape(pth)
 tp = Topo(shape, True)
 

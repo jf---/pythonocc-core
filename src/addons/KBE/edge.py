@@ -3,18 +3,17 @@ from OCC.BRepAdaptor import BRepAdaptor_Curve, BRepAdaptor_HCurve
 from OCC.GCPnts import  GCPnts_UniformAbscissa
 from OCC.Geom import Geom_OffsetCurve, Geom_TrimmedCurve
 from OCC.KBE.base import KbeObject
-from OCC.TopExp import TopExp
-from OCC.TopoDS import  TopoDS_Edge, TopoDS_Vertex, TopoDS_Face
+from OCC.TopExp import topexp
+from OCC.TopoDS import  TopoDS_Edge, TopoDS_Vertex, TopoDS_Face, topods, topods_Edge
 from OCC.gp import *
 # high-level
 from OCC.Utils.Common import vertex2pnt, minimum_distance
-from OCC.Utils.Construct import make_edge, fix_continuity
+from OCC.Utils.Construct import make_edge, fix_continuity, make_line
 from OCC.Utils.Context import assert_isdone
 from OCC.KBE.vertex import Vertex
 from OCC.KBE.types_lut import geom_lut
 from OCC.GeomLProp import GeomLProp_CurveTool
 from OCC.BRepLProp import BRepLProp_CLProps
-from OCC.GeomLib import GeomLib
 from OCC.GCPnts import GCPnts_AbscissaPoint
 from OCC.GeomAPI import GeomAPI_ProjectPointOnCurve
 from OCC.ShapeAnalysis import ShapeAnalysis_Edge
@@ -160,7 +159,15 @@ class ConstructFromCurve():
         '''
         pass
 
-class Edge(KbeObject, TopoDS_Edge):
+
+line = make_line(gp_Pnt(), gp_Pnt(100,0,0))
+
+class InheritEdge(topods_Edge):
+    def __init__(self, edge):
+        super(InheritEdge, self).__init__(edge)
+
+
+class Edge(KbeObject, topods_Edge):
     '''
     '''
 
@@ -169,7 +176,7 @@ class Edge(KbeObject, TopoDS_Edge):
         '''
         assert isinstance(edge, TopoDS_Edge), 'need a TopoDS_Edge, got a %s'% edge.__class__
         KbeObject.__init__(self, 'edge')
-        TopoDS_Edge.__init__(self, edge)
+        topods_Edge.__init__(self, edge)
 
         # tracking state
         self._local_properties_init    = False

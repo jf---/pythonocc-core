@@ -19,8 +19,9 @@ Can be a module, class or namespace.
 '''
 # occ
 from OCC.BRepBuilderAPI import BRepBuilderAPI_Copy
-from OCC.BRepGProp import BRepGProp
-from OCC.BRepCheck import *
+from OCC.BRepCheck import BRepCheck_Shell, BRepCheck_Vertex, BRepCheck_Edge, BRepCheck_Wire, BRepCheck_Face, \
+    BRepCheck_Analyzer
+from OCC.BRepGProp import brepgprop
 # occ high level
 from OCC.Display.SimpleGui import init_display
 from OCC.Utils.Construct import *
@@ -30,10 +31,11 @@ from types_lut import shape_lut, topo_lut, orient_lut, state_lut, curve_lut, sur
 import functools
 
 
-#===============================================================================
+# ===============================================================================
 # DISPLAY
 #===============================================================================
 global display
+
 
 class singleton(object):
     def __init__(self, cls):
@@ -45,21 +47,23 @@ class singleton(object):
             cls = functools.partial(self.cls, *args, **kwargs)
             self.instance_container.append(cls())
         return self.instance_container[0]
-        
+
+
 @singleton
 class Display(object):
     def __init__(self):
         self.display, self.start_display, self.add_menu, self.add_function_to_menu = init_display()
+
     def __call__(self, *args, **kwargs):
         return self.display.DisplayShape(*args, **kwargs)
 
-#============
-# base class 
-#============
+    #============
+    # base class
+    #============
     """base class for all KBE objects"""
 
-class KbeObject(object):
 
+class KbeObject(object):
     def __init__(self, name=None):
         """Constructor for KbeObject"""
         self.GlobalProperties = GlobalProperties(self)
@@ -102,13 +106,16 @@ class KbeObject(object):
         """
 
         _check = dict(vertex=BRepCheck_Vertex, edge=BRepCheck_Edge, wire=BRepCheck_Wire, face=BRepCheck_Face,
-            shell=BRepCheck_Shell, solid=BRepCheck_Solid)
+                      shell=BRepCheck_Shell,
+                      # what's up? not found in pyocc-core 0.16.1
+                      # solid=BRepCheck_Solid
+        )
         _test = _check[self.topo_type]
         # TODO: BRepCheck will be able to inform *what* actually is the matter,
         # though implementing this still is a bit of work...
         raise NotImplementedError
 
-        
+
     def is_valid(self):
         analyse = BRepCheck_Analyzer(self)
         ok = analyse.IsValid()
@@ -126,7 +133,7 @@ class KbeObject(object):
         cp.Perform(self)
         # get the class, construct a new instance
         # cast the cp.Shape() to its specific TopoDS topology
-        _copy = self.__class__( shape_lut(cp.Shape()) )
+        _copy = self.__class__(shape_lut(cp.Shape()))
         return _copy
 
     def distance(self, other):
@@ -139,7 +146,7 @@ class KbeObject(object):
         '''
         return minimum_distance(self, other)
 
-    def show( self, *args, **kwargs):
+    def show(self, *args, **kwargs):
         """
         renders the topological entity in the viewer
 
@@ -158,13 +165,14 @@ class KbeObject(object):
         return self.IsEqual(other)
 
     def __ne__(self, other):
-        return not(self.__eq__(other))
+        return not (self.__eq__(other))
 
 
 class GlobalProperties(object):
     '''
     global properties for all topologies
     '''
+
     def __init__(self, instance):
         self.instance = instance
 
@@ -174,11 +182,11 @@ class GlobalProperties(object):
         # todo, type should be abstracted with TopoDS...
         _topo_type = self.instance.topo_type
         if _topo_type == 'face' or _topo_type == 'shell':
-            BRepGProp().SurfaceProperties(self.instance, self._system)
+            brepgprop.SurfaceProperties(self.instance, self._system)
         elif _topo_type == 'edge':
-            BRepGProp().LinearProperties(self.instance, self._system)
+            brepgprop.LinearProperties(self.instance, self._system)
         elif _topo_type == 'solid':
-            BRepGProp().VolumeProperties(self.instance, self._system)
+            brepgprop.VolumeProperties(self.instance, self._system)
         return self._system
 
     def centre(self):
