@@ -2,6 +2,7 @@ from OCC.BRep import BRep_Tool
 from OCC.BRepAdaptor import BRepAdaptor_Curve, BRepAdaptor_HCurve
 from OCC.GCPnts import  GCPnts_UniformAbscissa
 from OCC.Geom import Geom_OffsetCurve, Geom_TrimmedCurve
+from OCC.GeomLib import geomlib
 from OCC.KBE.base import KbeObject
 from OCC.TopExp import topexp
 from OCC.TopoDS import  TopoDS_Edge, TopoDS_Vertex, TopoDS_Face, topods, topods_Edge
@@ -160,14 +161,8 @@ class ConstructFromCurve():
         pass
 
 
-line = make_line(gp_Pnt(), gp_Pnt(100,0,0))
 
-class InheritEdge(topods_Edge):
-    def __init__(self, edge):
-        super(InheritEdge, self).__init__(edge)
-
-
-class Edge(KbeObject, topods_Edge):
+class Edge(KbeObject, TopoDS_Edge):
     '''
     '''
 
@@ -176,7 +171,10 @@ class Edge(KbeObject, topods_Edge):
         '''
         assert isinstance(edge, TopoDS_Edge), 'need a TopoDS_Edge, got a %s'% edge.__class__
         KbeObject.__init__(self, 'edge')
-        topods_Edge.__init__(self, edge)
+
+        self.TShape(edge.TShape())
+        self.Location(edge.Location())
+        self.Orientation(edge.Orientation())
 
         # tracking state
         self._local_properties_init    = False
@@ -346,7 +344,7 @@ class Edge(KbeObject, topods_Edge):
         '''
         if self.degree > 3:
             raise ValueError, 'to extend you self.curve should be <= 3, is %s ' % (self.degree)
-        return GeomLib().ExtendCurveToPoint(self.curve, pnt, degree, beginning)
+        return geomlib.ExtendCurveToPoint(self.curve, pnt, degree, beginning)
 
 #===============================================================================
 #    Curve.
@@ -472,14 +470,14 @@ class Edge(KbeObject, topods_Edge):
 #
     def first_vertex(self):
         # TODO: should return Vertex, not TopoDS_Vertex
-        return TopExp.FirstVertex(self)
+        return topexp.FirstVertex(self)
 
     def last_vertex(self):
-        return TopExp.LastVertex(self)
+        return topexp.LastVertex(self)
 
     def common_vertex(self, edge):
         vert = TopoDS_Vertex()
-        if TopExp.CommonVertex(self, edge, vert):
+        if topexp.CommonVertex(self, edge, vert):
             return vert
         else:
             return False
