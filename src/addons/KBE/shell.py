@@ -37,11 +37,17 @@ class DressUp(object):
         pass
 
 
-class Shell(KbeObject, TopoDS_Shell):
+class Shell(TopoDS_Shell, KbeObject):
     _n = 0
     def __init__(self, shell):
-        KbeObject.__init__(self, name='Shell #{0}'.format(self._n))
-        TopoDS_Shell.__init__(self, shell)
+
+        super(Shell, self).__init__()
+        self.TShape(shell.TShape())
+        self.Location(shell.Location())
+        self.Orientation(shell.Orientation())
+
+        KbeObject.__init__(self, name='shell')
+
         self.GlobalProperties = GlobalProperties(self)
         self.DressUp = DressUp(self)
         self._n += 1

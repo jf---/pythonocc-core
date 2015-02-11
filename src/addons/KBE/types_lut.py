@@ -194,7 +194,7 @@ def what_is_face(face):
     if not face.ShapeType() == TopAbs_FACE:
         print '%s is not a TopAbs_FACE. Conversion impossible'
         return None
-    hs = BRep_Tool().Surface(face)
+    hs = BRep_Tool.Surface(face)
     obj = hs.GetObject()
     result = []
     for elem in classes:
@@ -210,7 +210,7 @@ def what_is_face(face):
 def face_is_plane(face):
     ''' Returns True if the TopoDS_Shape is a plane, False otherwise
     '''
-    hs = BRep_Tool().Surface(face)
+    hs = BRep_Tool.Surface(face)
     downcast_result = Handle_Geom_Plane().DownCast(hs)
     # the handle is null if downcast failed or is not possible,
     # that is to say the face is not a plane

@@ -54,7 +54,7 @@ class LoopWirePairs(object):
         self.tp_A  = Topo(self.wireA)
         self.tp_B  = Topo(self.wireB)
         
-        self.bt = BRep_Tool()
+        self.bt = BRep_Tool
         self.vertsA = [v for v in self.we_A.ordered_vertices()]
         self.vertsB = [v for v in self.we_B.ordered_vertices()]
         

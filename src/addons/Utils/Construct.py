@@ -26,8 +26,10 @@ This modules makes the construction of geometry a little easier
 
 from __future__ import with_statement
 # wrapped modules
+from OCC import BRepTools
 from OCC.BRep import BRep_Tool
 from OCC.BRepOffset import BRepOffset_Skin
+from OCC.BRepTools import breptools
 from OCC.Geom import Geom_TrimmedCurve
 from OCC.GeomConvert import GeomConvert_ApproxCurve
 from OCC.GeomLProp import *
@@ -73,7 +75,8 @@ def gp_Pnt_get_state(self):
 
     used for copying / serializing the instance
     '''
-    return self.XYZ().Coord()
+    coord = self.XYZ().Coord()
+    return coord.X(), coord.Y(), coord.Z()
 
 def gp_Pnt_set_state(self, state):
     '''unpack tuple and return instance...
@@ -87,16 +90,18 @@ def gp_Pnt_equal(self, other):
     return self.IsEqual(other, TOLERANCE)
 
 def gp_pnt_print(self):
-    return '< gp_Pnt: {0}, {1}, {2} >'.format(*self.Coord())
+    return '< gp_Pnt: {0}, {1}, {2} >'.format(self.X(), self.Y(), self.Z())
 
 def gp_vec_print(self):
-    x,y,z = self.Coord()
+    x,y,z = self.X(), self.Y(), self.Z()
     magn = self.Magnitude()
     return '< gp_Vec: {0}, {1}, {2}, magnitude: {3} >'.format(x,y,z, magn)
 
 def gp_ax1_print(self):
-    pX, pY, pZ = self.Location().Coord()
-    dX, dY, dZ = self.Direction().Coord()
+    loc = self.Location().Coord()
+    pX, pY, pZ = loc.X(), loc.Y(), loc.Z()
+    dir_ = self.Direction().Coord()
+    dX, dY, dZ = dir_.X(), dir_.Y(), dir_.Z()
     return "< gp_Ax1: location: {pX}, {pY}, {pZ}, direction: {dX}, {dY}, {dZ} >".format(**vars())
 
 def gp_trsf_print(self):
@@ -113,10 +118,14 @@ def gp_quat_print(self):
     return "< gp_Quaternion: w:{w}, x:{x}, y:{y}, z:{z} >\nvector:{vec} angle:{angle}".format(**vars())
 
 def _apply(pnt, other, _operator):
+    coord_ = pnt.Coord()
+    coord = (coord_.X(), coord_.Y(), coord_.Z())
     if isinstance(other, gp_Pnt):
-        return gp_Pnt(*map(lambda x: _operator(*x), zip(pnt.Coord(), other.Coord())))
+        other_coord_ = other.Coord()
+        other_coord = (other_coord_.X(), other_coord_.Y(), other_coord_.Z())
+        return gp_Pnt(*map(lambda x: _operator(*x), zip(coord, other_coord)))
     else:
-        return gp_Pnt(*map(lambda x: _operator(x, other), pnt.Coord()))
+        return gp_Pnt(*map(lambda x: _operator(x, other), coord))
 
 def gp_pnt_add(self, other):
     return _apply(self, other, operator.add)
@@ -527,7 +536,7 @@ def make_n_sections(edges):
 
 def make_coons(edges):
     from OCC.GeomFill import GeomFill_BSplineCurves, GeomFill_StretchStyle
-    bt = BRep_Tool()
+    bt = BRep_Tool
     if len(edges) == 4:
         spl1, spl2, spl3, spl4 = edges #[curve_to_bspline(bt.Curve(i)[0]) for i in edges]
         srf = GeomFill_BSplineCurves(spl1,spl2,spl3,spl4, GeomFill_StretchStyle)
@@ -814,8 +823,8 @@ def scale(brep, pnt, scale, copy=False):
 #===============================================================================
 
 def face_normal(face):
-    umin, umax, vmin, vmax = BRepTools.BRepTools().UVBounds(face)  
-    surf=BRep_Tool().Surface(face)
+    umin, umax, vmin, vmax = breptools.UVBounds(face)
+    surf=BRep_Tool.Surface(face)
     props= GeomLProp_SLProps(surf, (umin+umax)/2., (vmin+vmax)/2., 1, TOLERANCE)
     norm = props.Normal()
     if face.Orientation()==TopAbs_REVERSED:

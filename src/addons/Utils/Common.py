@@ -74,8 +74,7 @@ def get_boundingbox(shape, tol=TOLERANCE, vec=False):
     '''
     bbox = Bnd_Box()
     bbox.SetGap(tol)
-    #BRepBndLib_AddClose(shape, bbox)
-    tmp = BRepBndLib_Add(shape, bbox)
+    tmp = brepbndlib_Add(shape, bbox)
     xmin, ymin, zmin, xmax, ymax, zmax = bbox.Get()
     if vec is False:
         return xmin, ymin, zmin, xmax, ymax, zmax
@@ -587,11 +586,16 @@ def minimum_distance(shp1, shp2):
             min_dist_shp2.append(bdss.PointOnShape2(i))
     return min_dist, min_dist_shp1, min_dist_shp2
 
-def vertex2pnt(vertex):
+def vertex2pnt(vertex, as_tuple=False):
     '''returns a gp_Pnt from a TopoDS_Vertex
     '''
     from OCC.BRep import BRep_Tool
-    return BRep_Tool.Pnt(vertex)
+    pt = BRep_Tool.Pnt(vertex)
+    if not as_tuple:
+        return pt
+    else:
+        pt = pt.Coord()
+        return pt.X(), pt.Y(), pt.Z()
 
 def to_adaptor_3d(curveType):
     '''
@@ -630,10 +634,10 @@ def project_point_on_plane( plane, point ):
     @param plane: Geom_Plane
     @param point: gp_Pnt
     '''
-    from OCC.ProjLib import ProjLib
+    from OCC.ProjLib import projlib
     pl = plane.Pln()
-    ppp = ProjLib()
-    aa, bb  = ppp.Project(pl, point).Coord()
+    coord = projlib.Project(pl, point).Coord()
+    aa, bb = coord.X(), coord.Y()
     point = plane.Value(aa,bb)
     return point
 

@@ -20,6 +20,9 @@ from OCC.GeomAPI import GeomAPI_ProjectPointOnCurve
 from OCC.ShapeAnalysis import ShapeAnalysis_Edge
 from OCC.BRep import *
 
+import logging
+log = logging.getLogger(__name__)
+
 class IntersectCurve(object):
     def __init__(self, instance):
         self.instance = instance
@@ -45,7 +48,8 @@ class DiffGeomCurve(object):
     def __init__(self, instance):
         self.instance = instance
         #self._local_props = BRepLProp_CLProps(self.instance.adaptor, self.instance.degree(), self.instance.tolerance)
-        self._local_props = BRepLProp_CLProps(self.instance.adaptor, 2, self.instance.tolerance)
+        self._local_props = BRepLProp_CLProps(self.instance.adaptor, 2, 1e-6)
+        # self._local_props = BRepLProp_CLProps(self.instance.adaptor, 2, self.instance.tolerance)
         # initialize with random parameter: 0
 
     @property
@@ -162,7 +166,7 @@ class ConstructFromCurve():
 
 
 
-class Edge(KbeObject, TopoDS_Edge):
+class Edge(TopoDS_Edge, KbeObject):
     '''
     '''
 
@@ -170,11 +174,13 @@ class Edge(KbeObject, TopoDS_Edge):
         '''
         '''
         assert isinstance(edge, TopoDS_Edge), 'need a TopoDS_Edge, got a %s'% edge.__class__
-        KbeObject.__init__(self, 'edge')
 
+        super(Edge, self).__init__()
         self.TShape(edge.TShape())
         self.Location(edge.Location())
         self.Orientation(edge.Orientation())
+
+        KbeObject.__init__(self, name='edge')
 
         # tracking state
         self._local_properties_init    = False
@@ -231,7 +237,7 @@ class Edge(KbeObject, TopoDS_Edge):
         if self._curve is not None and not self.is_dirty:
             pass
         else:
-            self._curve_handle  = BRep_Tool().Curve(self)[0]
+            self._curve_handle  = BRep_Tool.Curve(self)[0]
             self._curve = self._curve_handle.GetObject()
         return self._curve
 
@@ -280,7 +286,7 @@ class Edge(KbeObject, TopoDS_Edge):
         computes the 2d parametric spline that lies on the surface of the face
         :return: Geom2d_Curve, u, v
         """
-        crv, u,v =  BRep_Tool().CurveOnSurface(self, face)
+        crv, u,v =  BRep_Tool.CurveOnSurface(self, face)
         return crv.GetObject(), u, v
 
     def _local_properties(self):
@@ -379,7 +385,7 @@ class Edge(KbeObject, TopoDS_Edge):
         _mid = (_min+_max) / 2.
         return _mid, self.adaptor.Value(_mid)
 
-    def divide_by_number_of_points(self, n_pts, lbound=None, ubound=None):
+    def divide_by_number_of_points(self, n_pts, lbound=None, ubound=None, as_tuple=False):
         '''returns a nested list of parameters and points on the edge
         at the requested interval [(param, gp_Pnt),...]
         '''
@@ -397,13 +403,16 @@ class Edge(KbeObject, TopoDS_Edge):
         try:
             npts = GCPnts_UniformAbscissa(self.adaptor, n_pts, _lbound, _ubound)
         except:
-            import ipdb; ipdb.set_trace()
+            log.debug("error generating point by abscissa")
         if npts.IsDone():
             tmp = []
             for i in xrange(1,npts.NbPoints()+1):
                 param = npts.Parameter(i)
                 pnt = self.adaptor.Value(param)
-                tmp.append((param, pnt))
+                if as_tuple:
+                    tmp.append((param, (pnt.X(), pnt.Y(), pnt.Z())))
+                else:
+                    tmp.append((param, pnt))
             return tmp
         else:
             return None

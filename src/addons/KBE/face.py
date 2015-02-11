@@ -189,20 +189,27 @@ class IntersectSurface(object):
             return uvw, bics.Point(), bics.Face(), bics.Transition()
 
 
-class Face(KbeObject, TopoDS_Face):
+class Face(TopoDS_Face, KbeObject):
     """high level surface API
     object is a Face iff part of a Solid
     otherwise the same methods do apply, apart from the topology obviously
     """
-
+    _n = 0
     def __init__(self, face):
         '''
         '''
+
+        super(Face, self).__init__()
+        self.TShape(face.TShape())
+        self.Location(face.Location())
+        self.Orientation(face.Orientation())
+
         KbeObject.__init__(self, name='face')
-        TopoDS_Face.__init__(self, face)
 
         # cooperative classes
         self.DiffGeom = DiffGeomSurface(self)
+
+        self._n += 1
 
         # STATE; whether cooperative classes are yet initialized
         self._curvature_initiated = False
@@ -386,7 +393,8 @@ class Face(KbeObject, TopoDS_Face):
         '''
         sas = ShapeAnalysis_Surface(self.surface_handle)
         uv = sas.ValueOfUV(pt, self.tolerance)
-        return uv.Coord()
+        coord = uv.Coord()
+        return coord.X(), coord.Y()
 
     def transform(self, transform):
         '''affine transform
@@ -402,7 +410,7 @@ class Face(KbeObject, TopoDS_Face):
         :return: bool, GeomAbs_Shape if it has continuity, otherwise
          False, None
         """
-        bt = BRep_Tool()
+        bt = BRep_Tool
         if bt.HasContinuity(edge, self, face):
             continuity = bt.Continuity(edge, self, face)
             return True, continuity
@@ -445,7 +453,7 @@ class Face(KbeObject, TopoDS_Face):
             if isinstance(other, TopoDS_Edge):
                 # convert edge to curve
                 first, last = topexp.FirstVertex(other), topexp.LastVertex(other)
-                lbound, ubound = BRep_Tool().Parameter(first, other), BRep_Tool().Parameter(last, other)
+                lbound, ubound = BRep_Tool.Parameter(first, other), BRep_Tool.Parameter(last, other)
                 other = BRep_Tool.Curve(other, lbound, ubound).GetObject()
 
             return geomprojlib.Project(other, self.surface_handle)
@@ -481,7 +489,7 @@ class Face(KbeObject, TopoDS_Face):
         return [Edge(i) for i in WireExplorer(self.topo.wires().next()).ordered_edges()]
 
     def __repr__(self):
-        return self.name
+        return "<Edge {0}>".format(self._n)
 
     def __str__(self):
         return self.__repr__()
