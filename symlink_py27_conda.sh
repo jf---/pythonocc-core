@@ -2,7 +2,7 @@
 
 pyocc_root="/Users/jelleferinga/GIT/pythonocc-core/src/addons"
 
-CONDA=~/miniconda
+CONDA=~/miniconda/envs/pyrapid-test
 PYOCC=$CONDA/lib/python2.7/site-packages/OCC/
 
 cd $PYOCC
