@@ -55,6 +55,7 @@ def init_display(backend_str=None, size=(1024, 768)):
     elif backend_str in ['wx', 'pyside', 'pyqt4']:
         USED_BACKEND = backend_str
     else:
+        # todo???
         raise ValueError("You should pass either 'wx','pyside', or 'pyqt4' to the init_display function.")
         sys.exit(1)
     # wxPython based simple GUI
