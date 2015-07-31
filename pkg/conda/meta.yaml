@@ -1,10 +1,10 @@
 package:
   name: pythonocc-core
-  version: 0.16.0
+  version: 0.16.2
 
 source:
     git_url: https://github.com/tpaviot/pythonocc-core.git
-    git_tag: 0.16.0
+    git_tag: 0.16.2
 
 build:
   number: 0
@@ -14,12 +14,12 @@ requirements:
   build:
     - cmake
     - python
-    - opencascade_community_edition
+    - opencascade_community_edition 0.16.1
     - swig 2.0.10
 
   run:
     - python
-    - opencascade_community_edition
+    - opencascade_community_edition 0.16.1
 
 #test:
 #  commands:

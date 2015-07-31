@@ -1,20 +1,11 @@
 #!/bin/bash
 
-# builds fine on OSX 10.8.5 / clang 5.0.0
-
-# if you'd like to build a conda package from a local directory
-# then comment out the "source" section in meta.yaml
-# and replace $LOCAL_SRC_DIR to your pythonocc-core directory
-#export LOCAL_SRC_DIR=/path/to/pythonocc-core/
-#cp -r $LOCAL_SRC_DIR .
-
 echo "conda build directory is:" `pwd`
 export PYTHONOCC_VERSION=`python -c "import OCC;print OCC.VERSION"`
 echo "building pythonocc-core version:" $PYTHONOCC_VERSION
 
-export MACOSX_DEPLOYMENT_TARGET=10.6
-export DYLD_LIBRARY_PATH="$PREFIX/lib:$DYLD_LIBRARY_PATH"
-export LD_LIBRARY_PATH="$PREFIX/lib:$LD_LIBRARY_PATH"
+# see https://github.com/conda/conda-build/pull/312
+export DYLD_LIBRARY_PATH="" #"$PREFIX/lib:$DYLD_LIBRARY_PATH"
 
 backup_prefix=$PREFIX
 
@@ -31,16 +22,15 @@ echo "swig <<<"$SWIG_LIB">>>"
 
 echo "Timestamp" && date
 cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
-      -DCMAKE_OSX_DEPLOYMENT_TARGET=10.8 \
+      -DCMAKE_OSX_DEPLOYMENT_TARGET=10.9 \
+      -DCMAKE_CXX_FLAGS=-stdlib=libstdc++ \
+      -DSWIG_DIR=$SWIG_LIB \
       -DOCE_INCLUDE_PATH=$PREFIX/include/oce \
       -DPYTHON_LIBRARY=$PREFIX/lib/libpython2.7.dylib \
       -DSWIG_EXECUTABLE=$PREFIX/bin/swig \
-      -DSWIG_DIR=$SWIG_LIB \
       -DOCE_LIB_PATH=$PREFIX/lib\
-      -DpythonOCC_INSTALL_DIRECTORY=$PREFIX/lib/python2.7/site-packages/OCC \
-      -DpythonOCC_WRAP_DATAEXCHANGE=ON \
-      -DpythonOCC_WRAP_MODEL=ON \
-      -DpythonOCC_WRAP_VISU=ON \
+      -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
+      -DCMAKE_C_COMPILER=/usr/bin/clang \
       $SRC_DIR
 
 echo ""
