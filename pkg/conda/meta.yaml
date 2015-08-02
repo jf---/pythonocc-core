@@ -15,7 +15,7 @@ requirements:
     - cmake
     - python
     - opencascade_community_edition 0.16.1
-    - swig 2.0.10
+    - swig
 
   run:
     - python
