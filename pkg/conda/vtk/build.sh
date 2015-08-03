@@ -53,9 +53,11 @@ cd build
 #..
 
 
+#
+#    -DVTK_RENDERING_BACKEND=OpenGL2 \
+
 cmake -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
     -DCMAKE_C_COMPILER=/usr/bin/clang \
-    -DVTK_RENDERING_BACKEND=OpenGL2 \
     -DVTK_PYTHON_VERSION=2.7 \
     -DVTK_LEGACY_REMOVE=ON \
     -DCMAKE_INSTALL_PREFIX:PATH="$PREFIX" \
@@ -77,7 +79,7 @@ cmake -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
     -DQT_MOC_EXECUTABLE=$PREFIX/bin/moc \
     -DQT_RCC_EXECUTABLE=$PREFIX/bin/rcc \
     -DQT_UIC_EXECUTABLE=$PREFIX/bin/uic \
-    ..
+    $SRC_DIR
 
 #VTK_Group_Qt
 #-DVTK_SMP_IMPLEMENTATION_TYPE=TBB \
@@ -91,5 +93,5 @@ cmake -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
 #Module_vtkRenderingFreeTypeFon
 #Module_vtkRenderingFreeTypeOpe
 
-make -j8
+make -j$CPU_COUNT
 make install

@@ -9,11 +9,6 @@ export DYLD_LIBRARY_PATH="" #"$PREFIX/lib:$DYLD_LIBRARY_PATH"
 
 backup_prefix=$PREFIX
 
-ncpus=1
-if test -x /usr/bin/getconf; then
-    ncpus=$(/usr/bin/getconf _NPROCESSORS_ONLN)
-fi
-
 #swig_incl_dir=`$PREFIX/bin/swig -swiglib`
 # see: https://github.com/ContinuumIO/anaconda-issues/issues/164
 # setting the $SWIG_LIB variable as a temporary bypass
@@ -36,6 +31,6 @@ cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
 echo ""
 echo "Timestamp" && date
 echo "Starting build with -j$ncpus ..."
-make -j$ncpus
+make -j$CPU_COUNT
 make install
 echo "Done building and installing pythonocc-core" && date

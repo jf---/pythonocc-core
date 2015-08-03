@@ -3,11 +3,6 @@ set -e
 
 backup_prefix=$PREFIX
 
-ncpus=1
-if test -x /usr/bin/getconf; then
-    ncpus=$(/usr/bin/getconf _NPROCESSORS_ONLN)
-fi
-
 echo "Timestamp" && date
 cmake -DOCE_ENABLE_DEB_FLAG:BOOL=OFF \
       -DCMAKE_BUILD_TYPE:STRING=Release \
@@ -26,6 +21,8 @@ cmake -DOCE_ENABLE_DEB_FLAG:BOOL=OFF \
       -DOCE_DATAEXCHANGE:BOOL=ON \
       -DOCE_USE_PCH:BOOL=ON \
       -DOCE_WITH_GL2PS:BOOL=OFF \
+      -DOCE_WITH_VTK:BOOL=ON \
+      -DVTK_DIR=$PREFIX/lib/cmake/vtk-6.2
       -DGL2PS_INCLUDE_DIR=$PREFIX/include \
       -DGL2PS_LIBRARY=$PREFIX/lib/libgl2ps.dylib \
       -DOCE_MULTITHREAD_LIBRARY:STRING=TBB \
@@ -53,7 +50,7 @@ echo "Starting build with -j$ncpus ..."
 # travis-ci truncates when there are more than 10,000 lines of output.
 # Builds generate around 9,000 lines of output, trim them to see test
 # results.
-make -j$ncpus | grep Built
+make -j$CPU_COUNT | grep Built
 make install
 
 # Run OCE tests
