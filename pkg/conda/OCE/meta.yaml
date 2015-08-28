@@ -5,7 +5,9 @@ package:
 source:
   git_url: https://github.com/tpaviot/oce
   git_tag: OCE-0.17
-
+  patches:
+    - patch_ivtk_tools.diff
+    - patch_ivtkvtk_view.diff
 
 build:
    number: 4

@@ -6,6 +6,8 @@ backup_prefix=$PREFIX
 echo "Timestamp" && date
 cmake -DOCE_ENABLE_DEB_FLAG:BOOL=OFF \
       -DCMAKE_BUILD_TYPE:STRING=Release \
+      -DBUILD_TESTING=OFF \
+      -DCMAKE_OSX_DEPLOYMENT_TARGET="" \
       -DOCE_USE_TCL_TEST_FRAMEWORK:BOOL=OFF \
       -DOCE_VISUALISATION:BOOL=ON \
       -DOCE_OCAF:BOOL=ON \
@@ -22,9 +24,7 @@ cmake -DOCE_ENABLE_DEB_FLAG:BOOL=OFF \
       -DOCE_USE_PCH:BOOL=ON \
       -DOCE_WITH_GL2PS:BOOL=OFF \
       -DOCE_WITH_VTK:BOOL=ON \
-      -DVTK_DIR=$PREFIX/lib/cmake/vtk-6.2
-      -DGL2PS_INCLUDE_DIR=$PREFIX/include \
-      -DGL2PS_LIBRARY=$PREFIX/lib/libgl2ps.dylib \
+      -DVTK_DIR=$PREFIX/lib/cmake/vtk-6.2 \
       -DOCE_MULTITHREAD_LIBRARY:STRING=TBB \
       -DOCE_TBB_MALLOC_SUPPORT=ON \
       -DTBB_INCLUDE_DIR=$PREFIX/include \
@@ -38,11 +38,18 @@ cmake -DOCE_ENABLE_DEB_FLAG:BOOL=OFF \
       -DFREEIMAGE_LIBRARY=$PREFIX/lib/libfreeimage.a \
       -DOCE_RPATH_FILTER_SYSTEM_PATHS=ON \
       -DOCE_INSTALL_PREFIX=$PREFIX \
-      -DOPENCL_LIBRARIES=/System/Library/Frameworks/OpenCL.framework \
       -DOCE_TESTING=ON \
+      -DCMAKE_CXX_FLAGS=-stdlib=libstdc++ \
       -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
       -DCMAKE_C_COMPILER=/usr/bin/clang \
-      $SRC_DIR
+      .
+
+#      $SRC_DIR
+
+
+#      -DGL2PS_INCLUDE_DIR=$PREFIX/include \
+#      -DGL2PS_LIBRARY=$PREFIX/lib/libgl2ps.dylib \
+
 
 echo ""
 echo "Timestamp" && date
