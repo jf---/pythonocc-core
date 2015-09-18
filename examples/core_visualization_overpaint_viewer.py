@@ -34,11 +34,10 @@ the example is extends Qt's :ref:`OpenGL overpainting example`
 """
 
 from __future__ import print_function
-
 import random
 import sys
 
-from OCC.Display.qtDisplay import qtViewer3d, get_qt_modules
+from OCC.Display.qtDisplay import qtViewer3d, get_qt_modules, point
 
 QtCore, QtGui, QtOpenGL = get_qt_modules()
 
@@ -69,11 +68,19 @@ class Bubble(object):
         gradient.setColorAt(1, self.outerColor)
         self.brush = QtGui.QBrush(gradient)
 
-    def drawBubble(self, painter):
+    def drawBubble(self, painter, mouse_intersects):
         painter.save()
         painter.translate(self.position.x() - self.radius,
                           self.position.y() - self.radius)
         painter.setBrush(self.brush)
+
+        if mouse_intersects:
+            font = painter.font()
+            font.setPointSize(20)
+            painter.setFont(font)
+            painter.setPen(QtCore.Qt.red)
+            painter.drawText(0, 0, "so hovering over!!!")
+
         painter.drawEllipse(0, 0, int(2 * self.radius), int(2 * self.radius))
         painter.restore()
 
@@ -115,101 +122,177 @@ class GLWidget(qtViewer3d):
     def __init__(self, parent=None):
         super(GLWidget, self).__init__(parent)
 
+        #: state
         self._initialized = False
+
+        # no effect?
+        self.doubleBuffer()
 
         midnight = QtCore.QTime(0, 0, 0)
         random.seed(midnight.secsTo(QtCore.QTime.currentTime()))
 
-        self.object = 0
         self.xRot = 0
         self.yRot = 0
         self.zRot = 0
-        self.image = QtGui.QImage()
         self.bubbles = []
+
+        # -------------------------------------------------------------------------------
+        # create properties for the last coordinate, such that the stupid "point" conversion
+        # takes place implicitly
+        # -------------------------------------------------------------------------------
+
         self.lastPos = QtCore.QPoint()
-
-        self.trolltechGreen = QtGui.QColor.fromCmykF(0.40, 0.0, 1.0, 0.0)
-        self.trolltechPurple = QtGui.QColor.fromCmykF(0.39, 0.39, 0.0, 0.0)
-
-        self.animationTimer = QtCore.QTimer()
-        self.animationTimer.setSingleShot(False)
-        self.animationTimer.timeout.connect(self.animate)
-        self.animationTimer.start(25)
-
-        self.setAutoFillBackground(False)
 
         self.setMinimumSize(200, 200)
         self.setWindowTitle("Overpainting a Scene")
 
         # parameters for overpainting
-        self.setAttribute(QtCore.Qt.WA_NoSystemBackground, 0)
-        self.setAttribute(QtCore.Qt.WA_OpaquePaintEvent)
+        self.setAttribute(QtCore.Qt.WA_NoSystemBackground)
+        self.setAutoFillBackground(False)
 
-    def setXRotation(self, angle):
-        if angle != self.xRot:
-            self.xRot = angle
+        # start the background thread that performs the overpainting of
+        # the OpenGL view with bubbles
+        self._setupAnimation()
 
-    def setYRotation(self, angle):
-        if angle != self.yRot:
-            self.yRot = angle
+        # bookkeeping properties
+        self._previous_event = None
+        self._next_event = None
+        self._delta_event_pos = None
+        self._current_action = self.current_action = None
 
-    def setZRotation(self, angle):
-        if angle != self.zRot:
-            self.zRot = angle
+    @property
+    def previous_event(self):
+        return self._previous_event
+
+    @previous_event.setter
+    def previous_event(self, value):
+        self._previous_event = value
+
+    @property
+    def next_event(self):
+        return self._next_event
+
+    @next_event.setter
+    def next_event(self, event):
+        self._next_event = event
+        if event.buttons() & QtCore.Qt.LeftButton:
+            self._current_action = "CurAction3d_DynamicRotation"
+
+        elif event.buttons() & QtCore.Qt.RightButton:
+            pass
+
+        else:
+            self._current_action = None
+
+    @property
+    def delta_event_pos(self):
+        """delta between previous_event and next_event"""
+        pos_a = self._previous_event.pos()
+        pos_b = self._next_event.pos()
+
+        dX = pos_a.x() - pos_b.x()
+        dY = pos_a.y() - pos_b.y()
+        return dX, dY
+
+    # @property
+    # def current_action(self):
+    #     return self._current_action
+
+    def _setupAnimation(self):
+        self.animationTimer = QtCore.QTimer()
+        self.animationTimer.setSingleShot(False)
+        self.animationTimer.timeout.connect(self.animate)
+        self.animationTimer.start(250)
 
     def mousePressEvent(self, event):
+        self.setFocus()
         self.lastPos = event.pos()
-        super(GLWidget, self).mousePressEvent(event)
+        self.dragStartPos = point(event.pos())
+
+    def mouseReleaseEvent(self, event):
+        pass
 
     def mouseMoveEvent(self, event):
-        dx = event.x() - self.lastPos.x()
-        dy = event.y() - self.lastPos.y()
-
         if event.buttons() & QtCore.Qt.LeftButton:
-            self.setXRotation(self.xRot + 8 * dy)
-            self.setYRotation(self.yRot + 8 * dx)
+            self.current_action = "CurAction3d_DynamicRotation"
+
         elif event.buttons() & QtCore.Qt.RightButton:
-            self.setXRotation(self.xRot + 8 * dy)
-            self.setZRotation(self.zRot + 8 * dx)
+            pass
+
+        else:
+            self.current_action = None
+
+        self.next_event = event
 
         self.lastPos = event.pos()
-        super(GLWidget, self).mouseMoveEvent(event)
-
-    def paintGL(self):
-        if self._inited:
-            self._display.Context.UpdateCurrentViewer()
+        self.update()
 
     def paintEvent(self, event):
-        if self._inited:
+        """
 
-            self._display.Context.UpdateCurrentViewer()
-            self.makeCurrent()
-            painter = QtGui.QPainter(self)
-            painter.setRenderHint(QtGui.QPainter.Antialiasing)
+
+        """
+        if self._inited:
+            # actions like panning, zooming and rotating the view invoke redrawing it
+            # therefore, these actions need to be performed in the paintEvent method
+            # this way, redrawing the view takes place synchronous with the overpaint action
+            # not respecting this order would lead to a jittering view
+            self._handle_gui_actions()
 
             if self.context().isValid():
+                # acquire the OpenGL context
+                self.makeCurrent()
+                painter = QtGui.QPainter(self)
+                painter.setRenderHint(QtGui.QPainter.Antialiasing)
+                # swap the buffer before overpainting it
                 self.swapBuffers()
-
-                if self._drawbox:
-                    painter.setPen(QtGui.QPen(QtGui.QColor(0, 0, 0), 1))
-                    rect = QtCore.QRect(*self._drawbox)
-                    painter.drawRect(rect)
-
-                for bubble in self.bubbles:
-                    if bubble.rect().intersects(QtCore.QRectF(event.rect())):
-                        bubble.drawBubble(painter)
-
-                self.drawInstructions(painter)
+                # perform overpainting
+                self._overpaint(event, painter)
                 painter.end()
+                # hand over the OpenGL context
                 self.doneCurrent()
             else:
                 print('invalid OpenGL context: Qt cannot overpaint viewer')
+
+    def _handle_gui_actions(self):
+        # invokes redrawing the view
+        try:
+            if self.current_action is None:
+                pass
+                self._display.View.Redraw()
+
+            elif self.current_action == "CurAction3d_DynamicRotation":
+                self._display.StartRotation(self.dragStartPos.x, self.dragStartPos.y)
+                if hasattr(self, "lastPos"):
+                    pt = point(self.lastPos)
+                    self._display.Rotation(pt.x, pt.y)
+                    self.dragStartPos.x = pt.x
+                    self.dragStartPos.y = pt.y
+        finally:
+            self.current_action = None
+
+    def _overpaint(self, event, painter):
+        # draw selection rectangle
+        if self._drawbox:
+            painter.setPen(QtGui.QPen(QtGui.QColor(0, 0, 0), 1))
+            rect = QtCore.QRect(*self._drawbox)
+            painter.drawRect(rect)
+
+        # draw bubbles
+        for bubble in self.bubbles:
+            bubble_rect = bubble.rect()
+            if bubble_rect.intersects(QtCore.QRectF(event.rect())):
+                over_mouse = bubble_rect.contains(self.lastPos)
+                bubble.drawBubble(painter, over_mouse)
+
+        # draw instructions in half transparent rectangle on top of the viewport
+        self.drawInstructions(painter)
 
     def showEvent(self, event):
         self.createBubbles(20 - len(self.bubbles))
 
     def sizeHint(self):
-        return QtCore.QSize(400, 400)
+        return QtCore.QSize(800, 600)
 
     def createBubbles(self, number):
         for _ in range(number):
@@ -226,30 +309,29 @@ class GLWidget(qtViewer3d):
             bubble.move(self.rect())
         self.update()
 
-    def setupViewport(self, width, height):
-        side = min(width, height)
-        glViewport((width - side) // 2, (height - side) // 2, side, side)
-
-        glMatrixMode(GL_PROJECTION)
-        glLoadIdentity()
-        glOrtho(-0.5, +0.5, +0.5, -0.5, 4.0, 15.0)
-        glMatrixMode(GL_MODELVIEW)
-
     def drawInstructions(self, painter):
         text = """
         Click and drag with the left mouse button to rotate the box
         Shift + Right Mouse Button for multiple selection area
         """
+        transparency = 80
         metrics = QtGui.QFontMetrics(self.font())
         border = max(4, metrics.leading())
 
         rect = metrics.boundingRect(0, 0, self.width() - 2 * border,
                                     int(self.height() * 0.125),
                                     QtCore.Qt.AlignCenter | QtCore.Qt.TextWordWrap, text)
+
         painter.setRenderHint(QtGui.QPainter.TextAntialiasing)
-        painter.fillRect(QtCore.QRect(0, 0, self.width(), rect.height() + 2 * border), QtGui.QColor(0, 0, 0, 127))
+
+        painter.fillRect(QtCore.QRect(0, 0, self.width(), rect.height() + 2 * border),
+                         QtGui.QColor(0, 0, 0, transparency))
+
         painter.setPen(QtCore.Qt.white)
-        painter.fillRect(QtCore.QRect(0, 0, self.width(), rect.height() + 2 * border), QtGui.QColor(0, 0, 0, 127))
+
+        painter.fillRect(QtCore.QRect(0, 0, self.width(), rect.height() + 2 * border),
+                         QtGui.QColor(0, 0, 0, transparency))
+
         painter.drawText((self.width() - rect.width()) / 2, border, rect.width(),
                          rect.height(), QtCore.Qt.AlignCenter | QtCore.Qt.TextWordWrap,
                          text)
@@ -261,7 +343,7 @@ if __name__ == '__main__':
             def __init__(self, parent=None):
                 QtGui.QWidget.__init__(self, parent)
                 self.setWindowTitle(self.tr("qtDisplay3d overpainting example"))
-                self.resize(640, 480)
+                self.resize(1280, 1024)
                 self.canva = GLWidget(self)
                 mainLayout = QtGui.QHBoxLayout()
                 mainLayout.addWidget(self.canva)
@@ -277,5 +359,6 @@ if __name__ == '__main__':
         frame.canva.InitDriver()
         frame.runTests()
         app.exec_()
+
 
     TestOverPainting()
