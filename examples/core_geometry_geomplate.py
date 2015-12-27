@@ -21,25 +21,24 @@
 ##along with pythonOCC.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-import types
 import sys
 import time
+import types
 
-from OCC.gp import gp_Pnt
-from OCC.Utils.Topology import WireExplorer, Topo
-from OCC.BRepAdaptor import BRepAdaptor_HCurve
 from OCC.BRep import BRep_Tool
-from OCC.ShapeAnalysis import *
-from OCC.GeomLProp import *
-from OCC.DataExchange.IGES import IGESImporter
+from OCC.BRepAdaptor import BRepAdaptor_HCurve
 from OCC.BRepFill import BRepFill_CurveConstraint
-from OCC.GeomPlate import *
-
-
-from OCC.Utils.Construct import make_closed_polygon, make_n_sided,\
-    make_vertex, make_face, make_wire
 from OCC.Display.SimpleGui import init_display
-
+from OCC.GeomAbs import GeomAbs_C0
+from OCC.GeomLProp import GeomLProp_SLProps
+from OCC.GeomLProp import GeomLProp_SurfaceTool
+from OCC.GeomPlate import GeomPlate_BuildPlateSurface, GeomPlate_PointConstraint, \
+    GeomPlate_MakeApprox
+from OCC.ShapeAnalysis import ShapeAnalysis_Surface
+from OCC.gp import gp_Pnt
+from OCCUtils.Construct import make_closed_polygon, make_n_sided, \
+    make_vertex, make_face, make_wire
+from OCCUtils.Topology import WireExplorer, Topo
 
 display, start_display, add_menu, add_function_to_menu = init_display()
 
@@ -48,6 +47,23 @@ try:
     from scipy.optimize import fsolve
 except ImportError:
     print 'scipy not installed, will not be able to run the geomplate example'
+
+
+def iges_importer(path_):
+    from OCC.IGESControl import IGESControl_Reader
+    from OCC.IFSelect import IFSelect_RetDone, IFSelect_ItemsByEntity
+    iges_reader = IGESControl_Reader()
+    status = iges_reader.ReadFile(path_)
+
+    if status == IFSelect_RetDone:  # check status
+        failsonly = False
+        iges_reader.PrintCheckLoad(failsonly, IFSelect_ItemsByEntity)
+        iges_reader.PrintCheckTransfer(failsonly, IFSelect_ItemsByEntity)
+        ok = iges_reader.TransferRoots()
+        aResShape = iges_reader.Shape(1)
+        return  aResShape
+    else:
+        raise AssertionError("could not import IGES file: {0}".format(path_))
 
 
 def geom_plate(event=None):
@@ -64,9 +80,10 @@ def geom_plate(event=None):
     display.DisplayShape(make_vertex(p5))
     display.DisplayShape(face, update=True)
 
-#============================================================================
+
+# ============================================================================
 # Find a surface such that the radius at the vertex is n
-#============================================================================
+# ============================================================================
 
 
 def build_plate(polygon, points):
@@ -93,7 +110,7 @@ def build_plate(polygon, points):
 
     maxSeg, maxDeg, critOrder = 9, 8, 0
     tol = 1e-4
-    dmax = max([tol, 10*bpSrf.G0Error()])
+    dmax = max([tol, 10 * bpSrf.G0Error()])
 
     srf = bpSrf.Surface()
     plate = GeomPlate_MakeApprox(srf, tol, maxSeg, maxDeg, dmax, critOrder)
@@ -112,15 +129,15 @@ def radius_at_uv(face, u, v):
     uv_domain = GeomLProp_SurfaceTool().Bounds(h_srf)
     curvature = GeomLProp_SLProps(h_srf, u, v, 1, 1e-6)
     try:
-        _crv_min = 1./curvature.MinCurvature()
+        _crv_min = 1. / curvature.MinCurvature()
     except ZeroDivisionError:
         _crv_min = 0.
 
     try:
-        _crv_max = 1./curvature.MaxCurvature()
+        _crv_max = 1. / curvature.MaxCurvature()
     except ZeroDivisionError:
         _crv_max = 0.
-    return abs((_crv_min+_crv_max)/2.)
+    return abs((_crv_min + _crv_max) / 2.)
 
 
 def uv_from_projected_point_on_face(face, pt):
@@ -138,6 +155,7 @@ class RadiusConstrainedSurface():
     '''
     returns a surface that has `radius` at `pt`
     '''
+
     def __init__(self, display, poly, pnt, targetRadius):
         self.display = display
         self.targetRadius = targetRadius
@@ -169,7 +187,7 @@ class RadiusConstrainedSurface():
         radius = radius_at_uv(self.plate, uv[0], uv[1])
         print 'z:', z, 'radius:', radius
         self.curr_radius = radius
-        return self.targetRadius-abs(radius)
+        return self.targetRadius - abs(radius)
 
     def solve(self):
         fsolve(self.radius, 1, maxfev=1000)
@@ -210,10 +228,13 @@ def build_geom_plate(edges):
 
     maxSeg, maxDeg, critOrder = 9, 8, 0
     tol = 1e-4
-    dmax = max([tol, 10*bpSrf.G0Error()])
+    dmax = max([tol, 10 * bpSrf.G0Error()])
 
     srf = bpSrf.Surface()
-    plate = GeomPlate_MakeApprox(srf, 1e-04, 100, 9, 1e-03, 0)
+    # segfaults here...
+    # plate = GeomPlate_MakeApprox(srf, 1e-04, 100, 9, 1e-03, 0)
+    plate = GeomPlate_MakeApprox(srf, 0.01, 10, 5, 0.01, 0, GeomAbs_C0)
+    # plate = GeomPlate_MakeApprox(srf)
 
     uMin, uMax, vMin, vMax = srf.GetObject().Bounds()
     face = make_face(plate.Surface(), uMin, uMax, vMin, vMax, 1e-6)
@@ -226,13 +247,13 @@ def build_curve_network(event=None):
     '''
     print 'Importing IGES file...',
     pth = os.path.dirname(os.path.abspath(__file__))
-    pth = os.path.abspath(os.path.join(pth, '../data/IGES/curve_geom_plate.igs'))
-    iges = IGESImporter(pth)
-    iges.read_file()
+    pth = os.path.abspath(
+            os.path.join(pth, 'models', 'curve_geom_plate.igs'))
+    iges = iges_importer(pth)
     print 'done.'
 
     print 'Building geomplate...',
-    topo = Topo(iges.get_compound())
+    topo = Topo(iges)
     edges_list = list(topo.edges())
     face = build_geom_plate(edges_list)
     print 'done.'
@@ -249,10 +270,13 @@ def build_curve_network(event=None):
 def exit(event=None):
     sys.exit()
 
+
 if __name__ == "__main__":
     add_menu('geom plate')
     add_function_to_menu('geom plate', geom_plate)
     add_function_to_menu('geom plate', solve_radius)
     add_function_to_menu('geom plate', build_curve_network)
     add_function_to_menu('geom plate', exit)
+
+    build_curve_network()
     start_display()
