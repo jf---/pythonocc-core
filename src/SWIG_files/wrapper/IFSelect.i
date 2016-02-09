@@ -32,11 +32,23 @@ along with pythonOCC.  If not, see <http://www.gnu.org/licenses/>.
 %include ../common/FunctionTransformers.i
 %include ../common/Operators.i
 
-%pythoncode {
-import OCC.GarbageCollector
-};
 
 %include IFSelect_headers.i
+
+
+%pythoncode {
+def register_handle(handle, base_object):
+    """
+    Inserts the handle into the base object to
+    prevent memory corruption in certain cases
+    """
+    try:
+        if base_object.IsKind("Standard_Transient"):
+            base_object.thisHandle = handle
+            base_object.thisown = False
+    except:
+        pass
+};
 
 /* typedefs */
 typedef IFSelect_ReturnStatus ( * IFSelect_ActFunc ) ( const Handle_IFSelect_SessionPilot & );
@@ -116,20 +128,6 @@ class IFSelect {
 };
 
 
-%feature("shadow") IFSelect::~IFSelect %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend IFSelect {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor IFSelect_Activator;
 class IFSelect_Activator : public MMgt_TShared {
 	public:
@@ -272,25 +270,23 @@ class IFSelect_Activator : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_Activator::~IFSelect_Activator %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_Activator {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_Activator(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_Activator {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_Activator {
-	Handle_IFSelect_Activator GetHandle() {
-	return *(Handle_IFSelect_Activator*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_Activator::Handle_IFSelect_Activator %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_Activator;
 class Handle_IFSelect_Activator : public Handle_MMgt_TShared {
@@ -308,20 +304,6 @@ class Handle_IFSelect_Activator : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_Activator {
     IFSelect_Activator* GetObject() {
     return (IFSelect_Activator*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_Activator::~Handle_IFSelect_Activator %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_Activator {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -395,25 +377,23 @@ class IFSelect_AppliedModifiers : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_AppliedModifiers::~IFSelect_AppliedModifiers %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_AppliedModifiers {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_AppliedModifiers(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_AppliedModifiers {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_AppliedModifiers {
-	Handle_IFSelect_AppliedModifiers GetHandle() {
-	return *(Handle_IFSelect_AppliedModifiers*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_AppliedModifiers::Handle_IFSelect_AppliedModifiers %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_AppliedModifiers;
 class Handle_IFSelect_AppliedModifiers : public Handle_MMgt_TShared {
@@ -431,20 +411,6 @@ class Handle_IFSelect_AppliedModifiers : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_AppliedModifiers {
     IFSelect_AppliedModifiers* GetObject() {
     return (IFSelect_AppliedModifiers*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_AppliedModifiers::~Handle_IFSelect_AppliedModifiers %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_AppliedModifiers {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -674,20 +640,6 @@ class IFSelect_ContextModif {
 };
 
 
-%feature("shadow") IFSelect_ContextModif::~IFSelect_ContextModif %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend IFSelect_ContextModif {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor IFSelect_ContextWrite;
 class IFSelect_ContextWrite {
 	public:
@@ -868,20 +820,6 @@ class IFSelect_ContextWrite {
 };
 
 
-%feature("shadow") IFSelect_ContextWrite::~IFSelect_ContextWrite %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend IFSelect_ContextWrite {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor IFSelect_Dispatch;
 class IFSelect_Dispatch : public MMgt_TShared {
 	public:
@@ -904,7 +842,7 @@ class IFSelect_Dispatch : public MMgt_TShared {
 
 	:rtype: Handle_TCollection_HAsciiString
 ") RootName;
-		const Handle_TCollection_HAsciiString & RootName ();
+		Handle_TCollection_HAsciiString RootName ();
 		%feature("compactdefaultargs") SetFinalSelection;
 		%feature("autodoc", "	* Stores (or Changes) the Final Selection for a Dispatch
 
@@ -994,25 +932,23 @@ class IFSelect_Dispatch : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_Dispatch::~IFSelect_Dispatch %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_Dispatch {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_Dispatch(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_Dispatch {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_Dispatch {
-	Handle_IFSelect_Dispatch GetHandle() {
-	return *(Handle_IFSelect_Dispatch*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_Dispatch::Handle_IFSelect_Dispatch %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_Dispatch;
 class Handle_IFSelect_Dispatch : public Handle_MMgt_TShared {
@@ -1030,20 +966,6 @@ class Handle_IFSelect_Dispatch : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_Dispatch {
     IFSelect_Dispatch* GetObject() {
     return (IFSelect_Dispatch*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_Dispatch::~Handle_IFSelect_Dispatch %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_Dispatch {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -1406,25 +1328,23 @@ class IFSelect_EditForm : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_EditForm::~IFSelect_EditForm %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_EditForm {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_EditForm(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_EditForm {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_EditForm {
-	Handle_IFSelect_EditForm GetHandle() {
-	return *(Handle_IFSelect_EditForm*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_EditForm::Handle_IFSelect_EditForm %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_EditForm;
 class Handle_IFSelect_EditForm : public Handle_MMgt_TShared {
@@ -1442,20 +1362,6 @@ class Handle_IFSelect_EditForm : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_EditForm {
     IFSelect_EditForm* GetObject() {
     return (IFSelect_EditForm*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_EditForm::~Handle_IFSelect_EditForm %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_EditForm {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -1671,25 +1577,23 @@ class IFSelect_Editor : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_Editor::~IFSelect_Editor %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_Editor {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_Editor(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_Editor {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_Editor {
-	Handle_IFSelect_Editor GetHandle() {
-	return *(Handle_IFSelect_Editor*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_Editor::Handle_IFSelect_Editor %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_Editor;
 class Handle_IFSelect_Editor : public Handle_MMgt_TShared {
@@ -1707,20 +1611,6 @@ class Handle_IFSelect_Editor : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_Editor {
     IFSelect_Editor* GetObject() {
     return (IFSelect_Editor*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_Editor::~Handle_IFSelect_Editor %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_Editor {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -1779,20 +1669,6 @@ class IFSelect_Functions {
 };
 
 
-%feature("shadow") IFSelect_Functions::~IFSelect_Functions %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend IFSelect_Functions {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor IFSelect_GeneralModifier;
 class IFSelect_GeneralModifier : public MMgt_TShared {
 	public:
@@ -1859,25 +1735,23 @@ class IFSelect_GeneralModifier : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_GeneralModifier::~IFSelect_GeneralModifier %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_GeneralModifier {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_GeneralModifier(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_GeneralModifier {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_GeneralModifier {
-	Handle_IFSelect_GeneralModifier GetHandle() {
-	return *(Handle_IFSelect_GeneralModifier*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_GeneralModifier::Handle_IFSelect_GeneralModifier %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_GeneralModifier;
 class Handle_IFSelect_GeneralModifier : public Handle_MMgt_TShared {
@@ -1895,20 +1769,6 @@ class Handle_IFSelect_GeneralModifier : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_GeneralModifier {
     IFSelect_GeneralModifier* GetObject() {
     return (IFSelect_GeneralModifier*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_GeneralModifier::~Handle_IFSelect_GeneralModifier %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_GeneralModifier {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -2018,13 +1878,13 @@ class IFSelect_HSeqOfSelection : public MMgt_TShared {
 	:type anIndex: int
 	:rtype: Handle_IFSelect_Selection
 ") Value;
-		const Handle_IFSelect_Selection & Value (const Standard_Integer anIndex);
+		Handle_IFSelect_Selection Value (const Standard_Integer anIndex);
 		%feature("compactdefaultargs") ChangeValue;
 		%feature("autodoc", "	:param anIndex:
 	:type anIndex: int
 	:rtype: Handle_IFSelect_Selection
 ") ChangeValue;
-		Handle_IFSelect_Selection & ChangeValue (const Standard_Integer anIndex);
+		Handle_IFSelect_Selection ChangeValue (const Standard_Integer anIndex);
 		%feature("compactdefaultargs") Remove;
 		%feature("autodoc", "	:param anIndex:
 	:type anIndex: int
@@ -2050,25 +1910,23 @@ class IFSelect_HSeqOfSelection : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_HSeqOfSelection::~IFSelect_HSeqOfSelection %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_HSeqOfSelection {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_HSeqOfSelection(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_HSeqOfSelection {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_HSeqOfSelection {
-	Handle_IFSelect_HSeqOfSelection GetHandle() {
-	return *(Handle_IFSelect_HSeqOfSelection*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_HSeqOfSelection::Handle_IFSelect_HSeqOfSelection %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_HSeqOfSelection;
 class Handle_IFSelect_HSeqOfSelection : public Handle_MMgt_TShared {
@@ -2086,20 +1944,6 @@ class Handle_IFSelect_HSeqOfSelection : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_HSeqOfSelection {
     IFSelect_HSeqOfSelection* GetObject() {
     return (IFSelect_HSeqOfSelection*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_HSeqOfSelection::~Handle_IFSelect_HSeqOfSelection %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_HSeqOfSelection {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -2137,25 +1981,23 @@ class IFSelect_IntParam : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_IntParam::~IFSelect_IntParam %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_IntParam {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_IntParam(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_IntParam {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_IntParam {
-	Handle_IFSelect_IntParam GetHandle() {
-	return *(Handle_IFSelect_IntParam*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_IntParam::Handle_IFSelect_IntParam %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_IntParam;
 class Handle_IFSelect_IntParam : public Handle_MMgt_TShared {
@@ -2173,20 +2015,6 @@ class Handle_IFSelect_IntParam : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_IntParam {
     IFSelect_IntParam* GetObject() {
     return (IFSelect_IntParam*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_IntParam::~Handle_IFSelect_IntParam %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_IntParam {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -2338,25 +2166,23 @@ class IFSelect_ListEditor : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_ListEditor::~IFSelect_ListEditor %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_ListEditor {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_ListEditor(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_ListEditor {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_ListEditor {
-	Handle_IFSelect_ListEditor GetHandle() {
-	return *(Handle_IFSelect_ListEditor*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_ListEditor::Handle_IFSelect_ListEditor %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_ListEditor;
 class Handle_IFSelect_ListEditor : public Handle_MMgt_TShared {
@@ -2374,20 +2200,6 @@ class Handle_IFSelect_ListEditor : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_ListEditor {
     IFSelect_ListEditor* GetObject() {
     return (IFSelect_ListEditor*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_ListEditor::~Handle_IFSelect_ListEditor %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_ListEditor {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -2603,25 +2415,23 @@ class IFSelect_ModelCopier : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_ModelCopier::~IFSelect_ModelCopier %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_ModelCopier {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_ModelCopier(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_ModelCopier {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_ModelCopier {
-	Handle_IFSelect_ModelCopier GetHandle() {
-	return *(Handle_IFSelect_ModelCopier*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_ModelCopier::Handle_IFSelect_ModelCopier %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_ModelCopier;
 class Handle_IFSelect_ModelCopier : public Handle_MMgt_TShared {
@@ -2639,20 +2449,6 @@ class Handle_IFSelect_ModelCopier : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_ModelCopier {
     IFSelect_ModelCopier* GetObject() {
     return (IFSelect_ModelCopier*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_ModelCopier::~Handle_IFSelect_ModelCopier %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_ModelCopier {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -2760,25 +2556,23 @@ class IFSelect_PacketList : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_PacketList::~IFSelect_PacketList %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_PacketList {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_PacketList(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_PacketList {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_PacketList {
-	Handle_IFSelect_PacketList GetHandle() {
-	return *(Handle_IFSelect_PacketList*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_PacketList::Handle_IFSelect_PacketList %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_PacketList;
 class Handle_IFSelect_PacketList : public Handle_MMgt_TShared {
@@ -2796,20 +2590,6 @@ class Handle_IFSelect_PacketList : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_PacketList {
     IFSelect_PacketList* GetObject() {
     return (IFSelect_PacketList*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_PacketList::~Handle_IFSelect_PacketList %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_PacketList {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -2857,25 +2637,23 @@ class IFSelect_Selection : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_Selection::~IFSelect_Selection %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_Selection {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_Selection(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_Selection {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_Selection {
-	Handle_IFSelect_Selection GetHandle() {
-	return *(Handle_IFSelect_Selection*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_Selection::Handle_IFSelect_Selection %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_Selection;
 class Handle_IFSelect_Selection : public Handle_MMgt_TShared {
@@ -2893,20 +2671,6 @@ class Handle_IFSelect_Selection : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_Selection {
     IFSelect_Selection* GetObject() {
     return (IFSelect_Selection*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_Selection::~Handle_IFSelect_Selection %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_Selection {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -2968,24 +2732,10 @@ class IFSelect_SelectionIterator {
 
 	:rtype: Handle_IFSelect_Selection
 ") Value;
-		const Handle_IFSelect_Selection & Value ();
+		Handle_IFSelect_Selection Value ();
 };
 
 
-%feature("shadow") IFSelect_SelectionIterator::~IFSelect_SelectionIterator %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend IFSelect_SelectionIterator {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor IFSelect_SequenceNodeOfSequenceOfAppliedModifiers;
 class IFSelect_SequenceNodeOfSequenceOfAppliedModifiers : public TCollection_SeqNode {
 	public:
@@ -3002,29 +2752,27 @@ class IFSelect_SequenceNodeOfSequenceOfAppliedModifiers : public TCollection_Seq
 		%feature("compactdefaultargs") Value;
 		%feature("autodoc", "	:rtype: Handle_IFSelect_AppliedModifiers
 ") Value;
-		Handle_IFSelect_AppliedModifiers & Value ();
+		Handle_IFSelect_AppliedModifiers Value ();
 };
 
 
-%feature("shadow") IFSelect_SequenceNodeOfSequenceOfAppliedModifiers::~IFSelect_SequenceNodeOfSequenceOfAppliedModifiers %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
+%extend IFSelect_SequenceNodeOfSequenceOfAppliedModifiers {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SequenceNodeOfSequenceOfAppliedModifiers(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
+
+%pythonappend Handle_IFSelect_SequenceNodeOfSequenceOfAppliedModifiers::Handle_IFSelect_SequenceNodeOfSequenceOfAppliedModifiers %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
 %}
-
-%extend IFSelect_SequenceNodeOfSequenceOfAppliedModifiers {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SequenceNodeOfSequenceOfAppliedModifiers {
-	Handle_IFSelect_SequenceNodeOfSequenceOfAppliedModifiers GetHandle() {
-	return *(Handle_IFSelect_SequenceNodeOfSequenceOfAppliedModifiers*) &$self;
-	}
-};
 
 %nodefaultctor Handle_IFSelect_SequenceNodeOfSequenceOfAppliedModifiers;
 class Handle_IFSelect_SequenceNodeOfSequenceOfAppliedModifiers : public Handle_TCollection_SeqNode {
@@ -3044,20 +2792,6 @@ class Handle_IFSelect_SequenceNodeOfSequenceOfAppliedModifiers : public Handle_T
     return (IFSelect_SequenceNodeOfSequenceOfAppliedModifiers*)$self->Access();
     }
 };
-%feature("shadow") Handle_IFSelect_SequenceNodeOfSequenceOfAppliedModifiers::~Handle_IFSelect_SequenceNodeOfSequenceOfAppliedModifiers %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SequenceNodeOfSequenceOfAppliedModifiers {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
 
 %nodefaultctor IFSelect_SequenceNodeOfSequenceOfGeneralModifier;
 class IFSelect_SequenceNodeOfSequenceOfGeneralModifier : public TCollection_SeqNode {
@@ -3075,29 +2809,27 @@ class IFSelect_SequenceNodeOfSequenceOfGeneralModifier : public TCollection_SeqN
 		%feature("compactdefaultargs") Value;
 		%feature("autodoc", "	:rtype: Handle_IFSelect_GeneralModifier
 ") Value;
-		Handle_IFSelect_GeneralModifier & Value ();
+		Handle_IFSelect_GeneralModifier Value ();
 };
 
 
-%feature("shadow") IFSelect_SequenceNodeOfSequenceOfGeneralModifier::~IFSelect_SequenceNodeOfSequenceOfGeneralModifier %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
+%extend IFSelect_SequenceNodeOfSequenceOfGeneralModifier {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SequenceNodeOfSequenceOfGeneralModifier(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
+
+%pythonappend Handle_IFSelect_SequenceNodeOfSequenceOfGeneralModifier::Handle_IFSelect_SequenceNodeOfSequenceOfGeneralModifier %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
 %}
-
-%extend IFSelect_SequenceNodeOfSequenceOfGeneralModifier {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SequenceNodeOfSequenceOfGeneralModifier {
-	Handle_IFSelect_SequenceNodeOfSequenceOfGeneralModifier GetHandle() {
-	return *(Handle_IFSelect_SequenceNodeOfSequenceOfGeneralModifier*) &$self;
-	}
-};
 
 %nodefaultctor Handle_IFSelect_SequenceNodeOfSequenceOfGeneralModifier;
 class Handle_IFSelect_SequenceNodeOfSequenceOfGeneralModifier : public Handle_TCollection_SeqNode {
@@ -3117,20 +2849,6 @@ class Handle_IFSelect_SequenceNodeOfSequenceOfGeneralModifier : public Handle_TC
     return (IFSelect_SequenceNodeOfSequenceOfGeneralModifier*)$self->Access();
     }
 };
-%feature("shadow") Handle_IFSelect_SequenceNodeOfSequenceOfGeneralModifier::~Handle_IFSelect_SequenceNodeOfSequenceOfGeneralModifier %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SequenceNodeOfSequenceOfGeneralModifier {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
 
 %nodefaultctor IFSelect_SequenceNodeOfSequenceOfInterfaceModel;
 class IFSelect_SequenceNodeOfSequenceOfInterfaceModel : public TCollection_SeqNode {
@@ -3148,29 +2866,27 @@ class IFSelect_SequenceNodeOfSequenceOfInterfaceModel : public TCollection_SeqNo
 		%feature("compactdefaultargs") Value;
 		%feature("autodoc", "	:rtype: Handle_Interface_InterfaceModel
 ") Value;
-		Handle_Interface_InterfaceModel & Value ();
+		Handle_Interface_InterfaceModel Value ();
 };
 
 
-%feature("shadow") IFSelect_SequenceNodeOfSequenceOfInterfaceModel::~IFSelect_SequenceNodeOfSequenceOfInterfaceModel %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
+%extend IFSelect_SequenceNodeOfSequenceOfInterfaceModel {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SequenceNodeOfSequenceOfInterfaceModel(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
+
+%pythonappend Handle_IFSelect_SequenceNodeOfSequenceOfInterfaceModel::Handle_IFSelect_SequenceNodeOfSequenceOfInterfaceModel %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
 %}
-
-%extend IFSelect_SequenceNodeOfSequenceOfInterfaceModel {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SequenceNodeOfSequenceOfInterfaceModel {
-	Handle_IFSelect_SequenceNodeOfSequenceOfInterfaceModel GetHandle() {
-	return *(Handle_IFSelect_SequenceNodeOfSequenceOfInterfaceModel*) &$self;
-	}
-};
 
 %nodefaultctor Handle_IFSelect_SequenceNodeOfSequenceOfInterfaceModel;
 class Handle_IFSelect_SequenceNodeOfSequenceOfInterfaceModel : public Handle_TCollection_SeqNode {
@@ -3190,20 +2906,6 @@ class Handle_IFSelect_SequenceNodeOfSequenceOfInterfaceModel : public Handle_TCo
     return (IFSelect_SequenceNodeOfSequenceOfInterfaceModel*)$self->Access();
     }
 };
-%feature("shadow") Handle_IFSelect_SequenceNodeOfSequenceOfInterfaceModel::~Handle_IFSelect_SequenceNodeOfSequenceOfInterfaceModel %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SequenceNodeOfSequenceOfInterfaceModel {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
 
 %nodefaultctor IFSelect_SequenceNodeOfTSeqOfDispatch;
 class IFSelect_SequenceNodeOfTSeqOfDispatch : public TCollection_SeqNode {
@@ -3221,29 +2923,27 @@ class IFSelect_SequenceNodeOfTSeqOfDispatch : public TCollection_SeqNode {
 		%feature("compactdefaultargs") Value;
 		%feature("autodoc", "	:rtype: Handle_IFSelect_Dispatch
 ") Value;
-		Handle_IFSelect_Dispatch & Value ();
+		Handle_IFSelect_Dispatch Value ();
 };
 
 
-%feature("shadow") IFSelect_SequenceNodeOfTSeqOfDispatch::~IFSelect_SequenceNodeOfTSeqOfDispatch %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
+%extend IFSelect_SequenceNodeOfTSeqOfDispatch {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SequenceNodeOfTSeqOfDispatch(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
+
+%pythonappend Handle_IFSelect_SequenceNodeOfTSeqOfDispatch::Handle_IFSelect_SequenceNodeOfTSeqOfDispatch %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
 %}
-
-%extend IFSelect_SequenceNodeOfTSeqOfDispatch {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SequenceNodeOfTSeqOfDispatch {
-	Handle_IFSelect_SequenceNodeOfTSeqOfDispatch GetHandle() {
-	return *(Handle_IFSelect_SequenceNodeOfTSeqOfDispatch*) &$self;
-	}
-};
 
 %nodefaultctor Handle_IFSelect_SequenceNodeOfTSeqOfDispatch;
 class Handle_IFSelect_SequenceNodeOfTSeqOfDispatch : public Handle_TCollection_SeqNode {
@@ -3263,20 +2963,6 @@ class Handle_IFSelect_SequenceNodeOfTSeqOfDispatch : public Handle_TCollection_S
     return (IFSelect_SequenceNodeOfTSeqOfDispatch*)$self->Access();
     }
 };
-%feature("shadow") Handle_IFSelect_SequenceNodeOfTSeqOfDispatch::~Handle_IFSelect_SequenceNodeOfTSeqOfDispatch %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SequenceNodeOfTSeqOfDispatch {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
 
 %nodefaultctor IFSelect_SequenceNodeOfTSeqOfSelection;
 class IFSelect_SequenceNodeOfTSeqOfSelection : public TCollection_SeqNode {
@@ -3294,29 +2980,27 @@ class IFSelect_SequenceNodeOfTSeqOfSelection : public TCollection_SeqNode {
 		%feature("compactdefaultargs") Value;
 		%feature("autodoc", "	:rtype: Handle_IFSelect_Selection
 ") Value;
-		Handle_IFSelect_Selection & Value ();
+		Handle_IFSelect_Selection Value ();
 };
 
 
-%feature("shadow") IFSelect_SequenceNodeOfTSeqOfSelection::~IFSelect_SequenceNodeOfTSeqOfSelection %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
+%extend IFSelect_SequenceNodeOfTSeqOfSelection {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SequenceNodeOfTSeqOfSelection(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
+
+%pythonappend Handle_IFSelect_SequenceNodeOfTSeqOfSelection::Handle_IFSelect_SequenceNodeOfTSeqOfSelection %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
 %}
-
-%extend IFSelect_SequenceNodeOfTSeqOfSelection {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SequenceNodeOfTSeqOfSelection {
-	Handle_IFSelect_SequenceNodeOfTSeqOfSelection GetHandle() {
-	return *(Handle_IFSelect_SequenceNodeOfTSeqOfSelection*) &$self;
-	}
-};
 
 %nodefaultctor Handle_IFSelect_SequenceNodeOfTSeqOfSelection;
 class Handle_IFSelect_SequenceNodeOfTSeqOfSelection : public Handle_TCollection_SeqNode {
@@ -3334,20 +3018,6 @@ class Handle_IFSelect_SequenceNodeOfTSeqOfSelection : public Handle_TCollection_
 %extend Handle_IFSelect_SequenceNodeOfTSeqOfSelection {
     IFSelect_SequenceNodeOfTSeqOfSelection* GetObject() {
     return (IFSelect_SequenceNodeOfTSeqOfSelection*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SequenceNodeOfTSeqOfSelection::~Handle_IFSelect_SequenceNodeOfTSeqOfSelection %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SequenceNodeOfTSeqOfSelection {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -3439,11 +3109,11 @@ class IFSelect_SequenceOfAppliedModifiers : public TCollection_BaseSequence {
 		%feature("compactdefaultargs") First;
 		%feature("autodoc", "	:rtype: Handle_IFSelect_AppliedModifiers
 ") First;
-		const Handle_IFSelect_AppliedModifiers & First ();
+		Handle_IFSelect_AppliedModifiers First ();
 		%feature("compactdefaultargs") Last;
 		%feature("autodoc", "	:rtype: Handle_IFSelect_AppliedModifiers
 ") Last;
-		const Handle_IFSelect_AppliedModifiers & Last ();
+		Handle_IFSelect_AppliedModifiers Last ();
 		%feature("compactdefaultargs") Split;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -3457,7 +3127,7 @@ class IFSelect_SequenceOfAppliedModifiers : public TCollection_BaseSequence {
 	:type Index: int
 	:rtype: Handle_IFSelect_AppliedModifiers
 ") Value;
-		const Handle_IFSelect_AppliedModifiers & Value (const Standard_Integer Index);
+		Handle_IFSelect_AppliedModifiers Value (const Standard_Integer Index);
 		%feature("compactdefaultargs") SetValue;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -3471,7 +3141,7 @@ class IFSelect_SequenceOfAppliedModifiers : public TCollection_BaseSequence {
 	:type Index: int
 	:rtype: Handle_IFSelect_AppliedModifiers
 ") ChangeValue;
-		Handle_IFSelect_AppliedModifiers & ChangeValue (const Standard_Integer Index);
+		Handle_IFSelect_AppliedModifiers ChangeValue (const Standard_Integer Index);
 		%feature("compactdefaultargs") Remove;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -3489,20 +3159,6 @@ class IFSelect_SequenceOfAppliedModifiers : public TCollection_BaseSequence {
 };
 
 
-%feature("shadow") IFSelect_SequenceOfAppliedModifiers::~IFSelect_SequenceOfAppliedModifiers %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend IFSelect_SequenceOfAppliedModifiers {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor IFSelect_SequenceOfGeneralModifier;
 class IFSelect_SequenceOfGeneralModifier : public TCollection_BaseSequence {
 	public:
@@ -3591,11 +3247,11 @@ class IFSelect_SequenceOfGeneralModifier : public TCollection_BaseSequence {
 		%feature("compactdefaultargs") First;
 		%feature("autodoc", "	:rtype: Handle_IFSelect_GeneralModifier
 ") First;
-		const Handle_IFSelect_GeneralModifier & First ();
+		Handle_IFSelect_GeneralModifier First ();
 		%feature("compactdefaultargs") Last;
 		%feature("autodoc", "	:rtype: Handle_IFSelect_GeneralModifier
 ") Last;
-		const Handle_IFSelect_GeneralModifier & Last ();
+		Handle_IFSelect_GeneralModifier Last ();
 		%feature("compactdefaultargs") Split;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -3609,7 +3265,7 @@ class IFSelect_SequenceOfGeneralModifier : public TCollection_BaseSequence {
 	:type Index: int
 	:rtype: Handle_IFSelect_GeneralModifier
 ") Value;
-		const Handle_IFSelect_GeneralModifier & Value (const Standard_Integer Index);
+		Handle_IFSelect_GeneralModifier Value (const Standard_Integer Index);
 		%feature("compactdefaultargs") SetValue;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -3623,7 +3279,7 @@ class IFSelect_SequenceOfGeneralModifier : public TCollection_BaseSequence {
 	:type Index: int
 	:rtype: Handle_IFSelect_GeneralModifier
 ") ChangeValue;
-		Handle_IFSelect_GeneralModifier & ChangeValue (const Standard_Integer Index);
+		Handle_IFSelect_GeneralModifier ChangeValue (const Standard_Integer Index);
 		%feature("compactdefaultargs") Remove;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -3641,20 +3297,6 @@ class IFSelect_SequenceOfGeneralModifier : public TCollection_BaseSequence {
 };
 
 
-%feature("shadow") IFSelect_SequenceOfGeneralModifier::~IFSelect_SequenceOfGeneralModifier %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend IFSelect_SequenceOfGeneralModifier {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor IFSelect_SequenceOfInterfaceModel;
 class IFSelect_SequenceOfInterfaceModel : public TCollection_BaseSequence {
 	public:
@@ -3743,11 +3385,11 @@ class IFSelect_SequenceOfInterfaceModel : public TCollection_BaseSequence {
 		%feature("compactdefaultargs") First;
 		%feature("autodoc", "	:rtype: Handle_Interface_InterfaceModel
 ") First;
-		const Handle_Interface_InterfaceModel & First ();
+		Handle_Interface_InterfaceModel First ();
 		%feature("compactdefaultargs") Last;
 		%feature("autodoc", "	:rtype: Handle_Interface_InterfaceModel
 ") Last;
-		const Handle_Interface_InterfaceModel & Last ();
+		Handle_Interface_InterfaceModel Last ();
 		%feature("compactdefaultargs") Split;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -3761,7 +3403,7 @@ class IFSelect_SequenceOfInterfaceModel : public TCollection_BaseSequence {
 	:type Index: int
 	:rtype: Handle_Interface_InterfaceModel
 ") Value;
-		const Handle_Interface_InterfaceModel & Value (const Standard_Integer Index);
+		Handle_Interface_InterfaceModel Value (const Standard_Integer Index);
 		%feature("compactdefaultargs") SetValue;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -3775,7 +3417,7 @@ class IFSelect_SequenceOfInterfaceModel : public TCollection_BaseSequence {
 	:type Index: int
 	:rtype: Handle_Interface_InterfaceModel
 ") ChangeValue;
-		Handle_Interface_InterfaceModel & ChangeValue (const Standard_Integer Index);
+		Handle_Interface_InterfaceModel ChangeValue (const Standard_Integer Index);
 		%feature("compactdefaultargs") Remove;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -3793,20 +3435,6 @@ class IFSelect_SequenceOfInterfaceModel : public TCollection_BaseSequence {
 };
 
 
-%feature("shadow") IFSelect_SequenceOfInterfaceModel::~IFSelect_SequenceOfInterfaceModel %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend IFSelect_SequenceOfInterfaceModel {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor IFSelect_SessionDumper;
 class IFSelect_SessionDumper : public MMgt_TShared {
 	public:
@@ -3847,25 +3475,23 @@ class IFSelect_SessionDumper : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_SessionDumper::~IFSelect_SessionDumper %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SessionDumper {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SessionDumper(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SessionDumper {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SessionDumper {
-	Handle_IFSelect_SessionDumper GetHandle() {
-	return *(Handle_IFSelect_SessionDumper*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SessionDumper::Handle_IFSelect_SessionDumper %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SessionDumper;
 class Handle_IFSelect_SessionDumper : public Handle_MMgt_TShared {
@@ -3883,20 +3509,6 @@ class Handle_IFSelect_SessionDumper : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_SessionDumper {
     IFSelect_SessionDumper* GetObject() {
     return (IFSelect_SessionDumper*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SessionDumper::~Handle_IFSelect_SessionDumper %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SessionDumper {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -4184,20 +3796,6 @@ class IFSelect_SessionFile {
 };
 
 
-%feature("shadow") IFSelect_SessionFile::~IFSelect_SessionFile %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend IFSelect_SessionFile {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor IFSelect_ShareOut;
 class IFSelect_ShareOut : public MMgt_TShared {
 	public:
@@ -4266,7 +3864,7 @@ class IFSelect_ShareOut : public MMgt_TShared {
 	:type num: int
 	:rtype: Handle_IFSelect_Dispatch
 ") Dispatch;
-		const Handle_IFSelect_Dispatch & Dispatch (const Standard_Integer num);
+		Handle_IFSelect_Dispatch Dispatch (const Standard_Integer num);
 		%feature("compactdefaultargs") AddDispatch;
 		%feature("autodoc", "	* Adds a Dispatch to the list
 
@@ -4464,25 +4062,23 @@ class IFSelect_ShareOut : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_ShareOut::~IFSelect_ShareOut %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_ShareOut {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_ShareOut(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_ShareOut {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_ShareOut {
-	Handle_IFSelect_ShareOut GetHandle() {
-	return *(Handle_IFSelect_ShareOut*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_ShareOut::Handle_IFSelect_ShareOut %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_ShareOut;
 class Handle_IFSelect_ShareOut : public Handle_MMgt_TShared {
@@ -4500,20 +4096,6 @@ class Handle_IFSelect_ShareOut : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_ShareOut {
     IFSelect_ShareOut* GetObject() {
     return (IFSelect_ShareOut*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_ShareOut::~Handle_IFSelect_ShareOut %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_ShareOut {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -4665,20 +4247,6 @@ class IFSelect_ShareOutResult {
 };
 
 
-%feature("shadow") IFSelect_ShareOutResult::~IFSelect_ShareOutResult %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend IFSelect_ShareOutResult {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor IFSelect_Signature;
 class IFSelect_Signature : public Interface_SignType {
 	public:
@@ -4773,25 +4341,23 @@ class IFSelect_Signature : public Interface_SignType {
 };
 
 
-%feature("shadow") IFSelect_Signature::~IFSelect_Signature %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_Signature {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_Signature(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_Signature {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_Signature {
-	Handle_IFSelect_Signature GetHandle() {
-	return *(Handle_IFSelect_Signature*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_Signature::Handle_IFSelect_Signature %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_Signature;
 class Handle_IFSelect_Signature : public Handle_Interface_SignType {
@@ -4809,20 +4375,6 @@ class Handle_IFSelect_Signature : public Handle_Interface_SignType {
 %extend Handle_IFSelect_Signature {
     IFSelect_Signature* GetObject() {
     return (IFSelect_Signature*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_Signature::~Handle_IFSelect_Signature %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_Signature {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -4973,25 +4525,23 @@ class IFSelect_SignatureList : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_SignatureList::~IFSelect_SignatureList %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SignatureList {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SignatureList(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SignatureList {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SignatureList {
-	Handle_IFSelect_SignatureList GetHandle() {
-	return *(Handle_IFSelect_SignatureList*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SignatureList::Handle_IFSelect_SignatureList %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SignatureList;
 class Handle_IFSelect_SignatureList : public Handle_MMgt_TShared {
@@ -5009,20 +4559,6 @@ class Handle_IFSelect_SignatureList : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_SignatureList {
     IFSelect_SignatureList* GetObject() {
     return (IFSelect_SignatureList*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SignatureList::~Handle_IFSelect_SignatureList %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SignatureList {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -5114,11 +4650,11 @@ class IFSelect_TSeqOfDispatch : public TCollection_BaseSequence {
 		%feature("compactdefaultargs") First;
 		%feature("autodoc", "	:rtype: Handle_IFSelect_Dispatch
 ") First;
-		const Handle_IFSelect_Dispatch & First ();
+		Handle_IFSelect_Dispatch First ();
 		%feature("compactdefaultargs") Last;
 		%feature("autodoc", "	:rtype: Handle_IFSelect_Dispatch
 ") Last;
-		const Handle_IFSelect_Dispatch & Last ();
+		Handle_IFSelect_Dispatch Last ();
 		%feature("compactdefaultargs") Split;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -5132,7 +4668,7 @@ class IFSelect_TSeqOfDispatch : public TCollection_BaseSequence {
 	:type Index: int
 	:rtype: Handle_IFSelect_Dispatch
 ") Value;
-		const Handle_IFSelect_Dispatch & Value (const Standard_Integer Index);
+		Handle_IFSelect_Dispatch Value (const Standard_Integer Index);
 		%feature("compactdefaultargs") SetValue;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -5146,7 +4682,7 @@ class IFSelect_TSeqOfDispatch : public TCollection_BaseSequence {
 	:type Index: int
 	:rtype: Handle_IFSelect_Dispatch
 ") ChangeValue;
-		Handle_IFSelect_Dispatch & ChangeValue (const Standard_Integer Index);
+		Handle_IFSelect_Dispatch ChangeValue (const Standard_Integer Index);
 		%feature("compactdefaultargs") Remove;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -5164,20 +4700,6 @@ class IFSelect_TSeqOfDispatch : public TCollection_BaseSequence {
 };
 
 
-%feature("shadow") IFSelect_TSeqOfDispatch::~IFSelect_TSeqOfDispatch %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend IFSelect_TSeqOfDispatch {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor IFSelect_TSeqOfSelection;
 class IFSelect_TSeqOfSelection : public TCollection_BaseSequence {
 	public:
@@ -5266,11 +4788,11 @@ class IFSelect_TSeqOfSelection : public TCollection_BaseSequence {
 		%feature("compactdefaultargs") First;
 		%feature("autodoc", "	:rtype: Handle_IFSelect_Selection
 ") First;
-		const Handle_IFSelect_Selection & First ();
+		Handle_IFSelect_Selection First ();
 		%feature("compactdefaultargs") Last;
 		%feature("autodoc", "	:rtype: Handle_IFSelect_Selection
 ") Last;
-		const Handle_IFSelect_Selection & Last ();
+		Handle_IFSelect_Selection Last ();
 		%feature("compactdefaultargs") Split;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -5284,7 +4806,7 @@ class IFSelect_TSeqOfSelection : public TCollection_BaseSequence {
 	:type Index: int
 	:rtype: Handle_IFSelect_Selection
 ") Value;
-		const Handle_IFSelect_Selection & Value (const Standard_Integer Index);
+		Handle_IFSelect_Selection Value (const Standard_Integer Index);
 		%feature("compactdefaultargs") SetValue;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -5298,7 +4820,7 @@ class IFSelect_TSeqOfSelection : public TCollection_BaseSequence {
 	:type Index: int
 	:rtype: Handle_IFSelect_Selection
 ") ChangeValue;
-		Handle_IFSelect_Selection & ChangeValue (const Standard_Integer Index);
+		Handle_IFSelect_Selection ChangeValue (const Standard_Integer Index);
 		%feature("compactdefaultargs") Remove;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -5316,20 +4838,6 @@ class IFSelect_TSeqOfSelection : public TCollection_BaseSequence {
 };
 
 
-%feature("shadow") IFSelect_TSeqOfSelection::~IFSelect_TSeqOfSelection %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend IFSelect_TSeqOfSelection {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor IFSelect_Transformer;
 class IFSelect_Transformer : public MMgt_TShared {
 	public:
@@ -5374,25 +4882,23 @@ class IFSelect_Transformer : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_Transformer::~IFSelect_Transformer %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_Transformer {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_Transformer(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_Transformer {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_Transformer {
-	Handle_IFSelect_Transformer GetHandle() {
-	return *(Handle_IFSelect_Transformer*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_Transformer::Handle_IFSelect_Transformer %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_Transformer;
 class Handle_IFSelect_Transformer : public Handle_MMgt_TShared {
@@ -5410,20 +4916,6 @@ class Handle_IFSelect_Transformer : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_Transformer {
     IFSelect_Transformer* GetObject() {
     return (IFSelect_Transformer*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_Transformer::~Handle_IFSelect_Transformer %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_Transformer {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -5535,25 +5027,23 @@ class IFSelect_WorkLibrary : public Standard_Transient {
 };
 
 
-%feature("shadow") IFSelect_WorkLibrary::~IFSelect_WorkLibrary %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_WorkLibrary {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_WorkLibrary(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_WorkLibrary {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_WorkLibrary {
-	Handle_IFSelect_WorkLibrary GetHandle() {
-	return *(Handle_IFSelect_WorkLibrary*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_WorkLibrary::Handle_IFSelect_WorkLibrary %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_WorkLibrary;
 class Handle_IFSelect_WorkLibrary : public Handle_Standard_Transient {
@@ -5573,20 +5063,6 @@ class Handle_IFSelect_WorkLibrary : public Handle_Standard_Transient {
     return (IFSelect_WorkLibrary*)$self->Access();
     }
 };
-%feature("shadow") Handle_IFSelect_WorkLibrary::~Handle_IFSelect_WorkLibrary %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_WorkLibrary {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
 
 %nodefaultctor IFSelect_WorkSession;
 class IFSelect_WorkSession : public MMgt_TShared {
@@ -5602,7 +5078,7 @@ class IFSelect_WorkSession : public MMgt_TShared {
 
 	:rtype: Handle_IFSelect_ShareOut
 ") ShareOut;
-		const Handle_IFSelect_ShareOut & ShareOut ();
+		Handle_IFSelect_ShareOut ShareOut ();
 		%feature("compactdefaultargs") SetShareOut;
 		%feature("autodoc", "	* Sets a new ShareOut. Fills Items which its content Warning : data from the former ShareOut are lost
 
@@ -6946,25 +6422,23 @@ class IFSelect_WorkSession : public MMgt_TShared {
 };
 
 
-%feature("shadow") IFSelect_WorkSession::~IFSelect_WorkSession %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_WorkSession {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_WorkSession(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_WorkSession {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_WorkSession {
-	Handle_IFSelect_WorkSession GetHandle() {
-	return *(Handle_IFSelect_WorkSession*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_WorkSession::Handle_IFSelect_WorkSession %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_WorkSession;
 class Handle_IFSelect_WorkSession : public Handle_MMgt_TShared {
@@ -6982,20 +6456,6 @@ class Handle_IFSelect_WorkSession : public Handle_MMgt_TShared {
 %extend Handle_IFSelect_WorkSession {
     IFSelect_WorkSession* GetObject() {
     return (IFSelect_WorkSession*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_WorkSession::~Handle_IFSelect_WorkSession %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_WorkSession {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -7069,25 +6529,23 @@ class IFSelect_Act : public IFSelect_Activator {
 };
 
 
-%feature("shadow") IFSelect_Act::~IFSelect_Act %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_Act {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_Act(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_Act {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_Act {
-	Handle_IFSelect_Act GetHandle() {
-	return *(Handle_IFSelect_Act*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_Act::Handle_IFSelect_Act %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_Act;
 class Handle_IFSelect_Act : public Handle_IFSelect_Activator {
@@ -7105,20 +6563,6 @@ class Handle_IFSelect_Act : public Handle_IFSelect_Activator {
 %extend Handle_IFSelect_Act {
     IFSelect_Act* GetObject() {
     return (IFSelect_Act*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_Act::~Handle_IFSelect_Act %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_Act {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -7156,25 +6600,23 @@ class IFSelect_BasicDumper : public IFSelect_SessionDumper {
 };
 
 
-%feature("shadow") IFSelect_BasicDumper::~IFSelect_BasicDumper %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_BasicDumper {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_BasicDumper(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_BasicDumper {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_BasicDumper {
-	Handle_IFSelect_BasicDumper GetHandle() {
-	return *(Handle_IFSelect_BasicDumper*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_BasicDumper::Handle_IFSelect_BasicDumper %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_BasicDumper;
 class Handle_IFSelect_BasicDumper : public Handle_IFSelect_SessionDumper {
@@ -7192,20 +6634,6 @@ class Handle_IFSelect_BasicDumper : public Handle_IFSelect_SessionDumper {
 %extend Handle_IFSelect_BasicDumper {
     IFSelect_BasicDumper* GetObject() {
     return (IFSelect_BasicDumper*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_BasicDumper::~Handle_IFSelect_BasicDumper %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_BasicDumper {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -7251,25 +6679,23 @@ class IFSelect_CheckCounter : public IFSelect_SignatureList {
 };
 
 
-%feature("shadow") IFSelect_CheckCounter::~IFSelect_CheckCounter %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_CheckCounter {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_CheckCounter(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_CheckCounter {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_CheckCounter {
-	Handle_IFSelect_CheckCounter GetHandle() {
-	return *(Handle_IFSelect_CheckCounter*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_CheckCounter::Handle_IFSelect_CheckCounter %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_CheckCounter;
 class Handle_IFSelect_CheckCounter : public Handle_IFSelect_SignatureList {
@@ -7287,20 +6713,6 @@ class Handle_IFSelect_CheckCounter : public Handle_IFSelect_SignatureList {
 %extend Handle_IFSelect_CheckCounter {
     IFSelect_CheckCounter* GetObject() {
     return (IFSelect_CheckCounter*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_CheckCounter::~Handle_IFSelect_CheckCounter %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_CheckCounter {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -7352,25 +6764,23 @@ class IFSelect_DispGlobal : public IFSelect_Dispatch {
 };
 
 
-%feature("shadow") IFSelect_DispGlobal::~IFSelect_DispGlobal %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_DispGlobal {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_DispGlobal(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_DispGlobal {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_DispGlobal {
-	Handle_IFSelect_DispGlobal GetHandle() {
-	return *(Handle_IFSelect_DispGlobal*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_DispGlobal::Handle_IFSelect_DispGlobal %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_DispGlobal;
 class Handle_IFSelect_DispGlobal : public Handle_IFSelect_Dispatch {
@@ -7388,20 +6798,6 @@ class Handle_IFSelect_DispGlobal : public Handle_IFSelect_Dispatch {
 %extend Handle_IFSelect_DispGlobal {
     IFSelect_DispGlobal* GetObject() {
     return (IFSelect_DispGlobal*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_DispGlobal::~Handle_IFSelect_DispGlobal %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_DispGlobal {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -7473,25 +6869,23 @@ class IFSelect_DispPerCount : public IFSelect_Dispatch {
 };
 
 
-%feature("shadow") IFSelect_DispPerCount::~IFSelect_DispPerCount %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_DispPerCount {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_DispPerCount(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_DispPerCount {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_DispPerCount {
-	Handle_IFSelect_DispPerCount GetHandle() {
-	return *(Handle_IFSelect_DispPerCount*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_DispPerCount::Handle_IFSelect_DispPerCount %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_DispPerCount;
 class Handle_IFSelect_DispPerCount : public Handle_IFSelect_Dispatch {
@@ -7509,20 +6903,6 @@ class Handle_IFSelect_DispPerCount : public Handle_IFSelect_Dispatch {
 %extend Handle_IFSelect_DispPerCount {
     IFSelect_DispPerCount* GetObject() {
     return (IFSelect_DispPerCount*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_DispPerCount::~Handle_IFSelect_DispPerCount %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_DispPerCount {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -7594,25 +6974,23 @@ class IFSelect_DispPerFiles : public IFSelect_Dispatch {
 };
 
 
-%feature("shadow") IFSelect_DispPerFiles::~IFSelect_DispPerFiles %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_DispPerFiles {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_DispPerFiles(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_DispPerFiles {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_DispPerFiles {
-	Handle_IFSelect_DispPerFiles GetHandle() {
-	return *(Handle_IFSelect_DispPerFiles*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_DispPerFiles::Handle_IFSelect_DispPerFiles %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_DispPerFiles;
 class Handle_IFSelect_DispPerFiles : public Handle_IFSelect_Dispatch {
@@ -7630,20 +7008,6 @@ class Handle_IFSelect_DispPerFiles : public Handle_IFSelect_Dispatch {
 %extend Handle_IFSelect_DispPerFiles {
     IFSelect_DispPerFiles* GetObject() {
     return (IFSelect_DispPerFiles*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_DispPerFiles::~Handle_IFSelect_DispPerFiles %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_DispPerFiles {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -7695,25 +7059,23 @@ class IFSelect_DispPerOne : public IFSelect_Dispatch {
 };
 
 
-%feature("shadow") IFSelect_DispPerOne::~IFSelect_DispPerOne %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_DispPerOne {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_DispPerOne(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_DispPerOne {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_DispPerOne {
-	Handle_IFSelect_DispPerOne GetHandle() {
-	return *(Handle_IFSelect_DispPerOne*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_DispPerOne::Handle_IFSelect_DispPerOne %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_DispPerOne;
 class Handle_IFSelect_DispPerOne : public Handle_IFSelect_Dispatch {
@@ -7731,20 +7093,6 @@ class Handle_IFSelect_DispPerOne : public Handle_IFSelect_Dispatch {
 %extend Handle_IFSelect_DispPerOne {
     IFSelect_DispPerOne* GetObject() {
     return (IFSelect_DispPerOne*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_DispPerOne::~Handle_IFSelect_DispPerOne %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_DispPerOne {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -7806,25 +7154,23 @@ class IFSelect_DispPerSignature : public IFSelect_Dispatch {
 };
 
 
-%feature("shadow") IFSelect_DispPerSignature::~IFSelect_DispPerSignature %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_DispPerSignature {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_DispPerSignature(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_DispPerSignature {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_DispPerSignature {
-	Handle_IFSelect_DispPerSignature GetHandle() {
-	return *(Handle_IFSelect_DispPerSignature*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_DispPerSignature::Handle_IFSelect_DispPerSignature %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_DispPerSignature;
 class Handle_IFSelect_DispPerSignature : public Handle_IFSelect_Dispatch {
@@ -7842,20 +7188,6 @@ class Handle_IFSelect_DispPerSignature : public Handle_IFSelect_Dispatch {
 %extend Handle_IFSelect_DispPerSignature {
     IFSelect_DispPerSignature* GetObject() {
     return (IFSelect_DispPerSignature*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_DispPerSignature::~Handle_IFSelect_DispPerSignature %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_DispPerSignature {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -7879,25 +7211,23 @@ class IFSelect_Modifier : public IFSelect_GeneralModifier {
 };
 
 
-%feature("shadow") IFSelect_Modifier::~IFSelect_Modifier %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_Modifier {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_Modifier(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_Modifier {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_Modifier {
-	Handle_IFSelect_Modifier GetHandle() {
-	return *(Handle_IFSelect_Modifier*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_Modifier::Handle_IFSelect_Modifier %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_Modifier;
 class Handle_IFSelect_Modifier : public Handle_IFSelect_GeneralModifier {
@@ -7915,20 +7245,6 @@ class Handle_IFSelect_Modifier : public Handle_IFSelect_GeneralModifier {
 %extend Handle_IFSelect_Modifier {
     IFSelect_Modifier* GetObject() {
     return (IFSelect_Modifier*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_Modifier::~Handle_IFSelect_Modifier %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_Modifier {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -8018,25 +7334,23 @@ class IFSelect_ParamEditor : public IFSelect_Editor {
 };
 
 
-%feature("shadow") IFSelect_ParamEditor::~IFSelect_ParamEditor %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_ParamEditor {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_ParamEditor(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_ParamEditor {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_ParamEditor {
-	Handle_IFSelect_ParamEditor GetHandle() {
-	return *(Handle_IFSelect_ParamEditor*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_ParamEditor::Handle_IFSelect_ParamEditor %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_ParamEditor;
 class Handle_IFSelect_ParamEditor : public Handle_IFSelect_Editor {
@@ -8056,20 +7370,6 @@ class Handle_IFSelect_ParamEditor : public Handle_IFSelect_Editor {
     return (IFSelect_ParamEditor*)$self->Access();
     }
 };
-%feature("shadow") Handle_IFSelect_ParamEditor::~Handle_IFSelect_ParamEditor %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_ParamEditor {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
 
 %nodefaultctor IFSelect_SelectBase;
 class IFSelect_SelectBase : public IFSelect_Selection {
@@ -8085,25 +7385,23 @@ class IFSelect_SelectBase : public IFSelect_Selection {
 };
 
 
-%feature("shadow") IFSelect_SelectBase::~IFSelect_SelectBase %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectBase {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectBase(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectBase {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectBase {
-	Handle_IFSelect_SelectBase GetHandle() {
-	return *(Handle_IFSelect_SelectBase*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectBase::Handle_IFSelect_SelectBase %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectBase;
 class Handle_IFSelect_SelectBase : public Handle_IFSelect_Selection {
@@ -8121,20 +7419,6 @@ class Handle_IFSelect_SelectBase : public Handle_IFSelect_Selection {
 %extend Handle_IFSelect_SelectBase {
     IFSelect_SelectBase* GetObject() {
     return (IFSelect_SelectBase*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectBase::~Handle_IFSelect_SelectBase %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectBase {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -8200,25 +7484,23 @@ class IFSelect_SelectCombine : public IFSelect_Selection {
 };
 
 
-%feature("shadow") IFSelect_SelectCombine::~IFSelect_SelectCombine %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectCombine {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectCombine(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectCombine {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectCombine {
-	Handle_IFSelect_SelectCombine GetHandle() {
-	return *(Handle_IFSelect_SelectCombine*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectCombine::Handle_IFSelect_SelectCombine %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectCombine;
 class Handle_IFSelect_SelectCombine : public Handle_IFSelect_Selection {
@@ -8236,20 +7518,6 @@ class Handle_IFSelect_SelectCombine : public Handle_IFSelect_Selection {
 %extend Handle_IFSelect_SelectCombine {
     IFSelect_SelectCombine* GetObject() {
     return (IFSelect_SelectCombine*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectCombine::~Handle_IFSelect_SelectCombine %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectCombine {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -8301,25 +7569,23 @@ class IFSelect_SelectControl : public IFSelect_Selection {
 };
 
 
-%feature("shadow") IFSelect_SelectControl::~IFSelect_SelectControl %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectControl {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectControl(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectControl {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectControl {
-	Handle_IFSelect_SelectControl GetHandle() {
-	return *(Handle_IFSelect_SelectControl*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectControl::Handle_IFSelect_SelectControl %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectControl;
 class Handle_IFSelect_SelectControl : public Handle_IFSelect_Selection {
@@ -8337,20 +7603,6 @@ class Handle_IFSelect_SelectControl : public Handle_IFSelect_Selection {
 %extend Handle_IFSelect_SelectControl {
     IFSelect_SelectControl* GetObject() {
     return (IFSelect_SelectControl*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectControl::~Handle_IFSelect_SelectControl %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectControl {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -8388,7 +7640,7 @@ class IFSelect_SelectDeduct : public IFSelect_Selection {
 
 	:rtype: Handle_IFSelect_SelectPointed
 ") Alternate;
-		Handle_IFSelect_SelectPointed & Alternate ();
+		Handle_IFSelect_SelectPointed Alternate ();
 		%feature("compactdefaultargs") InputResult;
 		%feature("autodoc", "	* Returns the Result determined by Input Selection, as Unique if Input Selection is not defined, returns an empty list. //! If Alternate is set, InputResult takes its definition instead of calling the Input Selection, then clears it
 
@@ -8408,25 +7660,23 @@ class IFSelect_SelectDeduct : public IFSelect_Selection {
 };
 
 
-%feature("shadow") IFSelect_SelectDeduct::~IFSelect_SelectDeduct %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectDeduct {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectDeduct(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectDeduct {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectDeduct {
-	Handle_IFSelect_SelectDeduct GetHandle() {
-	return *(Handle_IFSelect_SelectDeduct*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectDeduct::Handle_IFSelect_SelectDeduct %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectDeduct;
 class Handle_IFSelect_SelectDeduct : public Handle_IFSelect_Selection {
@@ -8444,20 +7694,6 @@ class Handle_IFSelect_SelectDeduct : public Handle_IFSelect_Selection {
 %extend Handle_IFSelect_SelectDeduct {
     IFSelect_SelectDeduct* GetObject() {
     return (IFSelect_SelectDeduct*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectDeduct::~Handle_IFSelect_SelectDeduct %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectDeduct {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -8671,25 +7907,23 @@ class IFSelect_SessionPilot : public IFSelect_Activator {
 };
 
 
-%feature("shadow") IFSelect_SessionPilot::~IFSelect_SessionPilot %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SessionPilot {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SessionPilot(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SessionPilot {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SessionPilot {
-	Handle_IFSelect_SessionPilot GetHandle() {
-	return *(Handle_IFSelect_SessionPilot*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SessionPilot::Handle_IFSelect_SessionPilot %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SessionPilot;
 class Handle_IFSelect_SessionPilot : public Handle_IFSelect_Activator {
@@ -8707,20 +7941,6 @@ class Handle_IFSelect_SessionPilot : public Handle_IFSelect_Activator {
 %extend Handle_IFSelect_SessionPilot {
     IFSelect_SessionPilot* GetObject() {
     return (IFSelect_SessionPilot*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SessionPilot::~Handle_IFSelect_SessionPilot %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SessionPilot {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -8746,25 +7966,23 @@ class IFSelect_SignCategory : public IFSelect_Signature {
 };
 
 
-%feature("shadow") IFSelect_SignCategory::~IFSelect_SignCategory %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SignCategory {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SignCategory(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SignCategory {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SignCategory {
-	Handle_IFSelect_SignCategory GetHandle() {
-	return *(Handle_IFSelect_SignCategory*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SignCategory::Handle_IFSelect_SignCategory %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SignCategory;
 class Handle_IFSelect_SignCategory : public Handle_IFSelect_Signature {
@@ -8782,20 +8000,6 @@ class Handle_IFSelect_SignCategory : public Handle_IFSelect_Signature {
 %extend Handle_IFSelect_SignCategory {
     IFSelect_SignCategory* GetObject() {
     return (IFSelect_SignCategory*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SignCategory::~Handle_IFSelect_SignCategory %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SignCategory {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -8957,25 +8161,23 @@ class IFSelect_SignCounter : public IFSelect_SignatureList {
 };
 
 
-%feature("shadow") IFSelect_SignCounter::~IFSelect_SignCounter %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SignCounter {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SignCounter(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SignCounter {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SignCounter {
-	Handle_IFSelect_SignCounter GetHandle() {
-	return *(Handle_IFSelect_SignCounter*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SignCounter::Handle_IFSelect_SignCounter %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SignCounter;
 class Handle_IFSelect_SignCounter : public Handle_IFSelect_SignatureList {
@@ -8993,20 +8195,6 @@ class Handle_IFSelect_SignCounter : public Handle_IFSelect_SignatureList {
 %extend Handle_IFSelect_SignCounter {
     IFSelect_SignCounter* GetObject() {
     return (IFSelect_SignCounter*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SignCounter::~Handle_IFSelect_SignCounter %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SignCounter {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -9060,25 +8248,23 @@ class IFSelect_SignMultiple : public IFSelect_Signature {
 };
 
 
-%feature("shadow") IFSelect_SignMultiple::~IFSelect_SignMultiple %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SignMultiple {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SignMultiple(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SignMultiple {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SignMultiple {
-	Handle_IFSelect_SignMultiple GetHandle() {
-	return *(Handle_IFSelect_SignMultiple*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SignMultiple::Handle_IFSelect_SignMultiple %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SignMultiple;
 class Handle_IFSelect_SignMultiple : public Handle_IFSelect_Signature {
@@ -9096,20 +8282,6 @@ class Handle_IFSelect_SignMultiple : public Handle_IFSelect_Signature {
 %extend Handle_IFSelect_SignMultiple {
     IFSelect_SignMultiple* GetObject() {
     return (IFSelect_SignMultiple*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SignMultiple::~Handle_IFSelect_SignMultiple %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SignMultiple {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -9137,25 +8309,23 @@ class IFSelect_SignType : public IFSelect_Signature {
 };
 
 
-%feature("shadow") IFSelect_SignType::~IFSelect_SignType %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SignType {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SignType(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SignType {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SignType {
-	Handle_IFSelect_SignType GetHandle() {
-	return *(Handle_IFSelect_SignType*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SignType::Handle_IFSelect_SignType %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SignType;
 class Handle_IFSelect_SignType : public Handle_IFSelect_Signature {
@@ -9173,20 +8343,6 @@ class Handle_IFSelect_SignType : public Handle_IFSelect_Signature {
 %extend Handle_IFSelect_SignType {
     IFSelect_SignType* GetObject() {
     return (IFSelect_SignType*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SignType::~Handle_IFSelect_SignType %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SignType {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -9222,25 +8378,23 @@ class IFSelect_SignValidity : public IFSelect_Signature {
 };
 
 
-%feature("shadow") IFSelect_SignValidity::~IFSelect_SignValidity %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SignValidity {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SignValidity(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SignValidity {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SignValidity {
-	Handle_IFSelect_SignValidity GetHandle() {
-	return *(Handle_IFSelect_SignValidity*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SignValidity::Handle_IFSelect_SignValidity %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SignValidity;
 class Handle_IFSelect_SignValidity : public Handle_IFSelect_Signature {
@@ -9258,20 +8412,6 @@ class Handle_IFSelect_SignValidity : public Handle_IFSelect_Signature {
 %extend Handle_IFSelect_SignValidity {
     IFSelect_SignValidity* GetObject() {
     return (IFSelect_SignValidity*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SignValidity::~Handle_IFSelect_SignValidity %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SignValidity {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -9445,25 +8585,23 @@ class IFSelect_TransformStandard : public IFSelect_Transformer {
 };
 
 
-%feature("shadow") IFSelect_TransformStandard::~IFSelect_TransformStandard %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_TransformStandard {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_TransformStandard(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_TransformStandard {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_TransformStandard {
-	Handle_IFSelect_TransformStandard GetHandle() {
-	return *(Handle_IFSelect_TransformStandard*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_TransformStandard::Handle_IFSelect_TransformStandard %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_TransformStandard;
 class Handle_IFSelect_TransformStandard : public Handle_IFSelect_Transformer {
@@ -9481,20 +8619,6 @@ class Handle_IFSelect_TransformStandard : public Handle_IFSelect_Transformer {
 %extend Handle_IFSelect_TransformStandard {
     IFSelect_TransformStandard* GetObject() {
     return (IFSelect_TransformStandard*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_TransformStandard::~Handle_IFSelect_TransformStandard %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_TransformStandard {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -9538,25 +8662,23 @@ class IFSelect_GraphCounter : public IFSelect_SignCounter {
 };
 
 
-%feature("shadow") IFSelect_GraphCounter::~IFSelect_GraphCounter %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_GraphCounter {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_GraphCounter(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_GraphCounter {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_GraphCounter {
-	Handle_IFSelect_GraphCounter GetHandle() {
-	return *(Handle_IFSelect_GraphCounter*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_GraphCounter::Handle_IFSelect_GraphCounter %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_GraphCounter;
 class Handle_IFSelect_GraphCounter : public Handle_IFSelect_SignCounter {
@@ -9574,20 +8696,6 @@ class Handle_IFSelect_GraphCounter : public Handle_IFSelect_SignCounter {
 %extend Handle_IFSelect_GraphCounter {
     IFSelect_GraphCounter* GetObject() {
     return (IFSelect_GraphCounter*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_GraphCounter::~Handle_IFSelect_GraphCounter %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_GraphCounter {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -9631,25 +8739,23 @@ class IFSelect_ModifEditForm : public IFSelect_Modifier {
 };
 
 
-%feature("shadow") IFSelect_ModifEditForm::~IFSelect_ModifEditForm %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_ModifEditForm {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_ModifEditForm(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_ModifEditForm {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_ModifEditForm {
-	Handle_IFSelect_ModifEditForm GetHandle() {
-	return *(Handle_IFSelect_ModifEditForm*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_ModifEditForm::Handle_IFSelect_ModifEditForm %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_ModifEditForm;
 class Handle_IFSelect_ModifEditForm : public Handle_IFSelect_Modifier {
@@ -9667,20 +8773,6 @@ class Handle_IFSelect_ModifEditForm : public Handle_IFSelect_Modifier {
 %extend Handle_IFSelect_ModifEditForm {
     IFSelect_ModifEditForm* GetObject() {
     return (IFSelect_ModifEditForm*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_ModifEditForm::~Handle_IFSelect_ModifEditForm %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_ModifEditForm {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -9718,25 +8810,23 @@ class IFSelect_ModifReorder : public IFSelect_Modifier {
 };
 
 
-%feature("shadow") IFSelect_ModifReorder::~IFSelect_ModifReorder %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_ModifReorder {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_ModifReorder(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_ModifReorder {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_ModifReorder {
-	Handle_IFSelect_ModifReorder GetHandle() {
-	return *(Handle_IFSelect_ModifReorder*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_ModifReorder::Handle_IFSelect_ModifReorder %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_ModifReorder;
 class Handle_IFSelect_ModifReorder : public Handle_IFSelect_Modifier {
@@ -9754,20 +8844,6 @@ class Handle_IFSelect_ModifReorder : public Handle_IFSelect_Modifier {
 %extend Handle_IFSelect_ModifReorder {
     IFSelect_ModifReorder* GetObject() {
     return (IFSelect_ModifReorder*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_ModifReorder::~Handle_IFSelect_ModifReorder %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_ModifReorder {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -9897,25 +8973,23 @@ class IFSelect_SelectAnyList : public IFSelect_SelectDeduct {
 };
 
 
-%feature("shadow") IFSelect_SelectAnyList::~IFSelect_SelectAnyList %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectAnyList {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectAnyList(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectAnyList {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectAnyList {
-	Handle_IFSelect_SelectAnyList GetHandle() {
-	return *(Handle_IFSelect_SelectAnyList*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectAnyList::Handle_IFSelect_SelectAnyList %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectAnyList;
 class Handle_IFSelect_SelectAnyList : public Handle_IFSelect_SelectDeduct {
@@ -9933,20 +9007,6 @@ class Handle_IFSelect_SelectAnyList : public Handle_IFSelect_SelectDeduct {
 %extend Handle_IFSelect_SelectAnyList {
     IFSelect_SelectAnyList* GetObject() {
     return (IFSelect_SelectAnyList*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectAnyList::~Handle_IFSelect_SelectAnyList %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectAnyList {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -9976,25 +9036,23 @@ class IFSelect_SelectDiff : public IFSelect_SelectControl {
 };
 
 
-%feature("shadow") IFSelect_SelectDiff::~IFSelect_SelectDiff %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectDiff {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectDiff(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectDiff {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectDiff {
-	Handle_IFSelect_SelectDiff GetHandle() {
-	return *(Handle_IFSelect_SelectDiff*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectDiff::Handle_IFSelect_SelectDiff %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectDiff;
 class Handle_IFSelect_SelectDiff : public Handle_IFSelect_SelectControl {
@@ -10012,20 +9070,6 @@ class Handle_IFSelect_SelectDiff : public Handle_IFSelect_SelectControl {
 %extend Handle_IFSelect_SelectDiff {
     IFSelect_SelectDiff* GetObject() {
     return (IFSelect_SelectDiff*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectDiff::~Handle_IFSelect_SelectDiff %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectDiff {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -10069,25 +9113,23 @@ class IFSelect_SelectEntityNumber : public IFSelect_SelectBase {
 };
 
 
-%feature("shadow") IFSelect_SelectEntityNumber::~IFSelect_SelectEntityNumber %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectEntityNumber {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectEntityNumber(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectEntityNumber {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectEntityNumber {
-	Handle_IFSelect_SelectEntityNumber GetHandle() {
-	return *(Handle_IFSelect_SelectEntityNumber*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectEntityNumber::Handle_IFSelect_SelectEntityNumber %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectEntityNumber;
 class Handle_IFSelect_SelectEntityNumber : public Handle_IFSelect_SelectBase {
@@ -10105,20 +9147,6 @@ class Handle_IFSelect_SelectEntityNumber : public Handle_IFSelect_SelectBase {
 %extend Handle_IFSelect_SelectEntityNumber {
     IFSelect_SelectEntityNumber* GetObject() {
     return (IFSelect_SelectEntityNumber*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectEntityNumber::~Handle_IFSelect_SelectEntityNumber %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectEntityNumber {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -10168,25 +9196,23 @@ class IFSelect_SelectExplore : public IFSelect_SelectDeduct {
 };
 
 
-%feature("shadow") IFSelect_SelectExplore::~IFSelect_SelectExplore %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectExplore {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectExplore(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectExplore {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectExplore {
-	Handle_IFSelect_SelectExplore GetHandle() {
-	return *(Handle_IFSelect_SelectExplore*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectExplore::Handle_IFSelect_SelectExplore %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectExplore;
 class Handle_IFSelect_SelectExplore : public Handle_IFSelect_SelectDeduct {
@@ -10204,20 +9230,6 @@ class Handle_IFSelect_SelectExplore : public Handle_IFSelect_SelectDeduct {
 %extend Handle_IFSelect_SelectExplore {
     IFSelect_SelectExplore* GetObject() {
     return (IFSelect_SelectExplore*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectExplore::~Handle_IFSelect_SelectExplore %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectExplore {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -10285,25 +9297,23 @@ class IFSelect_SelectExtract : public IFSelect_SelectDeduct {
 };
 
 
-%feature("shadow") IFSelect_SelectExtract::~IFSelect_SelectExtract %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectExtract {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectExtract(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectExtract {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectExtract {
-	Handle_IFSelect_SelectExtract GetHandle() {
-	return *(Handle_IFSelect_SelectExtract*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectExtract::Handle_IFSelect_SelectExtract %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectExtract;
 class Handle_IFSelect_SelectExtract : public Handle_IFSelect_SelectDeduct {
@@ -10321,20 +9331,6 @@ class Handle_IFSelect_SelectExtract : public Handle_IFSelect_SelectDeduct {
 %extend Handle_IFSelect_SelectExtract {
     IFSelect_SelectExtract* GetObject() {
     return (IFSelect_SelectExtract*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectExtract::~Handle_IFSelect_SelectExtract %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectExtract {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -10364,25 +9360,23 @@ class IFSelect_SelectIntersection : public IFSelect_SelectCombine {
 };
 
 
-%feature("shadow") IFSelect_SelectIntersection::~IFSelect_SelectIntersection %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectIntersection {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectIntersection(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectIntersection {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectIntersection {
-	Handle_IFSelect_SelectIntersection GetHandle() {
-	return *(Handle_IFSelect_SelectIntersection*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectIntersection::Handle_IFSelect_SelectIntersection %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectIntersection;
 class Handle_IFSelect_SelectIntersection : public Handle_IFSelect_SelectCombine {
@@ -10400,20 +9394,6 @@ class Handle_IFSelect_SelectIntersection : public Handle_IFSelect_SelectCombine 
 %extend Handle_IFSelect_SelectIntersection {
     IFSelect_SelectIntersection* GetObject() {
     return (IFSelect_SelectIntersection*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectIntersection::~Handle_IFSelect_SelectIntersection %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectIntersection {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -10451,25 +9431,23 @@ class IFSelect_SelectModelEntities : public IFSelect_SelectBase {
 };
 
 
-%feature("shadow") IFSelect_SelectModelEntities::~IFSelect_SelectModelEntities %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectModelEntities {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectModelEntities(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectModelEntities {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectModelEntities {
-	Handle_IFSelect_SelectModelEntities GetHandle() {
-	return *(Handle_IFSelect_SelectModelEntities*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectModelEntities::Handle_IFSelect_SelectModelEntities %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectModelEntities;
 class Handle_IFSelect_SelectModelEntities : public Handle_IFSelect_SelectBase {
@@ -10487,20 +9465,6 @@ class Handle_IFSelect_SelectModelEntities : public Handle_IFSelect_SelectBase {
 %extend Handle_IFSelect_SelectModelEntities {
     IFSelect_SelectModelEntities* GetObject() {
     return (IFSelect_SelectModelEntities*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectModelEntities::~Handle_IFSelect_SelectModelEntities %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectModelEntities {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -10530,25 +9494,23 @@ class IFSelect_SelectModelRoots : public IFSelect_SelectBase {
 };
 
 
-%feature("shadow") IFSelect_SelectModelRoots::~IFSelect_SelectModelRoots %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectModelRoots {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectModelRoots(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectModelRoots {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectModelRoots {
-	Handle_IFSelect_SelectModelRoots GetHandle() {
-	return *(Handle_IFSelect_SelectModelRoots*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectModelRoots::Handle_IFSelect_SelectModelRoots %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectModelRoots;
 class Handle_IFSelect_SelectModelRoots : public Handle_IFSelect_SelectBase {
@@ -10566,20 +9528,6 @@ class Handle_IFSelect_SelectModelRoots : public Handle_IFSelect_SelectBase {
 %extend Handle_IFSelect_SelectModelRoots {
     IFSelect_SelectModelRoots* GetObject() {
     return (IFSelect_SelectModelRoots*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectModelRoots::~Handle_IFSelect_SelectModelRoots %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectModelRoots {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -10723,25 +9671,23 @@ class IFSelect_SelectPointed : public IFSelect_SelectBase {
 };
 
 
-%feature("shadow") IFSelect_SelectPointed::~IFSelect_SelectPointed %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectPointed {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectPointed(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectPointed {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectPointed {
-	Handle_IFSelect_SelectPointed GetHandle() {
-	return *(Handle_IFSelect_SelectPointed*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectPointed::Handle_IFSelect_SelectPointed %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectPointed;
 class Handle_IFSelect_SelectPointed : public Handle_IFSelect_SelectBase {
@@ -10759,20 +9705,6 @@ class Handle_IFSelect_SelectPointed : public Handle_IFSelect_SelectBase {
 %extend Handle_IFSelect_SelectPointed {
     IFSelect_SelectPointed* GetObject() {
     return (IFSelect_SelectPointed*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectPointed::~Handle_IFSelect_SelectPointed %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectPointed {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -10802,25 +9734,23 @@ class IFSelect_SelectShared : public IFSelect_SelectDeduct {
 };
 
 
-%feature("shadow") IFSelect_SelectShared::~IFSelect_SelectShared %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectShared {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectShared(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectShared {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectShared {
-	Handle_IFSelect_SelectShared GetHandle() {
-	return *(Handle_IFSelect_SelectShared*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectShared::Handle_IFSelect_SelectShared %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectShared;
 class Handle_IFSelect_SelectShared : public Handle_IFSelect_SelectDeduct {
@@ -10838,20 +9768,6 @@ class Handle_IFSelect_SelectShared : public Handle_IFSelect_SelectDeduct {
 %extend Handle_IFSelect_SelectShared {
     IFSelect_SelectShared* GetObject() {
     return (IFSelect_SelectShared*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectShared::~Handle_IFSelect_SelectShared %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectShared {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -10881,25 +9797,23 @@ class IFSelect_SelectSharing : public IFSelect_SelectDeduct {
 };
 
 
-%feature("shadow") IFSelect_SelectSharing::~IFSelect_SelectSharing %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectSharing {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectSharing(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectSharing {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectSharing {
-	Handle_IFSelect_SelectSharing GetHandle() {
-	return *(Handle_IFSelect_SelectSharing*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectSharing::Handle_IFSelect_SelectSharing %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectSharing;
 class Handle_IFSelect_SelectSharing : public Handle_IFSelect_SelectDeduct {
@@ -10917,20 +9831,6 @@ class Handle_IFSelect_SelectSharing : public Handle_IFSelect_SelectDeduct {
 %extend Handle_IFSelect_SelectSharing {
     IFSelect_SelectSharing* GetObject() {
     return (IFSelect_SelectSharing*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectSharing::~Handle_IFSelect_SelectSharing %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectSharing {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -11006,25 +9906,23 @@ class IFSelect_SelectSuite : public IFSelect_SelectDeduct {
 };
 
 
-%feature("shadow") IFSelect_SelectSuite::~IFSelect_SelectSuite %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectSuite {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectSuite(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectSuite {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectSuite {
-	Handle_IFSelect_SelectSuite GetHandle() {
-	return *(Handle_IFSelect_SelectSuite*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectSuite::Handle_IFSelect_SelectSuite %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectSuite;
 class Handle_IFSelect_SelectSuite : public Handle_IFSelect_SelectDeduct {
@@ -11042,20 +9940,6 @@ class Handle_IFSelect_SelectSuite : public Handle_IFSelect_SelectDeduct {
 %extend Handle_IFSelect_SelectSuite {
     IFSelect_SelectSuite* GetObject() {
     return (IFSelect_SelectSuite*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectSuite::~Handle_IFSelect_SelectSuite %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectSuite {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -11085,25 +9969,23 @@ class IFSelect_SelectUnion : public IFSelect_SelectCombine {
 };
 
 
-%feature("shadow") IFSelect_SelectUnion::~IFSelect_SelectUnion %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectUnion {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectUnion(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectUnion {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectUnion {
-	Handle_IFSelect_SelectUnion GetHandle() {
-	return *(Handle_IFSelect_SelectUnion*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectUnion::Handle_IFSelect_SelectUnion %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectUnion;
 class Handle_IFSelect_SelectUnion : public Handle_IFSelect_SelectCombine {
@@ -11121,20 +10003,6 @@ class Handle_IFSelect_SelectUnion : public Handle_IFSelect_SelectCombine {
 %extend Handle_IFSelect_SelectUnion {
     IFSelect_SelectUnion* GetObject() {
     return (IFSelect_SelectUnion*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectUnion::~Handle_IFSelect_SelectUnion %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectUnion {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -11162,25 +10030,23 @@ class IFSelect_SignAncestor : public IFSelect_SignType {
 };
 
 
-%feature("shadow") IFSelect_SignAncestor::~IFSelect_SignAncestor %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SignAncestor {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SignAncestor(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SignAncestor {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SignAncestor {
-	Handle_IFSelect_SignAncestor GetHandle() {
-	return *(Handle_IFSelect_SignAncestor*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SignAncestor::Handle_IFSelect_SignAncestor %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SignAncestor;
 class Handle_IFSelect_SignAncestor : public Handle_IFSelect_SignType {
@@ -11198,20 +10064,6 @@ class Handle_IFSelect_SignAncestor : public Handle_IFSelect_SignType {
 %extend Handle_IFSelect_SignAncestor {
     IFSelect_SignAncestor* GetObject() {
     return (IFSelect_SignAncestor*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SignAncestor::~Handle_IFSelect_SignAncestor %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SignAncestor {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -11239,25 +10091,23 @@ class IFSelect_SelectAnyType : public IFSelect_SelectExtract {
 };
 
 
-%feature("shadow") IFSelect_SelectAnyType::~IFSelect_SelectAnyType %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectAnyType {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectAnyType(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectAnyType {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectAnyType {
-	Handle_IFSelect_SelectAnyType GetHandle() {
-	return *(Handle_IFSelect_SelectAnyType*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectAnyType::Handle_IFSelect_SelectAnyType %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectAnyType;
 class Handle_IFSelect_SelectAnyType : public Handle_IFSelect_SelectExtract {
@@ -11275,20 +10125,6 @@ class Handle_IFSelect_SelectAnyType : public Handle_IFSelect_SelectExtract {
 %extend Handle_IFSelect_SelectAnyType {
     IFSelect_SelectAnyType* GetObject() {
     return (IFSelect_SelectAnyType*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectAnyType::~Handle_IFSelect_SelectAnyType %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectAnyType {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -11322,25 +10158,23 @@ class IFSelect_SelectErrorEntities : public IFSelect_SelectExtract {
 };
 
 
-%feature("shadow") IFSelect_SelectErrorEntities::~IFSelect_SelectErrorEntities %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectErrorEntities {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectErrorEntities(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectErrorEntities {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectErrorEntities {
-	Handle_IFSelect_SelectErrorEntities GetHandle() {
-	return *(Handle_IFSelect_SelectErrorEntities*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectErrorEntities::Handle_IFSelect_SelectErrorEntities %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectErrorEntities;
 class Handle_IFSelect_SelectErrorEntities : public Handle_IFSelect_SelectExtract {
@@ -11358,20 +10192,6 @@ class Handle_IFSelect_SelectErrorEntities : public Handle_IFSelect_SelectExtract
 %extend Handle_IFSelect_SelectErrorEntities {
     IFSelect_SelectErrorEntities* GetObject() {
     return (IFSelect_SelectErrorEntities*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectErrorEntities::~Handle_IFSelect_SelectErrorEntities %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectErrorEntities {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -11421,25 +10241,23 @@ class IFSelect_SelectFlag : public IFSelect_SelectExtract {
 };
 
 
-%feature("shadow") IFSelect_SelectFlag::~IFSelect_SelectFlag %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectFlag {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectFlag(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectFlag {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectFlag {
-	Handle_IFSelect_SelectFlag GetHandle() {
-	return *(Handle_IFSelect_SelectFlag*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectFlag::Handle_IFSelect_SelectFlag %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectFlag;
 class Handle_IFSelect_SelectFlag : public Handle_IFSelect_SelectExtract {
@@ -11457,20 +10275,6 @@ class Handle_IFSelect_SelectFlag : public Handle_IFSelect_SelectExtract {
 %extend Handle_IFSelect_SelectFlag {
     IFSelect_SelectFlag* GetObject() {
     return (IFSelect_SelectFlag*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectFlag::~Handle_IFSelect_SelectFlag %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectFlag {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -11504,25 +10308,23 @@ class IFSelect_SelectInList : public IFSelect_SelectAnyList {
 };
 
 
-%feature("shadow") IFSelect_SelectInList::~IFSelect_SelectInList %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectInList {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectInList(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectInList {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectInList {
-	Handle_IFSelect_SelectInList GetHandle() {
-	return *(Handle_IFSelect_SelectInList*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectInList::Handle_IFSelect_SelectInList %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectInList;
 class Handle_IFSelect_SelectInList : public Handle_IFSelect_SelectAnyList {
@@ -11540,20 +10342,6 @@ class Handle_IFSelect_SelectInList : public Handle_IFSelect_SelectAnyList {
 %extend Handle_IFSelect_SelectInList {
     IFSelect_SelectInList* GetObject() {
     return (IFSelect_SelectInList*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectInList::~Handle_IFSelect_SelectInList %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectInList {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -11657,25 +10445,23 @@ class IFSelect_SelectRange : public IFSelect_SelectExtract {
 };
 
 
-%feature("shadow") IFSelect_SelectRange::~IFSelect_SelectRange %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectRange {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectRange(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectRange {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectRange {
-	Handle_IFSelect_SelectRange GetHandle() {
-	return *(Handle_IFSelect_SelectRange*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectRange::Handle_IFSelect_SelectRange %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectRange;
 class Handle_IFSelect_SelectRange : public Handle_IFSelect_SelectExtract {
@@ -11693,20 +10479,6 @@ class Handle_IFSelect_SelectRange : public Handle_IFSelect_SelectExtract {
 %extend Handle_IFSelect_SelectRange {
     IFSelect_SelectRange* GetObject() {
     return (IFSelect_SelectRange*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectRange::~Handle_IFSelect_SelectRange %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectRange {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -11748,25 +10520,23 @@ class IFSelect_SelectRootComps : public IFSelect_SelectExtract {
 };
 
 
-%feature("shadow") IFSelect_SelectRootComps::~IFSelect_SelectRootComps %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectRootComps {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectRootComps(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectRootComps {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectRootComps {
-	Handle_IFSelect_SelectRootComps GetHandle() {
-	return *(Handle_IFSelect_SelectRootComps*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectRootComps::Handle_IFSelect_SelectRootComps %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectRootComps;
 class Handle_IFSelect_SelectRootComps : public Handle_IFSelect_SelectExtract {
@@ -11784,20 +10554,6 @@ class Handle_IFSelect_SelectRootComps : public Handle_IFSelect_SelectExtract {
 %extend Handle_IFSelect_SelectRootComps {
     IFSelect_SelectRootComps* GetObject() {
     return (IFSelect_SelectRootComps*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectRootComps::~Handle_IFSelect_SelectRootComps %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectRootComps {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -11839,25 +10595,23 @@ class IFSelect_SelectRoots : public IFSelect_SelectExtract {
 };
 
 
-%feature("shadow") IFSelect_SelectRoots::~IFSelect_SelectRoots %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectRoots {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectRoots(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectRoots {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectRoots {
-	Handle_IFSelect_SelectRoots GetHandle() {
-	return *(Handle_IFSelect_SelectRoots*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectRoots::Handle_IFSelect_SelectRoots %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectRoots;
 class Handle_IFSelect_SelectRoots : public Handle_IFSelect_SelectExtract {
@@ -11875,20 +10629,6 @@ class Handle_IFSelect_SelectRoots : public Handle_IFSelect_SelectExtract {
 %extend Handle_IFSelect_SelectRoots {
     IFSelect_SelectRoots* GetObject() {
     return (IFSelect_SelectRoots*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectRoots::~Handle_IFSelect_SelectRoots %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectRoots {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -11946,25 +10686,23 @@ class IFSelect_SelectSent : public IFSelect_SelectExtract {
 };
 
 
-%feature("shadow") IFSelect_SelectSent::~IFSelect_SelectSent %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectSent {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectSent(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectSent {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectSent {
-	Handle_IFSelect_SelectSent GetHandle() {
-	return *(Handle_IFSelect_SelectSent*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectSent::Handle_IFSelect_SelectSent %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectSent;
 class Handle_IFSelect_SelectSent : public Handle_IFSelect_SelectExtract {
@@ -11982,20 +10720,6 @@ class Handle_IFSelect_SelectSent : public Handle_IFSelect_SelectExtract {
 %extend Handle_IFSelect_SelectSent {
     IFSelect_SelectSent* GetObject() {
     return (IFSelect_SelectSent*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectSent::~Handle_IFSelect_SelectSent %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectSent {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -12095,25 +10819,23 @@ class IFSelect_SelectSignature : public IFSelect_SelectExtract {
 };
 
 
-%feature("shadow") IFSelect_SelectSignature::~IFSelect_SelectSignature %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectSignature {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectSignature(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectSignature {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectSignature {
-	Handle_IFSelect_SelectSignature GetHandle() {
-	return *(Handle_IFSelect_SelectSignature*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectSignature::Handle_IFSelect_SelectSignature %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectSignature;
 class Handle_IFSelect_SelectSignature : public Handle_IFSelect_SelectExtract {
@@ -12131,20 +10853,6 @@ class Handle_IFSelect_SelectSignature : public Handle_IFSelect_SelectExtract {
 %extend Handle_IFSelect_SelectSignature {
     IFSelect_SelectSignature* GetObject() {
     return (IFSelect_SelectSignature*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectSignature::~Handle_IFSelect_SelectSignature %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectSignature {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -12206,25 +10914,23 @@ class IFSelect_SelectSignedShared : public IFSelect_SelectExplore {
 };
 
 
-%feature("shadow") IFSelect_SelectSignedShared::~IFSelect_SelectSignedShared %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectSignedShared {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectSignedShared(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectSignedShared {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectSignedShared {
-	Handle_IFSelect_SelectSignedShared GetHandle() {
-	return *(Handle_IFSelect_SelectSignedShared*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectSignedShared::Handle_IFSelect_SelectSignedShared %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectSignedShared;
 class Handle_IFSelect_SelectSignedShared : public Handle_IFSelect_SelectExplore {
@@ -12242,20 +10948,6 @@ class Handle_IFSelect_SelectSignedShared : public Handle_IFSelect_SelectExplore 
 %extend Handle_IFSelect_SelectSignedShared {
     IFSelect_SelectSignedShared* GetObject() {
     return (IFSelect_SelectSignedShared*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectSignedShared::~Handle_IFSelect_SelectSignedShared %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectSignedShared {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -12317,25 +11009,23 @@ class IFSelect_SelectSignedSharing : public IFSelect_SelectExplore {
 };
 
 
-%feature("shadow") IFSelect_SelectSignedSharing::~IFSelect_SelectSignedSharing %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectSignedSharing {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectSignedSharing(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectSignedSharing {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectSignedSharing {
-	Handle_IFSelect_SelectSignedSharing GetHandle() {
-	return *(Handle_IFSelect_SelectSignedSharing*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectSignedSharing::Handle_IFSelect_SelectSignedSharing %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectSignedSharing;
 class Handle_IFSelect_SelectSignedSharing : public Handle_IFSelect_SelectExplore {
@@ -12353,20 +11043,6 @@ class Handle_IFSelect_SelectSignedSharing : public Handle_IFSelect_SelectExplore
 %extend Handle_IFSelect_SelectSignedSharing {
     IFSelect_SelectSignedSharing* GetObject() {
     return (IFSelect_SelectSignedSharing*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectSignedSharing::~Handle_IFSelect_SelectSignedSharing %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectSignedSharing {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -12400,25 +11076,23 @@ class IFSelect_SelectUnknownEntities : public IFSelect_SelectExtract {
 };
 
 
-%feature("shadow") IFSelect_SelectUnknownEntities::~IFSelect_SelectUnknownEntities %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectUnknownEntities {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectUnknownEntities(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectUnknownEntities {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectUnknownEntities {
-	Handle_IFSelect_SelectUnknownEntities GetHandle() {
-	return *(Handle_IFSelect_SelectUnknownEntities*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectUnknownEntities::Handle_IFSelect_SelectUnknownEntities %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectUnknownEntities;
 class Handle_IFSelect_SelectUnknownEntities : public Handle_IFSelect_SelectExtract {
@@ -12438,20 +11112,6 @@ class Handle_IFSelect_SelectUnknownEntities : public Handle_IFSelect_SelectExtra
     return (IFSelect_SelectUnknownEntities*)$self->Access();
     }
 };
-%feature("shadow") Handle_IFSelect_SelectUnknownEntities::~Handle_IFSelect_SelectUnknownEntities %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectUnknownEntities {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
 
 %nodefaultctor IFSelect_SelectIncorrectEntities;
 class IFSelect_SelectIncorrectEntities : public IFSelect_SelectFlag {
@@ -12465,25 +11125,23 @@ class IFSelect_SelectIncorrectEntities : public IFSelect_SelectFlag {
 };
 
 
-%feature("shadow") IFSelect_SelectIncorrectEntities::~IFSelect_SelectIncorrectEntities %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectIncorrectEntities {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectIncorrectEntities(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectIncorrectEntities {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectIncorrectEntities {
-	Handle_IFSelect_SelectIncorrectEntities GetHandle() {
-	return *(Handle_IFSelect_SelectIncorrectEntities*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectIncorrectEntities::Handle_IFSelect_SelectIncorrectEntities %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectIncorrectEntities;
 class Handle_IFSelect_SelectIncorrectEntities : public Handle_IFSelect_SelectFlag {
@@ -12501,20 +11159,6 @@ class Handle_IFSelect_SelectIncorrectEntities : public Handle_IFSelect_SelectFla
 %extend Handle_IFSelect_SelectIncorrectEntities {
     IFSelect_SelectIncorrectEntities* GetObject() {
     return (IFSelect_SelectIncorrectEntities*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectIncorrectEntities::~Handle_IFSelect_SelectIncorrectEntities %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectIncorrectEntities {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -12558,25 +11202,23 @@ class IFSelect_SelectType : public IFSelect_SelectAnyType {
 };
 
 
-%feature("shadow") IFSelect_SelectType::~IFSelect_SelectType %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend IFSelect_SelectType {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_IFSelect_SelectType(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend IFSelect_SelectType {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend IFSelect_SelectType {
-	Handle_IFSelect_SelectType GetHandle() {
-	return *(Handle_IFSelect_SelectType*) &$self;
-	}
-};
+%pythonappend Handle_IFSelect_SelectType::Handle_IFSelect_SelectType %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_IFSelect_SelectType;
 class Handle_IFSelect_SelectType : public Handle_IFSelect_SelectAnyType {
@@ -12594,20 +11236,6 @@ class Handle_IFSelect_SelectType : public Handle_IFSelect_SelectAnyType {
 %extend Handle_IFSelect_SelectType {
     IFSelect_SelectType* GetObject() {
     return (IFSelect_SelectType*)$self->Access();
-    }
-};
-%feature("shadow") Handle_IFSelect_SelectType::~Handle_IFSelect_SelectType %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_IFSelect_SelectType {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 

@@ -32,11 +32,23 @@ along with pythonOCC.  If not, see <http://www.gnu.org/licenses/>.
 %include ../common/FunctionTransformers.i
 %include ../common/Operators.i
 
-%pythoncode {
-import OCC.GarbageCollector
-};
 
 %include BRepOffsetAPI_headers.i
+
+
+%pythoncode {
+def register_handle(handle, base_object):
+    """
+    Inserts the handle into the base object to
+    prevent memory corruption in certain cases
+    """
+    try:
+        if base_object.IsKind("Standard_Transient"):
+            base_object.thisHandle = handle
+            base_object.thisown = False
+    except:
+        pass
+};
 
 /* typedefs */
 typedef BRepBuilderAPI_Sewing BRepOffsetAPI_Sewing;
@@ -162,20 +174,6 @@ class BRepOffsetAPI_DraftAngle : public BRepBuilderAPI_ModifyShape {
 };
 
 
-%feature("shadow") BRepOffsetAPI_DraftAngle::~BRepOffsetAPI_DraftAngle %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRepOffsetAPI_DraftAngle {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRepOffsetAPI_FindContigousEdges;
 class BRepOffsetAPI_FindContigousEdges {
 	public:
@@ -290,20 +288,6 @@ class BRepOffsetAPI_FindContigousEdges {
 };
 
 
-%feature("shadow") BRepOffsetAPI_FindContigousEdges::~BRepOffsetAPI_FindContigousEdges %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRepOffsetAPI_FindContigousEdges {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRepOffsetAPI_MakeDraft;
 class BRepOffsetAPI_MakeDraft : public BRepBuilderAPI_MakeShape {
 	public:
@@ -384,20 +368,6 @@ class BRepOffsetAPI_MakeDraft : public BRepBuilderAPI_MakeShape {
 };
 
 
-%feature("shadow") BRepOffsetAPI_MakeDraft::~BRepOffsetAPI_MakeDraft %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRepOffsetAPI_MakeDraft {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRepOffsetAPI_MakeEvolved;
 class BRepOffsetAPI_MakeEvolved : public BRepBuilderAPI_MakeShape {
 	public:
@@ -478,20 +448,6 @@ class BRepOffsetAPI_MakeEvolved : public BRepBuilderAPI_MakeShape {
 };
 
 
-%feature("shadow") BRepOffsetAPI_MakeEvolved::~BRepOffsetAPI_MakeEvolved %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRepOffsetAPI_MakeEvolved {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRepOffsetAPI_MakeFilling;
 class BRepOffsetAPI_MakeFilling : public BRepBuilderAPI_MakeShape {
 	public:
@@ -690,20 +646,6 @@ class BRepOffsetAPI_MakeFilling : public BRepBuilderAPI_MakeShape {
 };
 
 
-%feature("shadow") BRepOffsetAPI_MakeFilling::~BRepOffsetAPI_MakeFilling %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRepOffsetAPI_MakeFilling {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRepOffsetAPI_MakeOffset;
 class BRepOffsetAPI_MakeOffset : public BRepBuilderAPI_MakeShape {
 	public:
@@ -792,20 +734,6 @@ class BRepOffsetAPI_MakeOffset : public BRepBuilderAPI_MakeShape {
 };
 
 
-%feature("shadow") BRepOffsetAPI_MakeOffset::~BRepOffsetAPI_MakeOffset %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRepOffsetAPI_MakeOffset {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRepOffsetAPI_MakeOffsetShape;
 class BRepOffsetAPI_MakeOffsetShape : public BRepBuilderAPI_MakeShape {
 	public:
@@ -868,20 +796,6 @@ class BRepOffsetAPI_MakeOffsetShape : public BRepBuilderAPI_MakeShape {
 };
 
 
-%feature("shadow") BRepOffsetAPI_MakeOffsetShape::~BRepOffsetAPI_MakeOffsetShape %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRepOffsetAPI_MakeOffsetShape {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRepOffsetAPI_MakePipe;
 class BRepOffsetAPI_MakePipe : public BRepPrimAPI_MakeSweep {
 	public:
@@ -946,20 +860,6 @@ class BRepOffsetAPI_MakePipe : public BRepPrimAPI_MakeSweep {
 };
 
 
-%feature("shadow") BRepOffsetAPI_MakePipe::~BRepOffsetAPI_MakePipe %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRepOffsetAPI_MakePipe {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRepOffsetAPI_MakePipeShell;
 class BRepOffsetAPI_MakePipeShell : public BRepPrimAPI_MakeSweep {
 	public:
@@ -1190,20 +1090,6 @@ class BRepOffsetAPI_MakePipeShell : public BRepPrimAPI_MakeSweep {
 };
 
 
-%feature("shadow") BRepOffsetAPI_MakePipeShell::~BRepOffsetAPI_MakePipeShell %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRepOffsetAPI_MakePipeShell {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRepOffsetAPI_MiddlePath;
 class BRepOffsetAPI_MiddlePath : public BRepBuilderAPI_MakeShape {
 	public:
@@ -1226,20 +1112,6 @@ class BRepOffsetAPI_MiddlePath : public BRepBuilderAPI_MakeShape {
 };
 
 
-%feature("shadow") BRepOffsetAPI_MiddlePath::~BRepOffsetAPI_MiddlePath %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRepOffsetAPI_MiddlePath {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRepOffsetAPI_NormalProjection;
 class BRepOffsetAPI_NormalProjection : public BRepBuilderAPI_MakeShape {
 	public:
@@ -1366,20 +1238,6 @@ class BRepOffsetAPI_NormalProjection : public BRepBuilderAPI_MakeShape {
 };
 
 
-%feature("shadow") BRepOffsetAPI_NormalProjection::~BRepOffsetAPI_NormalProjection %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRepOffsetAPI_NormalProjection {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal;
 class BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal : public TCollection_SeqNode {
 	public:
@@ -1400,25 +1258,23 @@ class BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal : public TCollection_
 };
 
 
-%feature("shadow") BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal::~BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal {
-	Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal GetHandle() {
-	return *(Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal*) &$self;
-	}
-};
+%pythonappend Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal::Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal;
 class Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal : public Handle_TCollection_SeqNode {
@@ -1436,20 +1292,6 @@ class Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal : public Handl
 %extend Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal {
     BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal* GetObject() {
     return (BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal::~Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfReal {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -1473,25 +1315,23 @@ class BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape : public TCollection
 };
 
 
-%feature("shadow") BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape::~BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape {
-	Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape GetHandle() {
-	return *(Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape*) &$self;
-	}
-};
+%pythonappend Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape::Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape;
 class Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape : public Handle_TCollection_SeqNode {
@@ -1509,20 +1349,6 @@ class Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape : public Hand
 %extend Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape {
     BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape* GetObject() {
     return (BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape::~Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRepOffsetAPI_SequenceNodeOfSequenceOfSequenceOfShape {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -1664,20 +1490,6 @@ class BRepOffsetAPI_SequenceOfSequenceOfReal : public TCollection_BaseSequence {
 };
 
 
-%feature("shadow") BRepOffsetAPI_SequenceOfSequenceOfReal::~BRepOffsetAPI_SequenceOfSequenceOfReal %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRepOffsetAPI_SequenceOfSequenceOfReal {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRepOffsetAPI_SequenceOfSequenceOfShape;
 class BRepOffsetAPI_SequenceOfSequenceOfShape : public TCollection_BaseSequence {
 	public:
@@ -1816,20 +1628,6 @@ class BRepOffsetAPI_SequenceOfSequenceOfShape : public TCollection_BaseSequence 
 };
 
 
-%feature("shadow") BRepOffsetAPI_SequenceOfSequenceOfShape::~BRepOffsetAPI_SequenceOfSequenceOfShape %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRepOffsetAPI_SequenceOfSequenceOfShape {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRepOffsetAPI_ThruSections;
 class BRepOffsetAPI_ThruSections : public BRepBuilderAPI_MakeShape {
 	public:
@@ -1986,20 +1784,6 @@ class BRepOffsetAPI_ThruSections : public BRepBuilderAPI_MakeShape {
 };
 
 
-%feature("shadow") BRepOffsetAPI_ThruSections::~BRepOffsetAPI_ThruSections %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRepOffsetAPI_ThruSections {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRepOffsetAPI_MakeThickSolid;
 class BRepOffsetAPI_MakeThickSolid : public BRepOffsetAPI_MakeOffsetShape {
 	public:
@@ -2046,17 +1830,3 @@ class BRepOffsetAPI_MakeThickSolid : public BRepOffsetAPI_MakeOffsetShape {
 };
 
 
-%feature("shadow") BRepOffsetAPI_MakeThickSolid::~BRepOffsetAPI_MakeThickSolid %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRepOffsetAPI_MakeThickSolid {
-	void _kill_pointed() {
-		delete $self;
-	}
-};

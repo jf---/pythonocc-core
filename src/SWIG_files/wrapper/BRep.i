@@ -32,11 +32,23 @@ along with pythonOCC.  If not, see <http://www.gnu.org/licenses/>.
 %include ../common/FunctionTransformers.i
 %include ../common/Operators.i
 
-%pythoncode {
-import OCC.GarbageCollector
-};
 
 %include BRep_headers.i
+
+
+%pythoncode {
+def register_handle(handle, base_object):
+    """
+    Inserts the handle into the base object to
+    prevent memory corruption in certain cases
+    """
+    try:
+        if base_object.IsKind("Standard_Transient"):
+            base_object.thisHandle = handle
+            base_object.thisown = False
+    except:
+        pass
+};
 
 /* typedefs */
 /* end typedefs declaration */
@@ -719,20 +731,6 @@ class BRep_Builder : public TopoDS_Builder {
 };
 
 
-%feature("shadow") BRep_Builder::~BRep_Builder %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRep_Builder {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRep_CurveRepresentation;
 class BRep_CurveRepresentation : public MMgt_TShared {
 	public:
@@ -847,7 +845,7 @@ class BRep_CurveRepresentation : public MMgt_TShared {
 		%feature("compactdefaultargs") Curve3D;
 		%feature("autodoc", "	:rtype: Handle_Geom_Curve
 ") Curve3D;
-		virtual const Handle_Geom_Curve & Curve3D ();
+		Handle_Geom_Curve Curve3D ();
 		%feature("compactdefaultargs") Curve3D;
 		%feature("autodoc", "	:param C:
 	:type C: Handle_Geom_Curve &
@@ -857,11 +855,11 @@ class BRep_CurveRepresentation : public MMgt_TShared {
 		%feature("compactdefaultargs") Surface;
 		%feature("autodoc", "	:rtype: Handle_Geom_Surface
 ") Surface;
-		virtual const Handle_Geom_Surface & Surface ();
+		Handle_Geom_Surface Surface ();
 		%feature("compactdefaultargs") PCurve;
 		%feature("autodoc", "	:rtype: Handle_Geom2d_Curve
 ") PCurve;
-		virtual const Handle_Geom2d_Curve & PCurve ();
+		Handle_Geom2d_Curve PCurve ();
 		%feature("compactdefaultargs") PCurve;
 		%feature("autodoc", "	:param C:
 	:type C: Handle_Geom2d_Curve &
@@ -871,7 +869,7 @@ class BRep_CurveRepresentation : public MMgt_TShared {
 		%feature("compactdefaultargs") PCurve2;
 		%feature("autodoc", "	:rtype: Handle_Geom2d_Curve
 ") PCurve2;
-		virtual const Handle_Geom2d_Curve & PCurve2 ();
+		Handle_Geom2d_Curve PCurve2 ();
 		%feature("compactdefaultargs") PCurve2;
 		%feature("autodoc", "	:param C:
 	:type C: Handle_Geom2d_Curve &
@@ -881,7 +879,7 @@ class BRep_CurveRepresentation : public MMgt_TShared {
 		%feature("compactdefaultargs") Polygon3D;
 		%feature("autodoc", "	:rtype: Handle_Poly_Polygon3D
 ") Polygon3D;
-		virtual const Handle_Poly_Polygon3D & Polygon3D ();
+		Handle_Poly_Polygon3D Polygon3D ();
 		%feature("compactdefaultargs") Polygon3D;
 		%feature("autodoc", "	:param P:
 	:type P: Handle_Poly_Polygon3D &
@@ -891,7 +889,7 @@ class BRep_CurveRepresentation : public MMgt_TShared {
 		%feature("compactdefaultargs") Polygon;
 		%feature("autodoc", "	:rtype: Handle_Poly_Polygon2D
 ") Polygon;
-		virtual const Handle_Poly_Polygon2D & Polygon ();
+		Handle_Poly_Polygon2D Polygon ();
 		%feature("compactdefaultargs") Polygon;
 		%feature("autodoc", "	:param P:
 	:type P: Handle_Poly_Polygon2D &
@@ -901,7 +899,7 @@ class BRep_CurveRepresentation : public MMgt_TShared {
 		%feature("compactdefaultargs") Polygon2;
 		%feature("autodoc", "	:rtype: Handle_Poly_Polygon2D
 ") Polygon2;
-		virtual const Handle_Poly_Polygon2D & Polygon2 ();
+		Handle_Poly_Polygon2D Polygon2 ();
 		%feature("compactdefaultargs") Polygon2;
 		%feature("autodoc", "	:param P:
 	:type P: Handle_Poly_Polygon2D &
@@ -911,11 +909,11 @@ class BRep_CurveRepresentation : public MMgt_TShared {
 		%feature("compactdefaultargs") Triangulation;
 		%feature("autodoc", "	:rtype: Handle_Poly_Triangulation
 ") Triangulation;
-		virtual const Handle_Poly_Triangulation & Triangulation ();
+		Handle_Poly_Triangulation Triangulation ();
 		%feature("compactdefaultargs") PolygonOnTriangulation;
 		%feature("autodoc", "	:rtype: Handle_Poly_PolygonOnTriangulation
 ") PolygonOnTriangulation;
-		virtual const Handle_Poly_PolygonOnTriangulation & PolygonOnTriangulation ();
+		Handle_Poly_PolygonOnTriangulation PolygonOnTriangulation ();
 		%feature("compactdefaultargs") PolygonOnTriangulation;
 		%feature("autodoc", "	:param P:
 	:type P: Handle_Poly_PolygonOnTriangulation &
@@ -925,7 +923,7 @@ class BRep_CurveRepresentation : public MMgt_TShared {
 		%feature("compactdefaultargs") PolygonOnTriangulation2;
 		%feature("autodoc", "	:rtype: Handle_Poly_PolygonOnTriangulation
 ") PolygonOnTriangulation2;
-		virtual const Handle_Poly_PolygonOnTriangulation & PolygonOnTriangulation2 ();
+		Handle_Poly_PolygonOnTriangulation PolygonOnTriangulation2 ();
 		%feature("compactdefaultargs") PolygonOnTriangulation2;
 		%feature("autodoc", "	:param P2:
 	:type P2: Handle_Poly_PolygonOnTriangulation &
@@ -935,7 +933,7 @@ class BRep_CurveRepresentation : public MMgt_TShared {
 		%feature("compactdefaultargs") Surface2;
 		%feature("autodoc", "	:rtype: Handle_Geom_Surface
 ") Surface2;
-		virtual const Handle_Geom_Surface & Surface2 ();
+		Handle_Geom_Surface Surface2 ();
 		%feature("compactdefaultargs") Location2;
 		%feature("autodoc", "	:rtype: TopLoc_Location
 ") Location2;
@@ -959,25 +957,23 @@ class BRep_CurveRepresentation : public MMgt_TShared {
 };
 
 
-%feature("shadow") BRep_CurveRepresentation::~BRep_CurveRepresentation %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_CurveRepresentation {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_CurveRepresentation(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_CurveRepresentation {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_CurveRepresentation {
-	Handle_BRep_CurveRepresentation GetHandle() {
-	return *(Handle_BRep_CurveRepresentation*) &$self;
-	}
-};
+%pythonappend Handle_BRep_CurveRepresentation::Handle_BRep_CurveRepresentation %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_CurveRepresentation;
 class Handle_BRep_CurveRepresentation : public Handle_MMgt_TShared {
@@ -995,20 +991,6 @@ class Handle_BRep_CurveRepresentation : public Handle_MMgt_TShared {
 %extend Handle_BRep_CurveRepresentation {
     BRep_CurveRepresentation* GetObject() {
     return (BRep_CurveRepresentation*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_CurveRepresentation::~Handle_BRep_CurveRepresentation %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_CurveRepresentation {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -1042,24 +1024,10 @@ class BRep_ListIteratorOfListOfCurveRepresentation {
 		%feature("compactdefaultargs") Value;
 		%feature("autodoc", "	:rtype: Handle_BRep_CurveRepresentation
 ") Value;
-		Handle_BRep_CurveRepresentation & Value ();
+		Handle_BRep_CurveRepresentation Value ();
 };
 
 
-%feature("shadow") BRep_ListIteratorOfListOfCurveRepresentation::~BRep_ListIteratorOfListOfCurveRepresentation %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRep_ListIteratorOfListOfCurveRepresentation {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRep_ListIteratorOfListOfPointRepresentation;
 class BRep_ListIteratorOfListOfPointRepresentation {
 	public:
@@ -1090,24 +1058,10 @@ class BRep_ListIteratorOfListOfPointRepresentation {
 		%feature("compactdefaultargs") Value;
 		%feature("autodoc", "	:rtype: Handle_BRep_PointRepresentation
 ") Value;
-		Handle_BRep_PointRepresentation & Value ();
+		Handle_BRep_PointRepresentation Value ();
 };
 
 
-%feature("shadow") BRep_ListIteratorOfListOfPointRepresentation::~BRep_ListIteratorOfListOfPointRepresentation %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRep_ListIteratorOfListOfPointRepresentation {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRep_ListNodeOfListOfCurveRepresentation;
 class BRep_ListNodeOfListOfCurveRepresentation : public TCollection_MapNode {
 	public:
@@ -1122,29 +1076,27 @@ class BRep_ListNodeOfListOfCurveRepresentation : public TCollection_MapNode {
 		%feature("compactdefaultargs") Value;
 		%feature("autodoc", "	:rtype: Handle_BRep_CurveRepresentation
 ") Value;
-		Handle_BRep_CurveRepresentation & Value ();
+		Handle_BRep_CurveRepresentation Value ();
 };
 
 
-%feature("shadow") BRep_ListNodeOfListOfCurveRepresentation::~BRep_ListNodeOfListOfCurveRepresentation %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
+%extend BRep_ListNodeOfListOfCurveRepresentation {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_ListNodeOfListOfCurveRepresentation(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
+
+%pythonappend Handle_BRep_ListNodeOfListOfCurveRepresentation::Handle_BRep_ListNodeOfListOfCurveRepresentation %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
 %}
-
-%extend BRep_ListNodeOfListOfCurveRepresentation {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_ListNodeOfListOfCurveRepresentation {
-	Handle_BRep_ListNodeOfListOfCurveRepresentation GetHandle() {
-	return *(Handle_BRep_ListNodeOfListOfCurveRepresentation*) &$self;
-	}
-};
 
 %nodefaultctor Handle_BRep_ListNodeOfListOfCurveRepresentation;
 class Handle_BRep_ListNodeOfListOfCurveRepresentation : public Handle_TCollection_MapNode {
@@ -1164,20 +1116,6 @@ class Handle_BRep_ListNodeOfListOfCurveRepresentation : public Handle_TCollectio
     return (BRep_ListNodeOfListOfCurveRepresentation*)$self->Access();
     }
 };
-%feature("shadow") Handle_BRep_ListNodeOfListOfCurveRepresentation::~Handle_BRep_ListNodeOfListOfCurveRepresentation %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_ListNodeOfListOfCurveRepresentation {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
 
 %nodefaultctor BRep_ListNodeOfListOfPointRepresentation;
 class BRep_ListNodeOfListOfPointRepresentation : public TCollection_MapNode {
@@ -1193,29 +1131,27 @@ class BRep_ListNodeOfListOfPointRepresentation : public TCollection_MapNode {
 		%feature("compactdefaultargs") Value;
 		%feature("autodoc", "	:rtype: Handle_BRep_PointRepresentation
 ") Value;
-		Handle_BRep_PointRepresentation & Value ();
+		Handle_BRep_PointRepresentation Value ();
 };
 
 
-%feature("shadow") BRep_ListNodeOfListOfPointRepresentation::~BRep_ListNodeOfListOfPointRepresentation %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
+%extend BRep_ListNodeOfListOfPointRepresentation {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_ListNodeOfListOfPointRepresentation(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
+
+%pythonappend Handle_BRep_ListNodeOfListOfPointRepresentation::Handle_BRep_ListNodeOfListOfPointRepresentation %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
 %}
-
-%extend BRep_ListNodeOfListOfPointRepresentation {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_ListNodeOfListOfPointRepresentation {
-	Handle_BRep_ListNodeOfListOfPointRepresentation GetHandle() {
-	return *(Handle_BRep_ListNodeOfListOfPointRepresentation*) &$self;
-	}
-};
 
 %nodefaultctor Handle_BRep_ListNodeOfListOfPointRepresentation;
 class Handle_BRep_ListNodeOfListOfPointRepresentation : public Handle_TCollection_MapNode {
@@ -1233,20 +1169,6 @@ class Handle_BRep_ListNodeOfListOfPointRepresentation : public Handle_TCollectio
 %extend Handle_BRep_ListNodeOfListOfPointRepresentation {
     BRep_ListNodeOfListOfPointRepresentation* GetObject() {
     return (BRep_ListNodeOfListOfPointRepresentation*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_ListNodeOfListOfPointRepresentation::~Handle_BRep_ListNodeOfListOfPointRepresentation %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_ListNodeOfListOfPointRepresentation {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -1330,11 +1252,11 @@ class BRep_ListOfCurveRepresentation {
 		%feature("compactdefaultargs") First;
 		%feature("autodoc", "	:rtype: Handle_BRep_CurveRepresentation
 ") First;
-		Handle_BRep_CurveRepresentation & First ();
+		Handle_BRep_CurveRepresentation First ();
 		%feature("compactdefaultargs") Last;
 		%feature("autodoc", "	:rtype: Handle_BRep_CurveRepresentation
 ") Last;
-		Handle_BRep_CurveRepresentation & Last ();
+		Handle_BRep_CurveRepresentation Last ();
 		%feature("compactdefaultargs") RemoveFirst;
 		%feature("autodoc", "	:rtype: None
 ") RemoveFirst;
@@ -1380,20 +1302,6 @@ class BRep_ListOfCurveRepresentation {
 };
 
 
-%feature("shadow") BRep_ListOfCurveRepresentation::~BRep_ListOfCurveRepresentation %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRep_ListOfCurveRepresentation {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRep_ListOfPointRepresentation;
 class BRep_ListOfPointRepresentation {
 	public:
@@ -1474,11 +1382,11 @@ class BRep_ListOfPointRepresentation {
 		%feature("compactdefaultargs") First;
 		%feature("autodoc", "	:rtype: Handle_BRep_PointRepresentation
 ") First;
-		Handle_BRep_PointRepresentation & First ();
+		Handle_BRep_PointRepresentation First ();
 		%feature("compactdefaultargs") Last;
 		%feature("autodoc", "	:rtype: Handle_BRep_PointRepresentation
 ") Last;
-		Handle_BRep_PointRepresentation & Last ();
+		Handle_BRep_PointRepresentation Last ();
 		%feature("compactdefaultargs") RemoveFirst;
 		%feature("autodoc", "	:rtype: None
 ") RemoveFirst;
@@ -1524,20 +1432,6 @@ class BRep_ListOfPointRepresentation {
 };
 
 
-%feature("shadow") BRep_ListOfPointRepresentation::~BRep_ListOfPointRepresentation %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRep_ListOfPointRepresentation {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRep_PointRepresentation;
 class BRep_PointRepresentation : public MMgt_TShared {
 	public:
@@ -1624,7 +1518,7 @@ class BRep_PointRepresentation : public MMgt_TShared {
 		%feature("compactdefaultargs") Curve;
 		%feature("autodoc", "	:rtype: Handle_Geom_Curve
 ") Curve;
-		virtual const Handle_Geom_Curve & Curve ();
+		Handle_Geom_Curve Curve ();
 		%feature("compactdefaultargs") Curve;
 		%feature("autodoc", "	:param C:
 	:type C: Handle_Geom_Curve &
@@ -1634,7 +1528,7 @@ class BRep_PointRepresentation : public MMgt_TShared {
 		%feature("compactdefaultargs") PCurve;
 		%feature("autodoc", "	:rtype: Handle_Geom2d_Curve
 ") PCurve;
-		virtual const Handle_Geom2d_Curve & PCurve ();
+		Handle_Geom2d_Curve PCurve ();
 		%feature("compactdefaultargs") PCurve;
 		%feature("autodoc", "	:param C:
 	:type C: Handle_Geom2d_Curve &
@@ -1644,7 +1538,7 @@ class BRep_PointRepresentation : public MMgt_TShared {
 		%feature("compactdefaultargs") Surface;
 		%feature("autodoc", "	:rtype: Handle_Geom_Surface
 ") Surface;
-		virtual const Handle_Geom_Surface & Surface ();
+		Handle_Geom_Surface Surface ();
 		%feature("compactdefaultargs") Surface;
 		%feature("autodoc", "	:param S:
 	:type S: Handle_Geom_Surface &
@@ -1654,25 +1548,23 @@ class BRep_PointRepresentation : public MMgt_TShared {
 };
 
 
-%feature("shadow") BRep_PointRepresentation::~BRep_PointRepresentation %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_PointRepresentation {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_PointRepresentation(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_PointRepresentation {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_PointRepresentation {
-	Handle_BRep_PointRepresentation GetHandle() {
-	return *(Handle_BRep_PointRepresentation*) &$self;
-	}
-};
+%pythonappend Handle_BRep_PointRepresentation::Handle_BRep_PointRepresentation %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_PointRepresentation;
 class Handle_BRep_PointRepresentation : public Handle_MMgt_TShared {
@@ -1690,20 +1582,6 @@ class Handle_BRep_PointRepresentation : public Handle_MMgt_TShared {
 %extend Handle_BRep_PointRepresentation {
     BRep_PointRepresentation* GetObject() {
     return (BRep_PointRepresentation*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_PointRepresentation::~Handle_BRep_PointRepresentation %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_PointRepresentation {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -1781,25 +1659,23 @@ class BRep_TEdge : public TopoDS_TEdge {
 };
 
 
-%feature("shadow") BRep_TEdge::~BRep_TEdge %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_TEdge {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_TEdge(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_TEdge {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_TEdge {
-	Handle_BRep_TEdge GetHandle() {
-	return *(Handle_BRep_TEdge*) &$self;
-	}
-};
+%pythonappend Handle_BRep_TEdge::Handle_BRep_TEdge %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_TEdge;
 class Handle_BRep_TEdge : public Handle_TopoDS_TEdge {
@@ -1819,20 +1695,6 @@ class Handle_BRep_TEdge : public Handle_TopoDS_TEdge {
     return (BRep_TEdge*)$self->Access();
     }
 };
-%feature("shadow") Handle_BRep_TEdge::~Handle_BRep_TEdge %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_TEdge {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
 
 %nodefaultctor BRep_TFace;
 class BRep_TFace : public TopoDS_TFace {
@@ -1846,11 +1708,11 @@ class BRep_TFace : public TopoDS_TFace {
 		%feature("compactdefaultargs") Surface;
 		%feature("autodoc", "	:rtype: Handle_Geom_Surface
 ") Surface;
-		const Handle_Geom_Surface & Surface ();
+		Handle_Geom_Surface Surface ();
 		%feature("compactdefaultargs") Triangulation;
 		%feature("autodoc", "	:rtype: Handle_Poly_Triangulation
 ") Triangulation;
-		const Handle_Poly_Triangulation & Triangulation ();
+		Handle_Poly_Triangulation Triangulation ();
 		%feature("compactdefaultargs") Location;
 		%feature("autodoc", "	:rtype: TopLoc_Location
 ") Location;
@@ -1902,25 +1764,23 @@ class BRep_TFace : public TopoDS_TFace {
 };
 
 
-%feature("shadow") BRep_TFace::~BRep_TFace %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_TFace {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_TFace(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_TFace {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_TFace {
-	Handle_BRep_TFace GetHandle() {
-	return *(Handle_BRep_TFace*) &$self;
-	}
-};
+%pythonappend Handle_BRep_TFace::Handle_BRep_TFace %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_TFace;
 class Handle_BRep_TFace : public Handle_TopoDS_TFace {
@@ -1938,20 +1798,6 @@ class Handle_BRep_TFace : public Handle_TopoDS_TFace {
 %extend Handle_BRep_TFace {
     BRep_TFace* GetObject() {
     return (BRep_TFace*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_TFace::~Handle_BRep_TFace %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_TFace {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -2007,25 +1853,23 @@ class BRep_TVertex : public TopoDS_TVertex {
 };
 
 
-%feature("shadow") BRep_TVertex::~BRep_TVertex %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_TVertex {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_TVertex(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_TVertex {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_TVertex {
-	Handle_BRep_TVertex GetHandle() {
-	return *(Handle_BRep_TVertex*) &$self;
-	}
-};
+%pythonappend Handle_BRep_TVertex::Handle_BRep_TVertex %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_TVertex;
 class Handle_BRep_TVertex : public Handle_TopoDS_TVertex {
@@ -2043,20 +1887,6 @@ class Handle_BRep_TVertex : public Handle_TopoDS_TVertex {
 %extend Handle_BRep_TVertex {
     BRep_TVertex* GetObject() {
     return (BRep_TVertex*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_TVertex::~Handle_BRep_TVertex %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_TVertex {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -2079,7 +1909,7 @@ class BRep_Tool {
 	:type L: TopLoc_Location &
 	:rtype: Handle_Geom_Surface
 ") Surface;
-		static const Handle_Geom_Surface & Surface (const TopoDS_Face & F,TopLoc_Location & L);
+		Handle_Geom_Surface Surface (const TopoDS_Face & F,TopLoc_Location & L);
 		%feature("compactdefaultargs") Surface;
 		%feature("autodoc", "	* Returns the geometric surface of the face. It can be a copy if there is a Location.
 
@@ -2097,7 +1927,7 @@ class BRep_Tool {
 	:type L: TopLoc_Location &
 	:rtype: Handle_Poly_Triangulation
 ") Triangulation;
-		static const Handle_Poly_Triangulation & Triangulation (const TopoDS_Face & F,TopLoc_Location & L);
+		Handle_Poly_Triangulation Triangulation (const TopoDS_Face & F,TopLoc_Location & L);
 		%feature("compactdefaultargs") Tolerance;
 		%feature("autodoc", "	* Returns the tolerance of the face.
 
@@ -2135,7 +1965,7 @@ class BRep_Tool {
 	:type Last: float &
 	:rtype: Handle_Geom_Curve
 ") Curve;
-		static const Handle_Geom_Curve & Curve (const TopoDS_Edge & E,TopLoc_Location & L,Standard_Real &OutValue,Standard_Real &OutValue);
+		Handle_Geom_Curve Curve (const TopoDS_Edge & E,TopLoc_Location & L,Standard_Real &OutValue,Standard_Real &OutValue);
 		%feature("compactdefaultargs") Curve;
 		%feature("autodoc", "	* Returns the 3D curve of the edge. May be a Null handle. In <First> and <Last> the parameter range. It can be a copy if there is a Location.
 
@@ -2157,7 +1987,7 @@ class BRep_Tool {
 	:type L: TopLoc_Location &
 	:rtype: Handle_Poly_Polygon3D
 ") Polygon3D;
-		static const Handle_Poly_Polygon3D & Polygon3D (const TopoDS_Edge & E,TopLoc_Location & L);
+		Handle_Poly_Polygon3D Polygon3D (const TopoDS_Edge & E,TopLoc_Location & L);
 		%feature("compactdefaultargs") CurveOnSurface;
 		%feature("autodoc", "	* Returns the curve associated to the edge in the parametric space of the face. Returns a NULL handle if this curve does not exist. Returns in <First> and <Last> the parameter range.
 
@@ -2289,7 +2119,7 @@ class BRep_Tool {
 	:type L: TopLoc_Location &
 	:rtype: Handle_Poly_PolygonOnTriangulation
 ") PolygonOnTriangulation;
-		static const Handle_Poly_PolygonOnTriangulation & PolygonOnTriangulation (const TopoDS_Edge & E,const Handle_Poly_Triangulation & T,const TopLoc_Location & L);
+		Handle_Poly_PolygonOnTriangulation PolygonOnTriangulation (const TopoDS_Edge & E,const Handle_Poly_Triangulation & T,const TopLoc_Location & L);
 		%feature("compactdefaultargs") PolygonOnTriangulation;
 		%feature("autodoc", "	* Returns in <P>, <T>, <L> a polygon on triangulation, a triangulation and a location for the edge <E>. <P> and <T> are null if the edge has no polygon on triangulation.
 
@@ -2615,20 +2445,6 @@ class BRep_Tool {
 };
 
 
-%feature("shadow") BRep_Tool::~BRep_Tool %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend BRep_Tool {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor BRep_CurveOn2Surfaces;
 class BRep_CurveOn2Surfaces : public BRep_CurveRepresentation {
 	public:
@@ -2679,11 +2495,11 @@ class BRep_CurveOn2Surfaces : public BRep_CurveRepresentation {
 		%feature("compactdefaultargs") Surface;
 		%feature("autodoc", "	:rtype: Handle_Geom_Surface
 ") Surface;
-		virtual const Handle_Geom_Surface & Surface ();
+		Handle_Geom_Surface Surface ();
 		%feature("compactdefaultargs") Surface2;
 		%feature("autodoc", "	:rtype: Handle_Geom_Surface
 ") Surface2;
-		virtual const Handle_Geom_Surface & Surface2 ();
+		Handle_Geom_Surface Surface2 ();
 		%feature("compactdefaultargs") Location2;
 		%feature("autodoc", "	:rtype: TopLoc_Location
 ") Location2;
@@ -2707,25 +2523,23 @@ class BRep_CurveOn2Surfaces : public BRep_CurveRepresentation {
 };
 
 
-%feature("shadow") BRep_CurveOn2Surfaces::~BRep_CurveOn2Surfaces %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_CurveOn2Surfaces {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_CurveOn2Surfaces(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_CurveOn2Surfaces {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_CurveOn2Surfaces {
-	Handle_BRep_CurveOn2Surfaces GetHandle() {
-	return *(Handle_BRep_CurveOn2Surfaces*) &$self;
-	}
-};
+%pythonappend Handle_BRep_CurveOn2Surfaces::Handle_BRep_CurveOn2Surfaces %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_CurveOn2Surfaces;
 class Handle_BRep_CurveOn2Surfaces : public Handle_BRep_CurveRepresentation {
@@ -2743,20 +2557,6 @@ class Handle_BRep_CurveOn2Surfaces : public Handle_BRep_CurveRepresentation {
 %extend Handle_BRep_CurveOn2Surfaces {
     BRep_CurveOn2Surfaces* GetObject() {
     return (BRep_CurveOn2Surfaces*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_CurveOn2Surfaces::~Handle_BRep_CurveOn2Surfaces %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_CurveOn2Surfaces {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -2818,25 +2618,23 @@ class BRep_GCurve : public BRep_CurveRepresentation {
 };
 
 
-%feature("shadow") BRep_GCurve::~BRep_GCurve %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_GCurve {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_GCurve(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_GCurve {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_GCurve {
-	Handle_BRep_GCurve GetHandle() {
-	return *(Handle_BRep_GCurve*) &$self;
-	}
-};
+%pythonappend Handle_BRep_GCurve::Handle_BRep_GCurve %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_GCurve;
 class Handle_BRep_GCurve : public Handle_BRep_CurveRepresentation {
@@ -2854,20 +2652,6 @@ class Handle_BRep_GCurve : public Handle_BRep_CurveRepresentation {
 %extend Handle_BRep_GCurve {
     BRep_GCurve* GetObject() {
     return (BRep_GCurve*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_GCurve::~Handle_BRep_GCurve %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_GCurve {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -2901,7 +2685,7 @@ class BRep_PointOnCurve : public BRep_PointRepresentation {
 		%feature("compactdefaultargs") Curve;
 		%feature("autodoc", "	:rtype: Handle_Geom_Curve
 ") Curve;
-		virtual const Handle_Geom_Curve & Curve ();
+		Handle_Geom_Curve Curve ();
 		%feature("compactdefaultargs") Curve;
 		%feature("autodoc", "	:param C:
 	:type C: Handle_Geom_Curve &
@@ -2911,25 +2695,23 @@ class BRep_PointOnCurve : public BRep_PointRepresentation {
 };
 
 
-%feature("shadow") BRep_PointOnCurve::~BRep_PointOnCurve %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_PointOnCurve {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_PointOnCurve(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_PointOnCurve {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_PointOnCurve {
-	Handle_BRep_PointOnCurve GetHandle() {
-	return *(Handle_BRep_PointOnCurve*) &$self;
-	}
-};
+%pythonappend Handle_BRep_PointOnCurve::Handle_BRep_PointOnCurve %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_PointOnCurve;
 class Handle_BRep_PointOnCurve : public Handle_BRep_PointRepresentation {
@@ -2949,20 +2731,6 @@ class Handle_BRep_PointOnCurve : public Handle_BRep_PointRepresentation {
     return (BRep_PointOnCurve*)$self->Access();
     }
 };
-%feature("shadow") Handle_BRep_PointOnCurve::~Handle_BRep_PointOnCurve %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_PointOnCurve {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
 
 %nodefaultctor BRep_PointsOnSurface;
 class BRep_PointsOnSurface : public BRep_PointRepresentation {
@@ -2970,7 +2738,7 @@ class BRep_PointsOnSurface : public BRep_PointRepresentation {
 		%feature("compactdefaultargs") Surface;
 		%feature("autodoc", "	:rtype: Handle_Geom_Surface
 ") Surface;
-		virtual const Handle_Geom_Surface & Surface ();
+		Handle_Geom_Surface Surface ();
 		%feature("compactdefaultargs") Surface;
 		%feature("autodoc", "	:param S:
 	:type S: Handle_Geom_Surface &
@@ -2980,25 +2748,23 @@ class BRep_PointsOnSurface : public BRep_PointRepresentation {
 };
 
 
-%feature("shadow") BRep_PointsOnSurface::~BRep_PointsOnSurface %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_PointsOnSurface {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_PointsOnSurface(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_PointsOnSurface {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_PointsOnSurface {
-	Handle_BRep_PointsOnSurface GetHandle() {
-	return *(Handle_BRep_PointsOnSurface*) &$self;
-	}
-};
+%pythonappend Handle_BRep_PointsOnSurface::Handle_BRep_PointsOnSurface %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_PointsOnSurface;
 class Handle_BRep_PointsOnSurface : public Handle_BRep_PointRepresentation {
@@ -3016,20 +2782,6 @@ class Handle_BRep_PointsOnSurface : public Handle_BRep_PointRepresentation {
 %extend Handle_BRep_PointsOnSurface {
     BRep_PointsOnSurface* GetObject() {
     return (BRep_PointsOnSurface*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_PointsOnSurface::~Handle_BRep_PointsOnSurface %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_PointsOnSurface {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -3053,7 +2805,7 @@ class BRep_Polygon3D : public BRep_CurveRepresentation {
 		%feature("compactdefaultargs") Polygon3D;
 		%feature("autodoc", "	:rtype: Handle_Poly_Polygon3D
 ") Polygon3D;
-		virtual const Handle_Poly_Polygon3D & Polygon3D ();
+		Handle_Poly_Polygon3D Polygon3D ();
 		%feature("compactdefaultargs") Polygon3D;
 		%feature("autodoc", "	:param P:
 	:type P: Handle_Poly_Polygon3D &
@@ -3069,25 +2821,23 @@ class BRep_Polygon3D : public BRep_CurveRepresentation {
 };
 
 
-%feature("shadow") BRep_Polygon3D::~BRep_Polygon3D %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_Polygon3D {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_Polygon3D(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_Polygon3D {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_Polygon3D {
-	Handle_BRep_Polygon3D GetHandle() {
-	return *(Handle_BRep_Polygon3D*) &$self;
-	}
-};
+%pythonappend Handle_BRep_Polygon3D::Handle_BRep_Polygon3D %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_Polygon3D;
 class Handle_BRep_Polygon3D : public Handle_BRep_CurveRepresentation {
@@ -3105,20 +2855,6 @@ class Handle_BRep_Polygon3D : public Handle_BRep_CurveRepresentation {
 %extend Handle_BRep_Polygon3D {
     BRep_Polygon3D* GetObject() {
     return (BRep_Polygon3D*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_Polygon3D::~Handle_BRep_Polygon3D %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_Polygon3D {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -3154,11 +2890,11 @@ class BRep_PolygonOnSurface : public BRep_CurveRepresentation {
 		%feature("compactdefaultargs") Surface;
 		%feature("autodoc", "	:rtype: Handle_Geom_Surface
 ") Surface;
-		virtual const Handle_Geom_Surface & Surface ();
+		Handle_Geom_Surface Surface ();
 		%feature("compactdefaultargs") Polygon;
 		%feature("autodoc", "	:rtype: Handle_Poly_Polygon2D
 ") Polygon;
-		virtual const Handle_Poly_Polygon2D & Polygon ();
+		Handle_Poly_Polygon2D Polygon ();
 		%feature("compactdefaultargs") Polygon;
 		%feature("autodoc", "	:param P:
 	:type P: Handle_Poly_Polygon2D &
@@ -3174,25 +2910,23 @@ class BRep_PolygonOnSurface : public BRep_CurveRepresentation {
 };
 
 
-%feature("shadow") BRep_PolygonOnSurface::~BRep_PolygonOnSurface %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_PolygonOnSurface {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_PolygonOnSurface(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_PolygonOnSurface {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_PolygonOnSurface {
-	Handle_BRep_PolygonOnSurface GetHandle() {
-	return *(Handle_BRep_PolygonOnSurface*) &$self;
-	}
-};
+%pythonappend Handle_BRep_PolygonOnSurface::Handle_BRep_PolygonOnSurface %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_PolygonOnSurface;
 class Handle_BRep_PolygonOnSurface : public Handle_BRep_CurveRepresentation {
@@ -3210,20 +2944,6 @@ class Handle_BRep_PolygonOnSurface : public Handle_BRep_CurveRepresentation {
 %extend Handle_BRep_PolygonOnSurface {
     BRep_PolygonOnSurface* GetObject() {
     return (BRep_PolygonOnSurface*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_PolygonOnSurface::~Handle_BRep_PolygonOnSurface %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_PolygonOnSurface {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -3267,11 +2987,11 @@ class BRep_PolygonOnTriangulation : public BRep_CurveRepresentation {
 		%feature("compactdefaultargs") Triangulation;
 		%feature("autodoc", "	:rtype: Handle_Poly_Triangulation
 ") Triangulation;
-		virtual const Handle_Poly_Triangulation & Triangulation ();
+		Handle_Poly_Triangulation Triangulation ();
 		%feature("compactdefaultargs") PolygonOnTriangulation;
 		%feature("autodoc", "	:rtype: Handle_Poly_PolygonOnTriangulation
 ") PolygonOnTriangulation;
-		virtual const Handle_Poly_PolygonOnTriangulation & PolygonOnTriangulation ();
+		Handle_Poly_PolygonOnTriangulation PolygonOnTriangulation ();
 		%feature("compactdefaultargs") Copy;
 		%feature("autodoc", "	* Return a copy of this representation.
 
@@ -3281,25 +3001,23 @@ class BRep_PolygonOnTriangulation : public BRep_CurveRepresentation {
 };
 
 
-%feature("shadow") BRep_PolygonOnTriangulation::~BRep_PolygonOnTriangulation %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_PolygonOnTriangulation {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_PolygonOnTriangulation(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_PolygonOnTriangulation {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_PolygonOnTriangulation {
-	Handle_BRep_PolygonOnTriangulation GetHandle() {
-	return *(Handle_BRep_PolygonOnTriangulation*) &$self;
-	}
-};
+%pythonappend Handle_BRep_PolygonOnTriangulation::Handle_BRep_PolygonOnTriangulation %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_PolygonOnTriangulation;
 class Handle_BRep_PolygonOnTriangulation : public Handle_BRep_CurveRepresentation {
@@ -3317,20 +3035,6 @@ class Handle_BRep_PolygonOnTriangulation : public Handle_BRep_CurveRepresentatio
 %extend Handle_BRep_PolygonOnTriangulation {
     BRep_PolygonOnTriangulation* GetObject() {
     return (BRep_PolygonOnTriangulation*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_PolygonOnTriangulation::~Handle_BRep_PolygonOnTriangulation %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_PolygonOnTriangulation {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -3364,7 +3068,7 @@ class BRep_Curve3D : public BRep_GCurve {
 		%feature("compactdefaultargs") Curve3D;
 		%feature("autodoc", "	:rtype: Handle_Geom_Curve
 ") Curve3D;
-		virtual const Handle_Geom_Curve & Curve3D ();
+		Handle_Geom_Curve Curve3D ();
 		%feature("compactdefaultargs") Curve3D;
 		%feature("autodoc", "	:param C:
 	:type C: Handle_Geom_Curve &
@@ -3380,25 +3084,23 @@ class BRep_Curve3D : public BRep_GCurve {
 };
 
 
-%feature("shadow") BRep_Curve3D::~BRep_Curve3D %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_Curve3D {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_Curve3D(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_Curve3D {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_Curve3D {
-	Handle_BRep_Curve3D GetHandle() {
-	return *(Handle_BRep_Curve3D*) &$self;
-	}
-};
+%pythonappend Handle_BRep_Curve3D::Handle_BRep_Curve3D %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_Curve3D;
 class Handle_BRep_Curve3D : public Handle_BRep_GCurve {
@@ -3416,20 +3118,6 @@ class Handle_BRep_Curve3D : public Handle_BRep_GCurve {
 %extend Handle_BRep_Curve3D {
     BRep_Curve3D* GetObject() {
     return (BRep_Curve3D*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_Curve3D::~Handle_BRep_Curve3D %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_Curve3D {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -3491,11 +3179,11 @@ class BRep_CurveOnSurface : public BRep_GCurve {
 		%feature("compactdefaultargs") Surface;
 		%feature("autodoc", "	:rtype: Handle_Geom_Surface
 ") Surface;
-		virtual const Handle_Geom_Surface & Surface ();
+		Handle_Geom_Surface Surface ();
 		%feature("compactdefaultargs") PCurve;
 		%feature("autodoc", "	:rtype: Handle_Geom2d_Curve
 ") PCurve;
-		virtual const Handle_Geom2d_Curve & PCurve ();
+		Handle_Geom2d_Curve PCurve ();
 		%feature("compactdefaultargs") PCurve;
 		%feature("autodoc", "	:param C:
 	:type C: Handle_Geom2d_Curve &
@@ -3517,25 +3205,23 @@ class BRep_CurveOnSurface : public BRep_GCurve {
 };
 
 
-%feature("shadow") BRep_CurveOnSurface::~BRep_CurveOnSurface %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_CurveOnSurface {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_CurveOnSurface(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_CurveOnSurface {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_CurveOnSurface {
-	Handle_BRep_CurveOnSurface GetHandle() {
-	return *(Handle_BRep_CurveOnSurface*) &$self;
-	}
-};
+%pythonappend Handle_BRep_CurveOnSurface::Handle_BRep_CurveOnSurface %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_CurveOnSurface;
 class Handle_BRep_CurveOnSurface : public Handle_BRep_GCurve {
@@ -3553,20 +3239,6 @@ class Handle_BRep_CurveOnSurface : public Handle_BRep_GCurve {
 %extend Handle_BRep_CurveOnSurface {
     BRep_CurveOnSurface* GetObject() {
     return (BRep_CurveOnSurface*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_CurveOnSurface::~Handle_BRep_CurveOnSurface %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_CurveOnSurface {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -3604,7 +3276,7 @@ class BRep_PointOnCurveOnSurface : public BRep_PointsOnSurface {
 		%feature("compactdefaultargs") PCurve;
 		%feature("autodoc", "	:rtype: Handle_Geom2d_Curve
 ") PCurve;
-		virtual const Handle_Geom2d_Curve & PCurve ();
+		Handle_Geom2d_Curve PCurve ();
 		%feature("compactdefaultargs") PCurve;
 		%feature("autodoc", "	:param C:
 	:type C: Handle_Geom2d_Curve &
@@ -3614,25 +3286,23 @@ class BRep_PointOnCurveOnSurface : public BRep_PointsOnSurface {
 };
 
 
-%feature("shadow") BRep_PointOnCurveOnSurface::~BRep_PointOnCurveOnSurface %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_PointOnCurveOnSurface {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_PointOnCurveOnSurface(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_PointOnCurveOnSurface {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_PointOnCurveOnSurface {
-	Handle_BRep_PointOnCurveOnSurface GetHandle() {
-	return *(Handle_BRep_PointOnCurveOnSurface*) &$self;
-	}
-};
+%pythonappend Handle_BRep_PointOnCurveOnSurface::Handle_BRep_PointOnCurveOnSurface %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_PointOnCurveOnSurface;
 class Handle_BRep_PointOnCurveOnSurface : public Handle_BRep_PointsOnSurface {
@@ -3650,20 +3320,6 @@ class Handle_BRep_PointOnCurveOnSurface : public Handle_BRep_PointsOnSurface {
 %extend Handle_BRep_PointOnCurveOnSurface {
     BRep_PointOnCurveOnSurface* GetObject() {
     return (BRep_PointOnCurveOnSurface*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_PointOnCurveOnSurface::~Handle_BRep_PointOnCurveOnSurface %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_PointOnCurveOnSurface {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -3707,25 +3363,23 @@ class BRep_PointOnSurface : public BRep_PointsOnSurface {
 };
 
 
-%feature("shadow") BRep_PointOnSurface::~BRep_PointOnSurface %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_PointOnSurface {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_PointOnSurface(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_PointOnSurface {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_PointOnSurface {
-	Handle_BRep_PointOnSurface GetHandle() {
-	return *(Handle_BRep_PointOnSurface*) &$self;
-	}
-};
+%pythonappend Handle_BRep_PointOnSurface::Handle_BRep_PointOnSurface %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_PointOnSurface;
 class Handle_BRep_PointOnSurface : public Handle_BRep_PointsOnSurface {
@@ -3743,20 +3397,6 @@ class Handle_BRep_PointOnSurface : public Handle_BRep_PointsOnSurface {
 %extend Handle_BRep_PointOnSurface {
     BRep_PointOnSurface* GetObject() {
     return (BRep_PointOnSurface*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_PointOnSurface::~Handle_BRep_PointOnSurface %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_PointOnSurface {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -3784,7 +3424,7 @@ class BRep_PolygonOnClosedSurface : public BRep_PolygonOnSurface {
 		%feature("compactdefaultargs") Polygon2;
 		%feature("autodoc", "	:rtype: Handle_Poly_Polygon2D
 ") Polygon2;
-		virtual const Handle_Poly_Polygon2D & Polygon2 ();
+		Handle_Poly_Polygon2D Polygon2 ();
 		%feature("compactdefaultargs") Polygon2;
 		%feature("autodoc", "	:param P:
 	:type P: Handle_Poly_Polygon2D &
@@ -3800,25 +3440,23 @@ class BRep_PolygonOnClosedSurface : public BRep_PolygonOnSurface {
 };
 
 
-%feature("shadow") BRep_PolygonOnClosedSurface::~BRep_PolygonOnClosedSurface %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_PolygonOnClosedSurface {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_PolygonOnClosedSurface(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_PolygonOnClosedSurface {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_PolygonOnClosedSurface {
-	Handle_BRep_PolygonOnClosedSurface GetHandle() {
-	return *(Handle_BRep_PolygonOnClosedSurface*) &$self;
-	}
-};
+%pythonappend Handle_BRep_PolygonOnClosedSurface::Handle_BRep_PolygonOnClosedSurface %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_PolygonOnClosedSurface;
 class Handle_BRep_PolygonOnClosedSurface : public Handle_BRep_PolygonOnSurface {
@@ -3836,20 +3474,6 @@ class Handle_BRep_PolygonOnClosedSurface : public Handle_BRep_PolygonOnSurface {
 %extend Handle_BRep_PolygonOnClosedSurface {
     BRep_PolygonOnClosedSurface* GetObject() {
     return (BRep_PolygonOnClosedSurface*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_PolygonOnClosedSurface::~Handle_BRep_PolygonOnClosedSurface %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_PolygonOnClosedSurface {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -3883,7 +3507,7 @@ class BRep_PolygonOnClosedTriangulation : public BRep_PolygonOnTriangulation {
 		%feature("compactdefaultargs") PolygonOnTriangulation2;
 		%feature("autodoc", "	:rtype: Handle_Poly_PolygonOnTriangulation
 ") PolygonOnTriangulation2;
-		virtual const Handle_Poly_PolygonOnTriangulation & PolygonOnTriangulation2 ();
+		Handle_Poly_PolygonOnTriangulation PolygonOnTriangulation2 ();
 		%feature("compactdefaultargs") Copy;
 		%feature("autodoc", "	* Return a copy of this representation.
 
@@ -3893,25 +3517,23 @@ class BRep_PolygonOnClosedTriangulation : public BRep_PolygonOnTriangulation {
 };
 
 
-%feature("shadow") BRep_PolygonOnClosedTriangulation::~BRep_PolygonOnClosedTriangulation %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_PolygonOnClosedTriangulation {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_PolygonOnClosedTriangulation(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_PolygonOnClosedTriangulation {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_PolygonOnClosedTriangulation {
-	Handle_BRep_PolygonOnClosedTriangulation GetHandle() {
-	return *(Handle_BRep_PolygonOnClosedTriangulation*) &$self;
-	}
-};
+%pythonappend Handle_BRep_PolygonOnClosedTriangulation::Handle_BRep_PolygonOnClosedTriangulation %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_PolygonOnClosedTriangulation;
 class Handle_BRep_PolygonOnClosedTriangulation : public Handle_BRep_PolygonOnTriangulation {
@@ -3929,20 +3551,6 @@ class Handle_BRep_PolygonOnClosedTriangulation : public Handle_BRep_PolygonOnTri
 %extend Handle_BRep_PolygonOnClosedTriangulation {
     BRep_PolygonOnClosedTriangulation* GetObject() {
     return (BRep_PolygonOnClosedTriangulation*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_PolygonOnClosedTriangulation::~Handle_BRep_PolygonOnClosedTriangulation %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_PolygonOnClosedTriangulation {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -4008,13 +3616,13 @@ class BRep_CurveOnClosedSurface : public BRep_CurveOnSurface {
 		%feature("compactdefaultargs") PCurve2;
 		%feature("autodoc", "	:rtype: Handle_Geom2d_Curve
 ") PCurve2;
-		virtual const Handle_Geom2d_Curve & PCurve2 ();
+		Handle_Geom2d_Curve PCurve2 ();
 		%feature("compactdefaultargs") Surface2;
 		%feature("autodoc", "	* Returns Surface()
 
 	:rtype: Handle_Geom_Surface
 ") Surface2;
-		virtual const Handle_Geom_Surface & Surface2 ();
+		Handle_Geom_Surface Surface2 ();
 		%feature("compactdefaultargs") Location2;
 		%feature("autodoc", "	* Returns Location()
 
@@ -4052,25 +3660,23 @@ class BRep_CurveOnClosedSurface : public BRep_CurveOnSurface {
 };
 
 
-%feature("shadow") BRep_CurveOnClosedSurface::~BRep_CurveOnClosedSurface %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend BRep_CurveOnClosedSurface {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_BRep_CurveOnClosedSurface(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend BRep_CurveOnClosedSurface {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend BRep_CurveOnClosedSurface {
-	Handle_BRep_CurveOnClosedSurface GetHandle() {
-	return *(Handle_BRep_CurveOnClosedSurface*) &$self;
-	}
-};
+%pythonappend Handle_BRep_CurveOnClosedSurface::Handle_BRep_CurveOnClosedSurface %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_BRep_CurveOnClosedSurface;
 class Handle_BRep_CurveOnClosedSurface : public Handle_BRep_CurveOnSurface {
@@ -4088,20 +3694,6 @@ class Handle_BRep_CurveOnClosedSurface : public Handle_BRep_CurveOnSurface {
 %extend Handle_BRep_CurveOnClosedSurface {
     BRep_CurveOnClosedSurface* GetObject() {
     return (BRep_CurveOnClosedSurface*)$self->Access();
-    }
-};
-%feature("shadow") Handle_BRep_CurveOnClosedSurface::~Handle_BRep_CurveOnClosedSurface %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_BRep_CurveOnClosedSurface {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 

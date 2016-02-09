@@ -32,11 +32,23 @@ along with pythonOCC.  If not, see <http://www.gnu.org/licenses/>.
 %include ../common/FunctionTransformers.i
 %include ../common/Operators.i
 
-%pythoncode {
-import OCC.GarbageCollector
-};
 
 %include MAT2d_headers.i
+
+
+%pythoncode {
+def register_handle(handle, base_object):
+    """
+    Inserts the handle into the base object to
+    prevent memory corruption in certain cases
+    """
+    try:
+        if base_object.IsKind("Standard_Transient"):
+            base_object.thisHandle = handle
+            base_object.thisown = False
+    except:
+        pass
+};
 
 /* typedefs */
 /* end typedefs declaration */
@@ -136,7 +148,7 @@ class MAT2d_Array2OfConnexion {
 	:type Col: int
 	:rtype: Handle_MAT2d_Connexion
 ") Value;
-		const Handle_MAT2d_Connexion & Value (const Standard_Integer Row,const Standard_Integer Col);
+		Handle_MAT2d_Connexion Value (const Standard_Integer Row,const Standard_Integer Col);
 		%feature("compactdefaultargs") ChangeValue;
 		%feature("autodoc", "	:param Row:
 	:type Row: int
@@ -144,24 +156,10 @@ class MAT2d_Array2OfConnexion {
 	:type Col: int
 	:rtype: Handle_MAT2d_Connexion
 ") ChangeValue;
-		Handle_MAT2d_Connexion & ChangeValue (const Standard_Integer Row,const Standard_Integer Col);
+		Handle_MAT2d_Connexion ChangeValue (const Standard_Integer Row,const Standard_Integer Col);
 };
 
 
-%feature("shadow") MAT2d_Array2OfConnexion::~MAT2d_Array2OfConnexion %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_Array2OfConnexion {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_BiInt;
 class MAT2d_BiInt {
 	public:
@@ -216,20 +214,6 @@ class MAT2d_BiInt {
         };
 
 
-%feature("shadow") MAT2d_BiInt::~MAT2d_BiInt %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_BiInt {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_Circuit;
 class MAT2d_Circuit : public MMgt_TShared {
 	public:
@@ -304,25 +288,23 @@ class MAT2d_Circuit : public MMgt_TShared {
 };
 
 
-%feature("shadow") MAT2d_Circuit::~MAT2d_Circuit %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend MAT2d_Circuit {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_MAT2d_Circuit(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend MAT2d_Circuit {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend MAT2d_Circuit {
-	Handle_MAT2d_Circuit GetHandle() {
-	return *(Handle_MAT2d_Circuit*) &$self;
-	}
-};
+%pythonappend Handle_MAT2d_Circuit::Handle_MAT2d_Circuit %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_MAT2d_Circuit;
 class Handle_MAT2d_Circuit : public Handle_MMgt_TShared {
@@ -340,20 +322,6 @@ class Handle_MAT2d_Circuit : public Handle_MMgt_TShared {
 %extend Handle_MAT2d_Circuit {
     MAT2d_Circuit* GetObject() {
     return (MAT2d_Circuit*)$self->Access();
-    }
-};
-%feature("shadow") Handle_MAT2d_Circuit::~Handle_MAT2d_Circuit %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_MAT2d_Circuit {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -523,25 +491,23 @@ class MAT2d_Connexion : public MMgt_TShared {
 };
 
 
-%feature("shadow") MAT2d_Connexion::~MAT2d_Connexion %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend MAT2d_Connexion {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_MAT2d_Connexion(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend MAT2d_Connexion {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend MAT2d_Connexion {
-	Handle_MAT2d_Connexion GetHandle() {
-	return *(Handle_MAT2d_Connexion*) &$self;
-	}
-};
+%pythonappend Handle_MAT2d_Connexion::Handle_MAT2d_Connexion %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_MAT2d_Connexion;
 class Handle_MAT2d_Connexion : public Handle_MMgt_TShared {
@@ -559,20 +525,6 @@ class Handle_MAT2d_Connexion : public Handle_MMgt_TShared {
 %extend Handle_MAT2d_Connexion {
     MAT2d_Connexion* GetObject() {
     return (MAT2d_Connexion*)$self->Access();
-    }
-};
-%feature("shadow") Handle_MAT2d_Connexion::~Handle_MAT2d_Connexion %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_MAT2d_Connexion {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -606,20 +558,6 @@ class MAT2d_DataMapIteratorOfDataMapOfBiIntInteger : public TCollection_BasicMap
 };
 
 
-%feature("shadow") MAT2d_DataMapIteratorOfDataMapOfBiIntInteger::~MAT2d_DataMapIteratorOfDataMapOfBiIntInteger %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_DataMapIteratorOfDataMapOfBiIntInteger {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_DataMapIteratorOfDataMapOfBiIntSequenceOfInteger;
 class MAT2d_DataMapIteratorOfDataMapOfBiIntSequenceOfInteger : public TCollection_BasicMapIterator {
 	public:
@@ -650,20 +588,6 @@ class MAT2d_DataMapIteratorOfDataMapOfBiIntSequenceOfInteger : public TCollectio
 };
 
 
-%feature("shadow") MAT2d_DataMapIteratorOfDataMapOfBiIntSequenceOfInteger::~MAT2d_DataMapIteratorOfDataMapOfBiIntSequenceOfInteger %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_DataMapIteratorOfDataMapOfBiIntSequenceOfInteger {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_DataMapIteratorOfDataMapOfIntegerBisec;
 class MAT2d_DataMapIteratorOfDataMapOfIntegerBisec : public TCollection_BasicMapIterator {
 	public:
@@ -694,20 +618,6 @@ class MAT2d_DataMapIteratorOfDataMapOfIntegerBisec : public TCollection_BasicMap
 };
 
 
-%feature("shadow") MAT2d_DataMapIteratorOfDataMapOfIntegerBisec::~MAT2d_DataMapIteratorOfDataMapOfIntegerBisec %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_DataMapIteratorOfDataMapOfIntegerBisec {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_DataMapIteratorOfDataMapOfIntegerConnexion;
 class MAT2d_DataMapIteratorOfDataMapOfIntegerConnexion : public TCollection_BasicMapIterator {
 	public:
@@ -734,24 +644,10 @@ class MAT2d_DataMapIteratorOfDataMapOfIntegerConnexion : public TCollection_Basi
 		%feature("compactdefaultargs") Value;
 		%feature("autodoc", "	:rtype: Handle_MAT2d_Connexion
 ") Value;
-		const Handle_MAT2d_Connexion & Value ();
+		Handle_MAT2d_Connexion Value ();
 };
 
 
-%feature("shadow") MAT2d_DataMapIteratorOfDataMapOfIntegerConnexion::~MAT2d_DataMapIteratorOfDataMapOfIntegerConnexion %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_DataMapIteratorOfDataMapOfIntegerConnexion {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_DataMapIteratorOfDataMapOfIntegerPnt2d;
 class MAT2d_DataMapIteratorOfDataMapOfIntegerPnt2d : public TCollection_BasicMapIterator {
 	public:
@@ -782,20 +678,6 @@ class MAT2d_DataMapIteratorOfDataMapOfIntegerPnt2d : public TCollection_BasicMap
 };
 
 
-%feature("shadow") MAT2d_DataMapIteratorOfDataMapOfIntegerPnt2d::~MAT2d_DataMapIteratorOfDataMapOfIntegerPnt2d %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_DataMapIteratorOfDataMapOfIntegerPnt2d {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_DataMapIteratorOfDataMapOfIntegerSequenceOfConnexion;
 class MAT2d_DataMapIteratorOfDataMapOfIntegerSequenceOfConnexion : public TCollection_BasicMapIterator {
 	public:
@@ -826,20 +708,6 @@ class MAT2d_DataMapIteratorOfDataMapOfIntegerSequenceOfConnexion : public TColle
 };
 
 
-%feature("shadow") MAT2d_DataMapIteratorOfDataMapOfIntegerSequenceOfConnexion::~MAT2d_DataMapIteratorOfDataMapOfIntegerSequenceOfConnexion %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_DataMapIteratorOfDataMapOfIntegerSequenceOfConnexion {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_DataMapIteratorOfDataMapOfIntegerVec2d;
 class MAT2d_DataMapIteratorOfDataMapOfIntegerVec2d : public TCollection_BasicMapIterator {
 	public:
@@ -870,20 +738,6 @@ class MAT2d_DataMapIteratorOfDataMapOfIntegerVec2d : public TCollection_BasicMap
 };
 
 
-%feature("shadow") MAT2d_DataMapIteratorOfDataMapOfIntegerVec2d::~MAT2d_DataMapIteratorOfDataMapOfIntegerVec2d %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_DataMapIteratorOfDataMapOfIntegerVec2d {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_DataMapNodeOfDataMapOfBiIntInteger;
 class MAT2d_DataMapNodeOfDataMapOfBiIntInteger : public TCollection_MapNode {
 	public:
@@ -917,25 +771,23 @@ class MAT2d_DataMapNodeOfDataMapOfBiIntInteger : public TCollection_MapNode {
             };
 
 
-%feature("shadow") MAT2d_DataMapNodeOfDataMapOfBiIntInteger::~MAT2d_DataMapNodeOfDataMapOfBiIntInteger %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend MAT2d_DataMapNodeOfDataMapOfBiIntInteger {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_MAT2d_DataMapNodeOfDataMapOfBiIntInteger(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend MAT2d_DataMapNodeOfDataMapOfBiIntInteger {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend MAT2d_DataMapNodeOfDataMapOfBiIntInteger {
-	Handle_MAT2d_DataMapNodeOfDataMapOfBiIntInteger GetHandle() {
-	return *(Handle_MAT2d_DataMapNodeOfDataMapOfBiIntInteger*) &$self;
-	}
-};
+%pythonappend Handle_MAT2d_DataMapNodeOfDataMapOfBiIntInteger::Handle_MAT2d_DataMapNodeOfDataMapOfBiIntInteger %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_MAT2d_DataMapNodeOfDataMapOfBiIntInteger;
 class Handle_MAT2d_DataMapNodeOfDataMapOfBiIntInteger : public Handle_TCollection_MapNode {
@@ -953,20 +805,6 @@ class Handle_MAT2d_DataMapNodeOfDataMapOfBiIntInteger : public Handle_TCollectio
 %extend Handle_MAT2d_DataMapNodeOfDataMapOfBiIntInteger {
     MAT2d_DataMapNodeOfDataMapOfBiIntInteger* GetObject() {
     return (MAT2d_DataMapNodeOfDataMapOfBiIntInteger*)$self->Access();
-    }
-};
-%feature("shadow") Handle_MAT2d_DataMapNodeOfDataMapOfBiIntInteger::~Handle_MAT2d_DataMapNodeOfDataMapOfBiIntInteger %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_MAT2d_DataMapNodeOfDataMapOfBiIntInteger {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -994,25 +832,23 @@ class MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger : public TCollection_Ma
 };
 
 
-%feature("shadow") MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger::~MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger {
-	Handle_MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger GetHandle() {
-	return *(Handle_MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger*) &$self;
-	}
-};
+%pythonappend Handle_MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger::Handle_MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger;
 class Handle_MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger : public Handle_TCollection_MapNode {
@@ -1030,20 +866,6 @@ class Handle_MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger : public Handle_
 %extend Handle_MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger {
     MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger* GetObject() {
     return (MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger*)$self->Access();
-    }
-};
-%feature("shadow") Handle_MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger::~Handle_MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_MAT2d_DataMapNodeOfDataMapOfBiIntSequenceOfInteger {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -1080,25 +902,23 @@ class MAT2d_DataMapNodeOfDataMapOfIntegerBisec : public TCollection_MapNode {
 };
 
 
-%feature("shadow") MAT2d_DataMapNodeOfDataMapOfIntegerBisec::~MAT2d_DataMapNodeOfDataMapOfIntegerBisec %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend MAT2d_DataMapNodeOfDataMapOfIntegerBisec {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_MAT2d_DataMapNodeOfDataMapOfIntegerBisec(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend MAT2d_DataMapNodeOfDataMapOfIntegerBisec {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend MAT2d_DataMapNodeOfDataMapOfIntegerBisec {
-	Handle_MAT2d_DataMapNodeOfDataMapOfIntegerBisec GetHandle() {
-	return *(Handle_MAT2d_DataMapNodeOfDataMapOfIntegerBisec*) &$self;
-	}
-};
+%pythonappend Handle_MAT2d_DataMapNodeOfDataMapOfIntegerBisec::Handle_MAT2d_DataMapNodeOfDataMapOfIntegerBisec %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_MAT2d_DataMapNodeOfDataMapOfIntegerBisec;
 class Handle_MAT2d_DataMapNodeOfDataMapOfIntegerBisec : public Handle_TCollection_MapNode {
@@ -1116,20 +936,6 @@ class Handle_MAT2d_DataMapNodeOfDataMapOfIntegerBisec : public Handle_TCollectio
 %extend Handle_MAT2d_DataMapNodeOfDataMapOfIntegerBisec {
     MAT2d_DataMapNodeOfDataMapOfIntegerBisec* GetObject() {
     return (MAT2d_DataMapNodeOfDataMapOfIntegerBisec*)$self->Access();
-    }
-};
-%feature("shadow") Handle_MAT2d_DataMapNodeOfDataMapOfIntegerBisec::~Handle_MAT2d_DataMapNodeOfDataMapOfIntegerBisec %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_MAT2d_DataMapNodeOfDataMapOfIntegerBisec {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -1162,29 +968,27 @@ class MAT2d_DataMapNodeOfDataMapOfIntegerConnexion : public TCollection_MapNode 
             		%feature("compactdefaultargs") Value;
 		%feature("autodoc", "	:rtype: Handle_MAT2d_Connexion
 ") Value;
-		Handle_MAT2d_Connexion & Value ();
+		Handle_MAT2d_Connexion Value ();
 };
 
 
-%feature("shadow") MAT2d_DataMapNodeOfDataMapOfIntegerConnexion::~MAT2d_DataMapNodeOfDataMapOfIntegerConnexion %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
+%extend MAT2d_DataMapNodeOfDataMapOfIntegerConnexion {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_MAT2d_DataMapNodeOfDataMapOfIntegerConnexion(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
+
+%pythonappend Handle_MAT2d_DataMapNodeOfDataMapOfIntegerConnexion::Handle_MAT2d_DataMapNodeOfDataMapOfIntegerConnexion %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
 %}
-
-%extend MAT2d_DataMapNodeOfDataMapOfIntegerConnexion {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend MAT2d_DataMapNodeOfDataMapOfIntegerConnexion {
-	Handle_MAT2d_DataMapNodeOfDataMapOfIntegerConnexion GetHandle() {
-	return *(Handle_MAT2d_DataMapNodeOfDataMapOfIntegerConnexion*) &$self;
-	}
-};
 
 %nodefaultctor Handle_MAT2d_DataMapNodeOfDataMapOfIntegerConnexion;
 class Handle_MAT2d_DataMapNodeOfDataMapOfIntegerConnexion : public Handle_TCollection_MapNode {
@@ -1202,20 +1006,6 @@ class Handle_MAT2d_DataMapNodeOfDataMapOfIntegerConnexion : public Handle_TColle
 %extend Handle_MAT2d_DataMapNodeOfDataMapOfIntegerConnexion {
     MAT2d_DataMapNodeOfDataMapOfIntegerConnexion* GetObject() {
     return (MAT2d_DataMapNodeOfDataMapOfIntegerConnexion*)$self->Access();
-    }
-};
-%feature("shadow") Handle_MAT2d_DataMapNodeOfDataMapOfIntegerConnexion::~Handle_MAT2d_DataMapNodeOfDataMapOfIntegerConnexion %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_MAT2d_DataMapNodeOfDataMapOfIntegerConnexion {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -1252,25 +1042,23 @@ class MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d : public TCollection_MapNode {
 };
 
 
-%feature("shadow") MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d::~MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d {
-	Handle_MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d GetHandle() {
-	return *(Handle_MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d*) &$self;
-	}
-};
+%pythonappend Handle_MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d::Handle_MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d;
 class Handle_MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d : public Handle_TCollection_MapNode {
@@ -1288,20 +1076,6 @@ class Handle_MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d : public Handle_TCollectio
 %extend Handle_MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d {
     MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d* GetObject() {
     return (MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d*)$self->Access();
-    }
-};
-%feature("shadow") Handle_MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d::~Handle_MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_MAT2d_DataMapNodeOfDataMapOfIntegerPnt2d {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -1338,25 +1112,23 @@ class MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion : public TCollectio
 };
 
 
-%feature("shadow") MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion::~MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion {
-	Handle_MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion GetHandle() {
-	return *(Handle_MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion*) &$self;
-	}
-};
+%pythonappend Handle_MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion::Handle_MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion;
 class Handle_MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion : public Handle_TCollection_MapNode {
@@ -1374,20 +1146,6 @@ class Handle_MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion : public Han
 %extend Handle_MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion {
     MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion* GetObject() {
     return (MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion*)$self->Access();
-    }
-};
-%feature("shadow") Handle_MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion::~Handle_MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_MAT2d_DataMapNodeOfDataMapOfIntegerSequenceOfConnexion {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -1424,25 +1182,23 @@ class MAT2d_DataMapNodeOfDataMapOfIntegerVec2d : public TCollection_MapNode {
 };
 
 
-%feature("shadow") MAT2d_DataMapNodeOfDataMapOfIntegerVec2d::~MAT2d_DataMapNodeOfDataMapOfIntegerVec2d %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend MAT2d_DataMapNodeOfDataMapOfIntegerVec2d {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_MAT2d_DataMapNodeOfDataMapOfIntegerVec2d(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend MAT2d_DataMapNodeOfDataMapOfIntegerVec2d {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend MAT2d_DataMapNodeOfDataMapOfIntegerVec2d {
-	Handle_MAT2d_DataMapNodeOfDataMapOfIntegerVec2d GetHandle() {
-	return *(Handle_MAT2d_DataMapNodeOfDataMapOfIntegerVec2d*) &$self;
-	}
-};
+%pythonappend Handle_MAT2d_DataMapNodeOfDataMapOfIntegerVec2d::Handle_MAT2d_DataMapNodeOfDataMapOfIntegerVec2d %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_MAT2d_DataMapNodeOfDataMapOfIntegerVec2d;
 class Handle_MAT2d_DataMapNodeOfDataMapOfIntegerVec2d : public Handle_TCollection_MapNode {
@@ -1460,20 +1216,6 @@ class Handle_MAT2d_DataMapNodeOfDataMapOfIntegerVec2d : public Handle_TCollectio
 %extend Handle_MAT2d_DataMapNodeOfDataMapOfIntegerVec2d {
     MAT2d_DataMapNodeOfDataMapOfIntegerVec2d* GetObject() {
     return (MAT2d_DataMapNodeOfDataMapOfIntegerVec2d*)$self->Access();
-    }
-};
-%feature("shadow") Handle_MAT2d_DataMapNodeOfDataMapOfIntegerVec2d::~Handle_MAT2d_DataMapNodeOfDataMapOfIntegerVec2d %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_MAT2d_DataMapNodeOfDataMapOfIntegerVec2d {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -1555,20 +1297,6 @@ class MAT2d_DataMapOfBiIntInteger : public TCollection_BasicMap {
 };
 
 
-%feature("shadow") MAT2d_DataMapOfBiIntInteger::~MAT2d_DataMapOfBiIntInteger %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_DataMapOfBiIntInteger {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_DataMapOfBiIntSequenceOfInteger;
 class MAT2d_DataMapOfBiIntSequenceOfInteger : public TCollection_BasicMap {
 	public:
@@ -1647,20 +1375,6 @@ class MAT2d_DataMapOfBiIntSequenceOfInteger : public TCollection_BasicMap {
 };
 
 
-%feature("shadow") MAT2d_DataMapOfBiIntSequenceOfInteger::~MAT2d_DataMapOfBiIntSequenceOfInteger %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_DataMapOfBiIntSequenceOfInteger {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_DataMapOfIntegerBisec;
 class MAT2d_DataMapOfIntegerBisec : public TCollection_BasicMap {
 	public:
@@ -1739,20 +1453,6 @@ class MAT2d_DataMapOfIntegerBisec : public TCollection_BasicMap {
 };
 
 
-%feature("shadow") MAT2d_DataMapOfIntegerBisec::~MAT2d_DataMapOfIntegerBisec %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_DataMapOfIntegerBisec {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_DataMapOfIntegerConnexion;
 class MAT2d_DataMapOfIntegerConnexion : public TCollection_BasicMap {
 	public:
@@ -1809,13 +1509,13 @@ class MAT2d_DataMapOfIntegerConnexion : public TCollection_BasicMap {
 	:type K: int &
 	:rtype: Handle_MAT2d_Connexion
 ") Find;
-		const Handle_MAT2d_Connexion & Find (const Standard_Integer & K);
+		Handle_MAT2d_Connexion Find (const Standard_Integer & K);
 		%feature("compactdefaultargs") ChangeFind;
 		%feature("autodoc", "	:param K:
 	:type K: int &
 	:rtype: Handle_MAT2d_Connexion
 ") ChangeFind;
-		Handle_MAT2d_Connexion & ChangeFind (const Standard_Integer & K);
+		Handle_MAT2d_Connexion ChangeFind (const Standard_Integer & K);
 		%feature("compactdefaultargs") Find1;
 		%feature("autodoc", "	:param K:
 	:type K: int &
@@ -1831,20 +1531,6 @@ class MAT2d_DataMapOfIntegerConnexion : public TCollection_BasicMap {
 };
 
 
-%feature("shadow") MAT2d_DataMapOfIntegerConnexion::~MAT2d_DataMapOfIntegerConnexion %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_DataMapOfIntegerConnexion {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_DataMapOfIntegerPnt2d;
 class MAT2d_DataMapOfIntegerPnt2d : public TCollection_BasicMap {
 	public:
@@ -1923,20 +1609,6 @@ class MAT2d_DataMapOfIntegerPnt2d : public TCollection_BasicMap {
 };
 
 
-%feature("shadow") MAT2d_DataMapOfIntegerPnt2d::~MAT2d_DataMapOfIntegerPnt2d %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_DataMapOfIntegerPnt2d {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_DataMapOfIntegerSequenceOfConnexion;
 class MAT2d_DataMapOfIntegerSequenceOfConnexion : public TCollection_BasicMap {
 	public:
@@ -2015,20 +1687,6 @@ class MAT2d_DataMapOfIntegerSequenceOfConnexion : public TCollection_BasicMap {
 };
 
 
-%feature("shadow") MAT2d_DataMapOfIntegerSequenceOfConnexion::~MAT2d_DataMapOfIntegerSequenceOfConnexion %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_DataMapOfIntegerSequenceOfConnexion {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_DataMapOfIntegerVec2d;
 class MAT2d_DataMapOfIntegerVec2d : public TCollection_BasicMap {
 	public:
@@ -2107,20 +1765,6 @@ class MAT2d_DataMapOfIntegerVec2d : public TCollection_BasicMap {
 };
 
 
-%feature("shadow") MAT2d_DataMapOfIntegerVec2d::~MAT2d_DataMapOfIntegerVec2d %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_DataMapOfIntegerVec2d {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 class MAT2d_MapBiIntHasher {
 	public:
 		%feature("compactdefaultargs") HashCode;
@@ -2142,20 +1786,6 @@ class MAT2d_MapBiIntHasher {
 };
 
 
-%feature("shadow") MAT2d_MapBiIntHasher::~MAT2d_MapBiIntHasher %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_MapBiIntHasher {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_Mat2d;
 class MAT2d_Mat2d {
 	public:
@@ -2228,20 +1858,6 @@ class MAT2d_Mat2d {
 };
 
 
-%feature("shadow") MAT2d_Mat2d::~MAT2d_Mat2d %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_Mat2d {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_MiniPath;
 class MAT2d_MiniPath {
 	public:
@@ -2308,20 +1924,6 @@ class MAT2d_MiniPath {
 };
 
 
-%feature("shadow") MAT2d_MiniPath::~MAT2d_MiniPath %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_MiniPath {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_SequenceNodeOfSequenceOfConnexion;
 class MAT2d_SequenceNodeOfSequenceOfConnexion : public TCollection_SeqNode {
 	public:
@@ -2338,29 +1940,27 @@ class MAT2d_SequenceNodeOfSequenceOfConnexion : public TCollection_SeqNode {
 		%feature("compactdefaultargs") Value;
 		%feature("autodoc", "	:rtype: Handle_MAT2d_Connexion
 ") Value;
-		Handle_MAT2d_Connexion & Value ();
+		Handle_MAT2d_Connexion Value ();
 };
 
 
-%feature("shadow") MAT2d_SequenceNodeOfSequenceOfConnexion::~MAT2d_SequenceNodeOfSequenceOfConnexion %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
+%extend MAT2d_SequenceNodeOfSequenceOfConnexion {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_MAT2d_SequenceNodeOfSequenceOfConnexion(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
+
+%pythonappend Handle_MAT2d_SequenceNodeOfSequenceOfConnexion::Handle_MAT2d_SequenceNodeOfSequenceOfConnexion %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
 %}
-
-%extend MAT2d_SequenceNodeOfSequenceOfConnexion {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend MAT2d_SequenceNodeOfSequenceOfConnexion {
-	Handle_MAT2d_SequenceNodeOfSequenceOfConnexion GetHandle() {
-	return *(Handle_MAT2d_SequenceNodeOfSequenceOfConnexion*) &$self;
-	}
-};
 
 %nodefaultctor Handle_MAT2d_SequenceNodeOfSequenceOfConnexion;
 class Handle_MAT2d_SequenceNodeOfSequenceOfConnexion : public Handle_TCollection_SeqNode {
@@ -2378,20 +1978,6 @@ class Handle_MAT2d_SequenceNodeOfSequenceOfConnexion : public Handle_TCollection
 %extend Handle_MAT2d_SequenceNodeOfSequenceOfConnexion {
     MAT2d_SequenceNodeOfSequenceOfConnexion* GetObject() {
     return (MAT2d_SequenceNodeOfSequenceOfConnexion*)$self->Access();
-    }
-};
-%feature("shadow") Handle_MAT2d_SequenceNodeOfSequenceOfConnexion::~Handle_MAT2d_SequenceNodeOfSequenceOfConnexion %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_MAT2d_SequenceNodeOfSequenceOfConnexion {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -2415,25 +2001,23 @@ class MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve : public TCollection_SeqNode
 };
 
 
-%feature("shadow") MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve::~MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve {
-	Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve GetHandle() {
-	return *(Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve*) &$self;
-	}
-};
+%pythonappend Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve::Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve;
 class Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve : public Handle_TCollection_SeqNode {
@@ -2451,20 +2035,6 @@ class Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve : public Handle_TColl
 %extend Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve {
     MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve* GetObject() {
     return (MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve*)$self->Access();
-    }
-};
-%feature("shadow") Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve::~Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfCurve {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -2488,25 +2058,23 @@ class MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry : public TCollection_SeqN
 };
 
 
-%feature("shadow") MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry::~MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
+%extend MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry {
+	%pythoncode {
+		def GetHandle(self):
+		    try:
+		        return self.thisHandle
+		    except:
+		        self.thisHandle = Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry(self)
+		        self.thisown = False
+		        return self.thisHandle
+	}
+};
 
-%extend MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry {
-	Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry GetHandle() {
-	return *(Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry*) &$self;
-	}
-};
+%pythonappend Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry::Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry %{
+    # register the handle in the base object
+    if len(args) > 0:
+        register_handle(self, args[0])
+%}
 
 %nodefaultctor Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry;
 class Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry : public Handle_TCollection_SeqNode {
@@ -2524,20 +2092,6 @@ class Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry : public Handle_TC
 %extend Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry {
     MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry* GetObject() {
     return (MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry*)$self->Access();
-    }
-};
-%feature("shadow") Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry::~Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_MAT2d_SequenceNodeOfSequenceOfSequenceOfGeometry {
-    void _kill_pointed() {
-        delete $self;
     }
 };
 
@@ -2629,11 +2183,11 @@ class MAT2d_SequenceOfConnexion : public TCollection_BaseSequence {
 		%feature("compactdefaultargs") First;
 		%feature("autodoc", "	:rtype: Handle_MAT2d_Connexion
 ") First;
-		const Handle_MAT2d_Connexion & First ();
+		Handle_MAT2d_Connexion First ();
 		%feature("compactdefaultargs") Last;
 		%feature("autodoc", "	:rtype: Handle_MAT2d_Connexion
 ") Last;
-		const Handle_MAT2d_Connexion & Last ();
+		Handle_MAT2d_Connexion Last ();
 		%feature("compactdefaultargs") Split;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -2647,7 +2201,7 @@ class MAT2d_SequenceOfConnexion : public TCollection_BaseSequence {
 	:type Index: int
 	:rtype: Handle_MAT2d_Connexion
 ") Value;
-		const Handle_MAT2d_Connexion & Value (const Standard_Integer Index);
+		Handle_MAT2d_Connexion Value (const Standard_Integer Index);
 		%feature("compactdefaultargs") SetValue;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -2661,7 +2215,7 @@ class MAT2d_SequenceOfConnexion : public TCollection_BaseSequence {
 	:type Index: int
 	:rtype: Handle_MAT2d_Connexion
 ") ChangeValue;
-		Handle_MAT2d_Connexion & ChangeValue (const Standard_Integer Index);
+		Handle_MAT2d_Connexion ChangeValue (const Standard_Integer Index);
 		%feature("compactdefaultargs") Remove;
 		%feature("autodoc", "	:param Index:
 	:type Index: int
@@ -2679,20 +2233,6 @@ class MAT2d_SequenceOfConnexion : public TCollection_BaseSequence {
 };
 
 
-%feature("shadow") MAT2d_SequenceOfConnexion::~MAT2d_SequenceOfConnexion %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_SequenceOfConnexion {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_SequenceOfSequenceOfCurve;
 class MAT2d_SequenceOfSequenceOfCurve : public TCollection_BaseSequence {
 	public:
@@ -2831,20 +2371,6 @@ class MAT2d_SequenceOfSequenceOfCurve : public TCollection_BaseSequence {
 };
 
 
-%feature("shadow") MAT2d_SequenceOfSequenceOfCurve::~MAT2d_SequenceOfSequenceOfCurve %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_SequenceOfSequenceOfCurve {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_SequenceOfSequenceOfGeometry;
 class MAT2d_SequenceOfSequenceOfGeometry : public TCollection_BaseSequence {
 	public:
@@ -2983,20 +2509,6 @@ class MAT2d_SequenceOfSequenceOfGeometry : public TCollection_BaseSequence {
 };
 
 
-%feature("shadow") MAT2d_SequenceOfSequenceOfGeometry::~MAT2d_SequenceOfSequenceOfGeometry %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_SequenceOfSequenceOfGeometry {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor MAT2d_Tool2d;
 class MAT2d_Tool2d {
 	public:
@@ -3193,17 +2705,3 @@ class MAT2d_Tool2d {
 };
 
 
-%feature("shadow") MAT2d_Tool2d::~MAT2d_Tool2d %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend MAT2d_Tool2d {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
