@@ -48,7 +48,7 @@ import OCC.GarbageCollector
 class IntImpParGen {
 	public:
 		%feature("compactdefaultargs") DetermineTransition;
-		%feature("autodoc", "	* Template class for an implicit curve. Template class for a tool on a parameterised curve. Math function, instantiated inside the Intersector. Tool used by the package IntCurve and IntImpParGen
+		%feature("autodoc", "	* Template class for an implicit curve. Math function, instantiated inside the Intersector. Tool used by the package IntCurve and IntImpParGen
 
 	:param Pos1:
 	:type Pos1: IntRes2d_Position

@@ -1415,7 +1415,7 @@ class TopOpeBRepBuild_HBuilder : public MMgt_TShared {
 ") Perform;
 		void Perform (const Handle_TopOpeBRepDS_HDataStructure & HDS,const TopoDS_Shape & S1,const TopoDS_Shape & S2);
 		%feature("compactdefaultargs") Clear;
-		%feature("autodoc", "	* Removes all split and merge already performed. 	 Does NOT clear the handled DS.
+		%feature("autodoc", "	* Removes all split and merge already performed. Does NOT clear the handled DS.
 
 	:rtype: None
 ") Clear;
@@ -2413,6 +2413,12 @@ class TopOpeBRepBuild_ListOfListOfLoop {
 		%feature("autodoc", "	:rtype: None
 ") TopOpeBRepBuild_ListOfListOfLoop;
 		 TopOpeBRepBuild_ListOfListOfLoop ();
+		%feature("compactdefaultargs") TopOpeBRepBuild_ListOfListOfLoop;
+		%feature("autodoc", "	:param Other:
+	:type Other: TopOpeBRepBuild_ListOfListOfLoop &
+	:rtype: None
+") TopOpeBRepBuild_ListOfListOfLoop;
+		 TopOpeBRepBuild_ListOfListOfLoop (const TopOpeBRepBuild_ListOfListOfLoop & Other);
 		%feature("compactdefaultargs") Assign;
 		%feature("autodoc", "	:param Other:
 	:type Other: TopOpeBRepBuild_ListOfListOfLoop &
@@ -2551,6 +2557,12 @@ class TopOpeBRepBuild_ListOfLoop {
 		%feature("autodoc", "	:rtype: None
 ") TopOpeBRepBuild_ListOfLoop;
 		 TopOpeBRepBuild_ListOfLoop ();
+		%feature("compactdefaultargs") TopOpeBRepBuild_ListOfLoop;
+		%feature("autodoc", "	:param Other:
+	:type Other: TopOpeBRepBuild_ListOfLoop &
+	:rtype: None
+") TopOpeBRepBuild_ListOfLoop;
+		 TopOpeBRepBuild_ListOfLoop (const TopOpeBRepBuild_ListOfLoop & Other);
 		%feature("compactdefaultargs") Assign;
 		%feature("autodoc", "	:param Other:
 	:type Other: TopOpeBRepBuild_ListOfLoop &
@@ -2689,6 +2701,12 @@ class TopOpeBRepBuild_ListOfPave {
 		%feature("autodoc", "	:rtype: None
 ") TopOpeBRepBuild_ListOfPave;
 		 TopOpeBRepBuild_ListOfPave ();
+		%feature("compactdefaultargs") TopOpeBRepBuild_ListOfPave;
+		%feature("autodoc", "	:param Other:
+	:type Other: TopOpeBRepBuild_ListOfPave &
+	:rtype: None
+") TopOpeBRepBuild_ListOfPave;
+		 TopOpeBRepBuild_ListOfPave (const TopOpeBRepBuild_ListOfPave & Other);
 		%feature("compactdefaultargs") Assign;
 		%feature("autodoc", "	:param Other:
 	:type Other: TopOpeBRepBuild_ListOfPave &
@@ -2827,6 +2845,12 @@ class TopOpeBRepBuild_ListOfShapeListOfShape {
 		%feature("autodoc", "	:rtype: None
 ") TopOpeBRepBuild_ListOfShapeListOfShape;
 		 TopOpeBRepBuild_ListOfShapeListOfShape ();
+		%feature("compactdefaultargs") TopOpeBRepBuild_ListOfShapeListOfShape;
+		%feature("autodoc", "	:param Other:
+	:type Other: TopOpeBRepBuild_ListOfShapeListOfShape &
+	:rtype: None
+") TopOpeBRepBuild_ListOfShapeListOfShape;
+		 TopOpeBRepBuild_ListOfShapeListOfShape (const TopOpeBRepBuild_ListOfShapeListOfShape & Other);
 		%feature("compactdefaultargs") Assign;
 		%feature("autodoc", "	:param Other:
 	:type Other: TopOpeBRepBuild_ListOfShapeListOfShape &
@@ -3762,7 +3786,7 @@ class TopOpeBRepBuild_Tools {
 ") IsDegEdgesTheSame;
 		static Standard_Boolean IsDegEdgesTheSame (const TopoDS_Shape & anE1,const TopoDS_Shape & anE2);
 		%feature("compactdefaultargs") NormalizeFace;
-		%feature("autodoc", "	* test if <oldFace> does not contain INTERNAL or EXTERNAL edges  and remove such edges in case of its presence. The result is stored in <corrFace>
+		%feature("autodoc", "	* test if <oldFace> does not contain INTERNAL or EXTERNAL edges and remove such edges in case of its presence. The result is stored in <corrFace>
 
 	:param oldFace:
 	:type oldFace: TopoDS_Shape &

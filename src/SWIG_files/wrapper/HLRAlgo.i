@@ -1894,6 +1894,12 @@ class HLRAlgo_InterferenceList {
 		%feature("autodoc", "	:rtype: None
 ") HLRAlgo_InterferenceList;
 		 HLRAlgo_InterferenceList ();
+		%feature("compactdefaultargs") HLRAlgo_InterferenceList;
+		%feature("autodoc", "	:param Other:
+	:type Other: HLRAlgo_InterferenceList &
+	:rtype: None
+") HLRAlgo_InterferenceList;
+		 HLRAlgo_InterferenceList (const HLRAlgo_InterferenceList & Other);
 		%feature("compactdefaultargs") Assign;
 		%feature("autodoc", "	:param Other:
 	:type Other: HLRAlgo_InterferenceList &
@@ -2382,6 +2388,12 @@ class HLRAlgo_ListOfBPoint {
 		%feature("autodoc", "	:rtype: None
 ") HLRAlgo_ListOfBPoint;
 		 HLRAlgo_ListOfBPoint ();
+		%feature("compactdefaultargs") HLRAlgo_ListOfBPoint;
+		%feature("autodoc", "	:param Other:
+	:type Other: HLRAlgo_ListOfBPoint &
+	:rtype: None
+") HLRAlgo_ListOfBPoint;
+		 HLRAlgo_ListOfBPoint (const HLRAlgo_ListOfBPoint & Other);
 		%feature("compactdefaultargs") Assign;
 		%feature("autodoc", "	:param Other:
 	:type Other: HLRAlgo_ListOfBPoint &

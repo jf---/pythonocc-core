@@ -124,7 +124,7 @@ class Intrv_Interval {
 ") SetStart;
 		void SetStart (const Standard_Real Start,const Standard_ShortReal TolStart);
 		%feature("compactdefaultargs") FuseAtStart;
-		%feature("autodoc", "	* ****+****--------------------> Old one  ****+****------------------------> New one to fuse  <<< <<<  ****+****------------------------> result
+		%feature("autodoc", "	* ****+****--------------------> Old one ****+****------------------------> New one to fuse <<< <<< ****+****------------------------> result
 
 	:param Start:
 	:type Start: float
@@ -134,7 +134,7 @@ class Intrv_Interval {
 ") FuseAtStart;
 		void FuseAtStart (const Standard_Real Start,const Standard_ShortReal TolStart);
 		%feature("compactdefaultargs") CutAtStart;
-		%feature("autodoc", "	* ****+****-----------> Old one  <----------**+** Tool for cutting  >>> >>> ****+****-----------> result
+		%feature("autodoc", "	* ****+****-----------> Old one <----------**+** Tool for cutting >>> >>> ****+****-----------> result
 
 	:param Start:
 	:type Start: float
@@ -152,7 +152,7 @@ class Intrv_Interval {
 ") SetEnd;
 		void SetEnd (const Standard_Real End,const Standard_ShortReal TolEnd);
 		%feature("compactdefaultargs") FuseAtEnd;
-		%feature("autodoc", "	* <---------------------****+**** Old one  <-----------------**+**  New one to fuse  >>> >>>  <---------------------****+**** result
+		%feature("autodoc", "	* <---------------------****+**** Old one <-----------------**+**  New one to fuse >>> >>> <---------------------****+**** result
 
 	:param End:
 	:type End: float
@@ -162,7 +162,7 @@ class Intrv_Interval {
 ") FuseAtEnd;
 		void FuseAtEnd (const Standard_Real End,const Standard_ShortReal TolEnd);
 		%feature("compactdefaultargs") CutAtEnd;
-		%feature("autodoc", "	* <-----****+****  Old one  **+**------> Tool for cutting  <<< <<<  <-----****+****  result
+		%feature("autodoc", "	* <-----****+****  Old one **+**------> Tool for cutting <<< <<< <-----****+****  result
 
 	:param End:
 	:type End: float
@@ -172,13 +172,13 @@ class Intrv_Interval {
 ") CutAtEnd;
 		void CutAtEnd (const Standard_Real End,const Standard_ShortReal TolEnd);
 		%feature("compactdefaultargs") IsProbablyEmpty;
-		%feature("autodoc", "	* True if myStart+myTolStart > myEnd-myTolEnd  or if myEnd+myTolEnd > myStart-myTolStart
+		%feature("autodoc", "	* True if myStart+myTolStart > myEnd-myTolEnd or if myEnd+myTolEnd > myStart-myTolStart
 
 	:rtype: bool
 ") IsProbablyEmpty;
 		Standard_Boolean IsProbablyEmpty ();
 		%feature("compactdefaultargs") Position;
-		%feature("autodoc", "	* True if me is Before Other  **-----------**** Other ***-----*   Before ***------------*  JustBefore ***-----------------*  OverlappingAtStart ***--------------------------*  JustEnclosingAtEnd ***-------------------------------------* Enclosing ***----*  JustOverlappingAtStart ***-------------*  Similar ***------------------------* JustEnclosingAtStart  ***-*  Inside  ***------*  JustOverlappingAtEnd  ***-----------------* OverlappingAtEnd  ***--------* JustAfter  ***---* After
+		%feature("autodoc", "	* True if me is Before Other **-----------**** Other ***-----*   Before ***------------*  JustBefore ***-----------------*  OverlappingAtStart ***--------------------------*  JustEnclosingAtEnd ***-------------------------------------* Enclosing ***----*  JustOverlappingAtStart ***-------------*  Similar ***------------------------* JustEnclosingAtStart ***-*  Inside ***------*  JustOverlappingAtEnd ***-----------------* OverlappingAtEnd ***--------* JustAfter ***---* After
 
 	:param Other:
 	:type Other: Intrv_Interval &
@@ -186,7 +186,7 @@ class Intrv_Interval {
 ") Position;
 		Intrv_Position Position (const Intrv_Interval & Other);
 		%feature("compactdefaultargs") IsBefore;
-		%feature("autodoc", "	* True if me is Before Other ***----------------**  me  **-----------**** Other
+		%feature("autodoc", "	* True if me is Before Other ***----------------**  me **-----------**** Other
 
 	:param Other:
 	:type Other: Intrv_Interval &
@@ -194,7 +194,7 @@ class Intrv_Interval {
 ") IsBefore;
 		Standard_Boolean IsBefore (const Intrv_Interval & Other);
 		%feature("compactdefaultargs") IsAfter;
-		%feature("autodoc", "	* True if me is After Other  **-----------**** me ***----------------**  Other
+		%feature("autodoc", "	* True if me is After Other **-----------**** me ***----------------**  Other
 
 	:param Other:
 	:type Other: Intrv_Interval &
@@ -202,7 +202,7 @@ class Intrv_Interval {
 ") IsAfter;
 		Standard_Boolean IsAfter (const Intrv_Interval & Other);
 		%feature("compactdefaultargs") IsInside;
-		%feature("autodoc", "	* True if me is Inside Other  **-----------****  me ***--------------------------**  Other
+		%feature("autodoc", "	* True if me is Inside Other **-----------****  me ***--------------------------**  Other
 
 	:param Other:
 	:type Other: Intrv_Interval &
@@ -218,7 +218,7 @@ class Intrv_Interval {
 ") IsEnclosing;
 		Standard_Boolean IsEnclosing (const Intrv_Interval & Other);
 		%feature("compactdefaultargs") IsJustEnclosingAtStart;
-		%feature("autodoc", "	* True if me is just Enclosing Other at start  ***---------------------------**** me ***------------------** Other
+		%feature("autodoc", "	* True if me is just Enclosing Other at start ***---------------------------**** me ***------------------** Other
 
 	:param Other:
 	:type Other: Intrv_Interval &
@@ -226,7 +226,7 @@ class Intrv_Interval {
 ") IsJustEnclosingAtStart;
 		Standard_Boolean IsJustEnclosingAtStart (const Intrv_Interval & Other);
 		%feature("compactdefaultargs") IsJustEnclosingAtEnd;
-		%feature("autodoc", "	* True if me is just Enclosing Other at End ***----------------------------**** me  ***-----------------****  Other
+		%feature("autodoc", "	* True if me is just Enclosing Other at End ***----------------------------**** me ***-----------------****  Other
 
 	:param Other:
 	:type Other: Intrv_Interval &
@@ -234,7 +234,7 @@ class Intrv_Interval {
 ") IsJustEnclosingAtEnd;
 		Standard_Boolean IsJustEnclosingAtEnd (const Intrv_Interval & Other);
 		%feature("compactdefaultargs") IsJustBefore;
-		%feature("autodoc", "	* True if me is just before Other ***--------****   me  ***-----------** Other
+		%feature("autodoc", "	* True if me is just before Other ***--------****   me ***-----------** Other
 
 	:param Other:
 	:type Other: Intrv_Interval &
@@ -242,7 +242,7 @@ class Intrv_Interval {
 ") IsJustBefore;
 		Standard_Boolean IsJustBefore (const Intrv_Interval & Other);
 		%feature("compactdefaultargs") IsJustAfter;
-		%feature("autodoc", "	* True if me is just after Other  ****-------****  me ***-----------**  Other
+		%feature("autodoc", "	* True if me is just after Other ****-------****  me ***-----------**  Other
 
 	:param Other:
 	:type Other: Intrv_Interval &
@@ -250,7 +250,7 @@ class Intrv_Interval {
 ") IsJustAfter;
 		Standard_Boolean IsJustAfter (const Intrv_Interval & Other);
 		%feature("compactdefaultargs") IsOverlappingAtStart;
-		%feature("autodoc", "	* True if me is overlapping Other at start ***---------------***  me  ***-----------** Other
+		%feature("autodoc", "	* True if me is overlapping Other at start ***---------------***  me ***-----------** Other
 
 	:param Other:
 	:type Other: Intrv_Interval &
@@ -258,7 +258,7 @@ class Intrv_Interval {
 ") IsOverlappingAtStart;
 		Standard_Boolean IsOverlappingAtStart (const Intrv_Interval & Other);
 		%feature("compactdefaultargs") IsOverlappingAtEnd;
-		%feature("autodoc", "	* True if me is overlapping Other at end  ***-----------** me ***---------------***  Other
+		%feature("autodoc", "	* True if me is overlapping Other at end ***-----------** me ***---------------***  Other
 
 	:param Other:
 	:type Other: Intrv_Interval &
@@ -274,7 +274,7 @@ class Intrv_Interval {
 ") IsJustOverlappingAtStart;
 		Standard_Boolean IsJustOverlappingAtStart (const Intrv_Interval & Other);
 		%feature("compactdefaultargs") IsJustOverlappingAtEnd;
-		%feature("autodoc", "	* True if me is just overlapping Other at end  ***-----------*  me ***------------------------** Other
+		%feature("autodoc", "	* True if me is just overlapping Other at end ***-----------*  me ***------------------------** Other
 
 	:param Other:
 	:type Other: Intrv_Interval &
@@ -282,7 +282,7 @@ class Intrv_Interval {
 ") IsJustOverlappingAtEnd;
 		Standard_Boolean IsJustOverlappingAtEnd (const Intrv_Interval & Other);
 		%feature("compactdefaultargs") IsSimilar;
-		%feature("autodoc", "	* True if me and Other have the same bounds  *----------------***  me ***-----------------**  Other
+		%feature("autodoc", "	* True if me and Other have the same bounds *----------------***  me ***-----------------**  Other
 
 	:param Other:
 	:type Other: Intrv_Interval &
@@ -490,6 +490,12 @@ class Intrv_SequenceOfInterval : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") Intrv_SequenceOfInterval;
 		 Intrv_SequenceOfInterval ();
+		%feature("compactdefaultargs") Intrv_SequenceOfInterval;
+		%feature("autodoc", "	:param Other:
+	:type Other: Intrv_SequenceOfInterval &
+	:rtype: None
+") Intrv_SequenceOfInterval;
+		 Intrv_SequenceOfInterval (const Intrv_SequenceOfInterval & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;

@@ -236,102 +236,6 @@ def __del__(self):
 		delete $self;
 	}
 };
-%nodefaultctor TColGeom2d_Array1OfBoundedCurve;
-class TColGeom2d_Array1OfBoundedCurve {
-	public:
-		%feature("compactdefaultargs") TColGeom2d_Array1OfBoundedCurve;
-		%feature("autodoc", "	:param Low:
-	:type Low: int
-	:param Up:
-	:type Up: int
-	:rtype: None
-") TColGeom2d_Array1OfBoundedCurve;
-		 TColGeom2d_Array1OfBoundedCurve (const Standard_Integer Low,const Standard_Integer Up);
-		%feature("compactdefaultargs") TColGeom2d_Array1OfBoundedCurve;
-		%feature("autodoc", "	:param Item:
-	:type Item: Handle_Geom2d_BoundedCurve &
-	:param Low:
-	:type Low: int
-	:param Up:
-	:type Up: int
-	:rtype: None
-") TColGeom2d_Array1OfBoundedCurve;
-		 TColGeom2d_Array1OfBoundedCurve (const Handle_Geom2d_BoundedCurve & Item,const Standard_Integer Low,const Standard_Integer Up);
-		%feature("compactdefaultargs") Init;
-		%feature("autodoc", "	:param V:
-	:type V: Handle_Geom2d_BoundedCurve &
-	:rtype: None
-") Init;
-		void Init (const Handle_Geom2d_BoundedCurve & V);
-		%feature("compactdefaultargs") Destroy;
-		%feature("autodoc", "	:rtype: None
-") Destroy;
-		void Destroy ();
-		%feature("compactdefaultargs") IsAllocated;
-		%feature("autodoc", "	:rtype: bool
-") IsAllocated;
-		Standard_Boolean IsAllocated ();
-		%feature("compactdefaultargs") Assign;
-		%feature("autodoc", "	:param Other:
-	:type Other: TColGeom2d_Array1OfBoundedCurve &
-	:rtype: TColGeom2d_Array1OfBoundedCurve
-") Assign;
-		const TColGeom2d_Array1OfBoundedCurve & Assign (const TColGeom2d_Array1OfBoundedCurve & Other);
-		%feature("compactdefaultargs") operator =;
-		%feature("autodoc", "	:param Other:
-	:type Other: TColGeom2d_Array1OfBoundedCurve &
-	:rtype: TColGeom2d_Array1OfBoundedCurve
-") operator=;
-		const TColGeom2d_Array1OfBoundedCurve & operator = (const TColGeom2d_Array1OfBoundedCurve & Other);
-		%feature("compactdefaultargs") Length;
-		%feature("autodoc", "	:rtype: int
-") Length;
-		Standard_Integer Length ();
-		%feature("compactdefaultargs") Lower;
-		%feature("autodoc", "	:rtype: int
-") Lower;
-		Standard_Integer Lower ();
-		%feature("compactdefaultargs") Upper;
-		%feature("autodoc", "	:rtype: int
-") Upper;
-		Standard_Integer Upper ();
-		%feature("compactdefaultargs") SetValue;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:param Value:
-	:type Value: Handle_Geom2d_BoundedCurve &
-	:rtype: None
-") SetValue;
-		void SetValue (const Standard_Integer Index,const Handle_Geom2d_BoundedCurve & Value);
-		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:rtype: Handle_Geom2d_BoundedCurve
-") Value;
-		const Handle_Geom2d_BoundedCurve & Value (const Standard_Integer Index);
-		%feature("compactdefaultargs") ChangeValue;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:rtype: Handle_Geom2d_BoundedCurve
-") ChangeValue;
-		Handle_Geom2d_BoundedCurve & ChangeValue (const Standard_Integer Index);
-};
-
-
-%feature("shadow") TColGeom2d_Array1OfBoundedCurve::~TColGeom2d_Array1OfBoundedCurve %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend TColGeom2d_Array1OfBoundedCurve {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor TColGeom2d_Array1OfCurve;
 class TColGeom2d_Array1OfCurve {
 	public:
@@ -424,102 +328,6 @@ def __del__(self):
 %}
 
 %extend TColGeom2d_Array1OfCurve {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%nodefaultctor TColGeom2d_Array1OfGeometry;
-class TColGeom2d_Array1OfGeometry {
-	public:
-		%feature("compactdefaultargs") TColGeom2d_Array1OfGeometry;
-		%feature("autodoc", "	:param Low:
-	:type Low: int
-	:param Up:
-	:type Up: int
-	:rtype: None
-") TColGeom2d_Array1OfGeometry;
-		 TColGeom2d_Array1OfGeometry (const Standard_Integer Low,const Standard_Integer Up);
-		%feature("compactdefaultargs") TColGeom2d_Array1OfGeometry;
-		%feature("autodoc", "	:param Item:
-	:type Item: Handle_Geom2d_Geometry &
-	:param Low:
-	:type Low: int
-	:param Up:
-	:type Up: int
-	:rtype: None
-") TColGeom2d_Array1OfGeometry;
-		 TColGeom2d_Array1OfGeometry (const Handle_Geom2d_Geometry & Item,const Standard_Integer Low,const Standard_Integer Up);
-		%feature("compactdefaultargs") Init;
-		%feature("autodoc", "	:param V:
-	:type V: Handle_Geom2d_Geometry &
-	:rtype: None
-") Init;
-		void Init (const Handle_Geom2d_Geometry & V);
-		%feature("compactdefaultargs") Destroy;
-		%feature("autodoc", "	:rtype: None
-") Destroy;
-		void Destroy ();
-		%feature("compactdefaultargs") IsAllocated;
-		%feature("autodoc", "	:rtype: bool
-") IsAllocated;
-		Standard_Boolean IsAllocated ();
-		%feature("compactdefaultargs") Assign;
-		%feature("autodoc", "	:param Other:
-	:type Other: TColGeom2d_Array1OfGeometry &
-	:rtype: TColGeom2d_Array1OfGeometry
-") Assign;
-		const TColGeom2d_Array1OfGeometry & Assign (const TColGeom2d_Array1OfGeometry & Other);
-		%feature("compactdefaultargs") operator =;
-		%feature("autodoc", "	:param Other:
-	:type Other: TColGeom2d_Array1OfGeometry &
-	:rtype: TColGeom2d_Array1OfGeometry
-") operator=;
-		const TColGeom2d_Array1OfGeometry & operator = (const TColGeom2d_Array1OfGeometry & Other);
-		%feature("compactdefaultargs") Length;
-		%feature("autodoc", "	:rtype: int
-") Length;
-		Standard_Integer Length ();
-		%feature("compactdefaultargs") Lower;
-		%feature("autodoc", "	:rtype: int
-") Lower;
-		Standard_Integer Lower ();
-		%feature("compactdefaultargs") Upper;
-		%feature("autodoc", "	:rtype: int
-") Upper;
-		Standard_Integer Upper ();
-		%feature("compactdefaultargs") SetValue;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:param Value:
-	:type Value: Handle_Geom2d_Geometry &
-	:rtype: None
-") SetValue;
-		void SetValue (const Standard_Integer Index,const Handle_Geom2d_Geometry & Value);
-		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:rtype: Handle_Geom2d_Geometry
-") Value;
-		const Handle_Geom2d_Geometry & Value (const Standard_Integer Index);
-		%feature("compactdefaultargs") ChangeValue;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:rtype: Handle_Geom2d_Geometry
-") ChangeValue;
-		Handle_Geom2d_Geometry & ChangeValue (const Standard_Integer Index);
-};
-
-
-%feature("shadow") TColGeom2d_Array1OfGeometry::~TColGeom2d_Array1OfGeometry %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend TColGeom2d_Array1OfGeometry {
 	void _kill_pointed() {
 		delete $self;
 	}
@@ -770,129 +578,6 @@ def __del__(self):
     }
 };
 
-%nodefaultctor TColGeom2d_HArray1OfBoundedCurve;
-class TColGeom2d_HArray1OfBoundedCurve : public MMgt_TShared {
-	public:
-		%feature("compactdefaultargs") TColGeom2d_HArray1OfBoundedCurve;
-		%feature("autodoc", "	:param Low:
-	:type Low: int
-	:param Up:
-	:type Up: int
-	:rtype: None
-") TColGeom2d_HArray1OfBoundedCurve;
-		 TColGeom2d_HArray1OfBoundedCurve (const Standard_Integer Low,const Standard_Integer Up);
-		%feature("compactdefaultargs") TColGeom2d_HArray1OfBoundedCurve;
-		%feature("autodoc", "	:param Low:
-	:type Low: int
-	:param Up:
-	:type Up: int
-	:param V:
-	:type V: Handle_Geom2d_BoundedCurve &
-	:rtype: None
-") TColGeom2d_HArray1OfBoundedCurve;
-		 TColGeom2d_HArray1OfBoundedCurve (const Standard_Integer Low,const Standard_Integer Up,const Handle_Geom2d_BoundedCurve & V);
-		%feature("compactdefaultargs") Init;
-		%feature("autodoc", "	:param V:
-	:type V: Handle_Geom2d_BoundedCurve &
-	:rtype: None
-") Init;
-		void Init (const Handle_Geom2d_BoundedCurve & V);
-		%feature("compactdefaultargs") Length;
-		%feature("autodoc", "	:rtype: int
-") Length;
-		Standard_Integer Length ();
-		%feature("compactdefaultargs") Lower;
-		%feature("autodoc", "	:rtype: int
-") Lower;
-		Standard_Integer Lower ();
-		%feature("compactdefaultargs") Upper;
-		%feature("autodoc", "	:rtype: int
-") Upper;
-		Standard_Integer Upper ();
-		%feature("compactdefaultargs") SetValue;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:param Value:
-	:type Value: Handle_Geom2d_BoundedCurve &
-	:rtype: None
-") SetValue;
-		void SetValue (const Standard_Integer Index,const Handle_Geom2d_BoundedCurve & Value);
-		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:rtype: Handle_Geom2d_BoundedCurve
-") Value;
-		const Handle_Geom2d_BoundedCurve & Value (const Standard_Integer Index);
-		%feature("compactdefaultargs") ChangeValue;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:rtype: Handle_Geom2d_BoundedCurve
-") ChangeValue;
-		Handle_Geom2d_BoundedCurve & ChangeValue (const Standard_Integer Index);
-		%feature("compactdefaultargs") Array1;
-		%feature("autodoc", "	:rtype: TColGeom2d_Array1OfBoundedCurve
-") Array1;
-		const TColGeom2d_Array1OfBoundedCurve & Array1 ();
-		%feature("compactdefaultargs") ChangeArray1;
-		%feature("autodoc", "	:rtype: TColGeom2d_Array1OfBoundedCurve
-") ChangeArray1;
-		TColGeom2d_Array1OfBoundedCurve & ChangeArray1 ();
-};
-
-
-%feature("shadow") TColGeom2d_HArray1OfBoundedCurve::~TColGeom2d_HArray1OfBoundedCurve %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend TColGeom2d_HArray1OfBoundedCurve {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend TColGeom2d_HArray1OfBoundedCurve {
-	Handle_TColGeom2d_HArray1OfBoundedCurve GetHandle() {
-	return *(Handle_TColGeom2d_HArray1OfBoundedCurve*) &$self;
-	}
-};
-
-%nodefaultctor Handle_TColGeom2d_HArray1OfBoundedCurve;
-class Handle_TColGeom2d_HArray1OfBoundedCurve : public Handle_MMgt_TShared {
-
-    public:
-        // constructors
-        Handle_TColGeom2d_HArray1OfBoundedCurve();
-        Handle_TColGeom2d_HArray1OfBoundedCurve(const Handle_TColGeom2d_HArray1OfBoundedCurve &aHandle);
-        Handle_TColGeom2d_HArray1OfBoundedCurve(const TColGeom2d_HArray1OfBoundedCurve *anItem);
-        void Nullify();
-        Standard_Boolean IsNull() const;
-        static const Handle_TColGeom2d_HArray1OfBoundedCurve DownCast(const Handle_Standard_Transient &AnObject);
-
-};
-%extend Handle_TColGeom2d_HArray1OfBoundedCurve {
-    TColGeom2d_HArray1OfBoundedCurve* GetObject() {
-    return (TColGeom2d_HArray1OfBoundedCurve*)$self->Access();
-    }
-};
-%feature("shadow") Handle_TColGeom2d_HArray1OfBoundedCurve::~Handle_TColGeom2d_HArray1OfBoundedCurve %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_TColGeom2d_HArray1OfBoundedCurve {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
-
 %nodefaultctor TColGeom2d_HArray1OfCurve;
 class TColGeom2d_HArray1OfCurve : public MMgt_TShared {
 	public:
@@ -1011,129 +696,6 @@ def __del__(self):
 %}
 
 %extend Handle_TColGeom2d_HArray1OfCurve {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
-
-%nodefaultctor TColGeom2d_HArray1OfGeometry;
-class TColGeom2d_HArray1OfGeometry : public MMgt_TShared {
-	public:
-		%feature("compactdefaultargs") TColGeom2d_HArray1OfGeometry;
-		%feature("autodoc", "	:param Low:
-	:type Low: int
-	:param Up:
-	:type Up: int
-	:rtype: None
-") TColGeom2d_HArray1OfGeometry;
-		 TColGeom2d_HArray1OfGeometry (const Standard_Integer Low,const Standard_Integer Up);
-		%feature("compactdefaultargs") TColGeom2d_HArray1OfGeometry;
-		%feature("autodoc", "	:param Low:
-	:type Low: int
-	:param Up:
-	:type Up: int
-	:param V:
-	:type V: Handle_Geom2d_Geometry &
-	:rtype: None
-") TColGeom2d_HArray1OfGeometry;
-		 TColGeom2d_HArray1OfGeometry (const Standard_Integer Low,const Standard_Integer Up,const Handle_Geom2d_Geometry & V);
-		%feature("compactdefaultargs") Init;
-		%feature("autodoc", "	:param V:
-	:type V: Handle_Geom2d_Geometry &
-	:rtype: None
-") Init;
-		void Init (const Handle_Geom2d_Geometry & V);
-		%feature("compactdefaultargs") Length;
-		%feature("autodoc", "	:rtype: int
-") Length;
-		Standard_Integer Length ();
-		%feature("compactdefaultargs") Lower;
-		%feature("autodoc", "	:rtype: int
-") Lower;
-		Standard_Integer Lower ();
-		%feature("compactdefaultargs") Upper;
-		%feature("autodoc", "	:rtype: int
-") Upper;
-		Standard_Integer Upper ();
-		%feature("compactdefaultargs") SetValue;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:param Value:
-	:type Value: Handle_Geom2d_Geometry &
-	:rtype: None
-") SetValue;
-		void SetValue (const Standard_Integer Index,const Handle_Geom2d_Geometry & Value);
-		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:rtype: Handle_Geom2d_Geometry
-") Value;
-		const Handle_Geom2d_Geometry & Value (const Standard_Integer Index);
-		%feature("compactdefaultargs") ChangeValue;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:rtype: Handle_Geom2d_Geometry
-") ChangeValue;
-		Handle_Geom2d_Geometry & ChangeValue (const Standard_Integer Index);
-		%feature("compactdefaultargs") Array1;
-		%feature("autodoc", "	:rtype: TColGeom2d_Array1OfGeometry
-") Array1;
-		const TColGeom2d_Array1OfGeometry & Array1 ();
-		%feature("compactdefaultargs") ChangeArray1;
-		%feature("autodoc", "	:rtype: TColGeom2d_Array1OfGeometry
-") ChangeArray1;
-		TColGeom2d_Array1OfGeometry & ChangeArray1 ();
-};
-
-
-%feature("shadow") TColGeom2d_HArray1OfGeometry::~TColGeom2d_HArray1OfGeometry %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend TColGeom2d_HArray1OfGeometry {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend TColGeom2d_HArray1OfGeometry {
-	Handle_TColGeom2d_HArray1OfGeometry GetHandle() {
-	return *(Handle_TColGeom2d_HArray1OfGeometry*) &$self;
-	}
-};
-
-%nodefaultctor Handle_TColGeom2d_HArray1OfGeometry;
-class Handle_TColGeom2d_HArray1OfGeometry : public Handle_MMgt_TShared {
-
-    public:
-        // constructors
-        Handle_TColGeom2d_HArray1OfGeometry();
-        Handle_TColGeom2d_HArray1OfGeometry(const Handle_TColGeom2d_HArray1OfGeometry &aHandle);
-        Handle_TColGeom2d_HArray1OfGeometry(const TColGeom2d_HArray1OfGeometry *anItem);
-        void Nullify();
-        Standard_Boolean IsNull() const;
-        static const Handle_TColGeom2d_HArray1OfGeometry DownCast(const Handle_Standard_Transient &AnObject);
-
-};
-%extend Handle_TColGeom2d_HArray1OfGeometry {
-    TColGeom2d_HArray1OfGeometry* GetObject() {
-    return (TColGeom2d_HArray1OfGeometry*)$self->Access();
-    }
-};
-%feature("shadow") Handle_TColGeom2d_HArray1OfGeometry::~Handle_TColGeom2d_HArray1OfGeometry %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_TColGeom2d_HArray1OfGeometry {
     void _kill_pointed() {
         delete $self;
     }
@@ -1274,10 +836,6 @@ class TColGeom2d_HSequenceOfBoundedCurve : public MMgt_TShared {
 		%feature("autodoc", "	:rtype: TColGeom2d_SequenceOfBoundedCurve
 ") ChangeSequence;
 		TColGeom2d_SequenceOfBoundedCurve & ChangeSequence ();
-		%feature("compactdefaultargs") ShallowCopy;
-		%feature("autodoc", "	:rtype: Handle_TColGeom2d_HSequenceOfBoundedCurve
-") ShallowCopy;
-		Handle_TColGeom2d_HSequenceOfBoundedCurve ShallowCopy ();
 };
 
 
@@ -1469,10 +1027,6 @@ class TColGeom2d_HSequenceOfCurve : public MMgt_TShared {
 		%feature("autodoc", "	:rtype: TColGeom2d_SequenceOfCurve
 ") ChangeSequence;
 		TColGeom2d_SequenceOfCurve & ChangeSequence ();
-		%feature("compactdefaultargs") ShallowCopy;
-		%feature("autodoc", "	:rtype: Handle_TColGeom2d_HSequenceOfCurve
-") ShallowCopy;
-		Handle_TColGeom2d_HSequenceOfCurve ShallowCopy ();
 };
 
 
@@ -1524,201 +1078,6 @@ def __del__(self):
 %}
 
 %extend Handle_TColGeom2d_HSequenceOfCurve {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
-
-%nodefaultctor TColGeom2d_HSequenceOfGeometry;
-class TColGeom2d_HSequenceOfGeometry : public MMgt_TShared {
-	public:
-		%feature("compactdefaultargs") TColGeom2d_HSequenceOfGeometry;
-		%feature("autodoc", "	:rtype: None
-") TColGeom2d_HSequenceOfGeometry;
-		 TColGeom2d_HSequenceOfGeometry ();
-		%feature("compactdefaultargs") IsEmpty;
-		%feature("autodoc", "	:rtype: bool
-") IsEmpty;
-		Standard_Boolean IsEmpty ();
-		%feature("compactdefaultargs") Length;
-		%feature("autodoc", "	:rtype: int
-") Length;
-		Standard_Integer Length ();
-		%feature("compactdefaultargs") Clear;
-		%feature("autodoc", "	:rtype: None
-") Clear;
-		void Clear ();
-		%feature("compactdefaultargs") Append;
-		%feature("autodoc", "	:param anItem:
-	:type anItem: Handle_Geom2d_Geometry &
-	:rtype: None
-") Append;
-		void Append (const Handle_Geom2d_Geometry & anItem);
-		%feature("compactdefaultargs") Append;
-		%feature("autodoc", "	:param aSequence:
-	:type aSequence: Handle_TColGeom2d_HSequenceOfGeometry &
-	:rtype: None
-") Append;
-		void Append (const Handle_TColGeom2d_HSequenceOfGeometry & aSequence);
-		%feature("compactdefaultargs") Prepend;
-		%feature("autodoc", "	:param anItem:
-	:type anItem: Handle_Geom2d_Geometry &
-	:rtype: None
-") Prepend;
-		void Prepend (const Handle_Geom2d_Geometry & anItem);
-		%feature("compactdefaultargs") Prepend;
-		%feature("autodoc", "	:param aSequence:
-	:type aSequence: Handle_TColGeom2d_HSequenceOfGeometry &
-	:rtype: None
-") Prepend;
-		void Prepend (const Handle_TColGeom2d_HSequenceOfGeometry & aSequence);
-		%feature("compactdefaultargs") Reverse;
-		%feature("autodoc", "	:rtype: None
-") Reverse;
-		void Reverse ();
-		%feature("compactdefaultargs") InsertBefore;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:param anItem:
-	:type anItem: Handle_Geom2d_Geometry &
-	:rtype: None
-") InsertBefore;
-		void InsertBefore (const Standard_Integer anIndex,const Handle_Geom2d_Geometry & anItem);
-		%feature("compactdefaultargs") InsertBefore;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:param aSequence:
-	:type aSequence: Handle_TColGeom2d_HSequenceOfGeometry &
-	:rtype: None
-") InsertBefore;
-		void InsertBefore (const Standard_Integer anIndex,const Handle_TColGeom2d_HSequenceOfGeometry & aSequence);
-		%feature("compactdefaultargs") InsertAfter;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:param anItem:
-	:type anItem: Handle_Geom2d_Geometry &
-	:rtype: None
-") InsertAfter;
-		void InsertAfter (const Standard_Integer anIndex,const Handle_Geom2d_Geometry & anItem);
-		%feature("compactdefaultargs") InsertAfter;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:param aSequence:
-	:type aSequence: Handle_TColGeom2d_HSequenceOfGeometry &
-	:rtype: None
-") InsertAfter;
-		void InsertAfter (const Standard_Integer anIndex,const Handle_TColGeom2d_HSequenceOfGeometry & aSequence);
-		%feature("compactdefaultargs") Exchange;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:param anOtherIndex:
-	:type anOtherIndex: int
-	:rtype: None
-") Exchange;
-		void Exchange (const Standard_Integer anIndex,const Standard_Integer anOtherIndex);
-		%feature("compactdefaultargs") Split;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:rtype: Handle_TColGeom2d_HSequenceOfGeometry
-") Split;
-		Handle_TColGeom2d_HSequenceOfGeometry Split (const Standard_Integer anIndex);
-		%feature("compactdefaultargs") SetValue;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:param anItem:
-	:type anItem: Handle_Geom2d_Geometry &
-	:rtype: None
-") SetValue;
-		void SetValue (const Standard_Integer anIndex,const Handle_Geom2d_Geometry & anItem);
-		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:rtype: Handle_Geom2d_Geometry
-") Value;
-		const Handle_Geom2d_Geometry & Value (const Standard_Integer anIndex);
-		%feature("compactdefaultargs") ChangeValue;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:rtype: Handle_Geom2d_Geometry
-") ChangeValue;
-		Handle_Geom2d_Geometry & ChangeValue (const Standard_Integer anIndex);
-		%feature("compactdefaultargs") Remove;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:rtype: None
-") Remove;
-		void Remove (const Standard_Integer anIndex);
-		%feature("compactdefaultargs") Remove;
-		%feature("autodoc", "	:param fromIndex:
-	:type fromIndex: int
-	:param toIndex:
-	:type toIndex: int
-	:rtype: None
-") Remove;
-		void Remove (const Standard_Integer fromIndex,const Standard_Integer toIndex);
-		%feature("compactdefaultargs") Sequence;
-		%feature("autodoc", "	:rtype: TColGeom2d_SequenceOfGeometry
-") Sequence;
-		const TColGeom2d_SequenceOfGeometry & Sequence ();
-		%feature("compactdefaultargs") ChangeSequence;
-		%feature("autodoc", "	:rtype: TColGeom2d_SequenceOfGeometry
-") ChangeSequence;
-		TColGeom2d_SequenceOfGeometry & ChangeSequence ();
-		%feature("compactdefaultargs") ShallowCopy;
-		%feature("autodoc", "	:rtype: Handle_TColGeom2d_HSequenceOfGeometry
-") ShallowCopy;
-		Handle_TColGeom2d_HSequenceOfGeometry ShallowCopy ();
-};
-
-
-%feature("shadow") TColGeom2d_HSequenceOfGeometry::~TColGeom2d_HSequenceOfGeometry %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend TColGeom2d_HSequenceOfGeometry {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend TColGeom2d_HSequenceOfGeometry {
-	Handle_TColGeom2d_HSequenceOfGeometry GetHandle() {
-	return *(Handle_TColGeom2d_HSequenceOfGeometry*) &$self;
-	}
-};
-
-%nodefaultctor Handle_TColGeom2d_HSequenceOfGeometry;
-class Handle_TColGeom2d_HSequenceOfGeometry : public Handle_MMgt_TShared {
-
-    public:
-        // constructors
-        Handle_TColGeom2d_HSequenceOfGeometry();
-        Handle_TColGeom2d_HSequenceOfGeometry(const Handle_TColGeom2d_HSequenceOfGeometry &aHandle);
-        Handle_TColGeom2d_HSequenceOfGeometry(const TColGeom2d_HSequenceOfGeometry *anItem);
-        void Nullify();
-        Standard_Boolean IsNull() const;
-        static const Handle_TColGeom2d_HSequenceOfGeometry DownCast(const Handle_Standard_Transient &AnObject);
-
-};
-%extend Handle_TColGeom2d_HSequenceOfGeometry {
-    TColGeom2d_HSequenceOfGeometry* GetObject() {
-    return (TColGeom2d_HSequenceOfGeometry*)$self->Access();
-    }
-};
-%feature("shadow") Handle_TColGeom2d_HSequenceOfGeometry::~Handle_TColGeom2d_HSequenceOfGeometry %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_TColGeom2d_HSequenceOfGeometry {
     void _kill_pointed() {
         delete $self;
     }
@@ -1950,6 +1309,12 @@ class TColGeom2d_SequenceOfBoundedCurve : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") TColGeom2d_SequenceOfBoundedCurve;
 		 TColGeom2d_SequenceOfBoundedCurve ();
+		%feature("compactdefaultargs") TColGeom2d_SequenceOfBoundedCurve;
+		%feature("autodoc", "	:param Other:
+	:type Other: TColGeom2d_SequenceOfBoundedCurve &
+	:rtype: None
+") TColGeom2d_SequenceOfBoundedCurve;
+		 TColGeom2d_SequenceOfBoundedCurve (const TColGeom2d_SequenceOfBoundedCurve & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;
@@ -2096,6 +1461,12 @@ class TColGeom2d_SequenceOfCurve : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") TColGeom2d_SequenceOfCurve;
 		 TColGeom2d_SequenceOfCurve ();
+		%feature("compactdefaultargs") TColGeom2d_SequenceOfCurve;
+		%feature("autodoc", "	:param Other:
+	:type Other: TColGeom2d_SequenceOfCurve &
+	:rtype: None
+") TColGeom2d_SequenceOfCurve;
+		 TColGeom2d_SequenceOfCurve (const TColGeom2d_SequenceOfCurve & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;
@@ -2242,6 +1613,12 @@ class TColGeom2d_SequenceOfGeometry : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") TColGeom2d_SequenceOfGeometry;
 		 TColGeom2d_SequenceOfGeometry ();
+		%feature("compactdefaultargs") TColGeom2d_SequenceOfGeometry;
+		%feature("autodoc", "	:param Other:
+	:type Other: TColGeom2d_SequenceOfGeometry &
+	:rtype: None
+") TColGeom2d_SequenceOfGeometry;
+		 TColGeom2d_SequenceOfGeometry (const TColGeom2d_SequenceOfGeometry & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;

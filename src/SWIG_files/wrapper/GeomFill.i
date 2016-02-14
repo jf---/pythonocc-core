@@ -1502,7 +1502,7 @@ class GeomFill_CircularBlendFunc : public Approx_SweepFunction {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -2637,10 +2637,6 @@ class GeomFill_HSequenceOfAx2 : public MMgt_TShared {
 		%feature("autodoc", "	:rtype: GeomFill_SequenceOfAx2
 ") ChangeSequence;
 		GeomFill_SequenceOfAx2 & ChangeSequence ();
-		%feature("compactdefaultargs") ShallowCopy;
-		%feature("autodoc", "	:rtype: Handle_GeomFill_HSequenceOfAx2
-") ShallowCopy;
-		Handle_GeomFill_HSequenceOfAx2 ShallowCopy ();
 };
 
 
@@ -2952,7 +2948,7 @@ class GeomFill_LocationLaw : public MMgt_TShared {
 ") D2;
 		virtual Standard_Boolean D2 (const Standard_Real Param,gp_Mat & M,gp_Vec & V,gp_Mat & DM,gp_Vec & DV,gp_Mat & D2M,gp_Vec & D2V,TColgp_Array1OfPnt2d & Poles2d,TColgp_Array1OfVec2d & DPoles2d,TColgp_Array1OfVec2d & D2Poles2d);
 		%feature("compactdefaultargs") Nb2dCurves;
-		%feature("autodoc", "	* get the number of 2d curves (Restrictions + Traces)  to approximate.
+		%feature("autodoc", "	* get the number of 2d curves (Restrictions + Traces) to approximate.
 
 	:rtype: int
 ") Nb2dCurves;
@@ -2976,7 +2972,7 @@ class GeomFill_LocationLaw : public MMgt_TShared {
 ") TraceNumber;
 		virtual Standard_Integer TraceNumber ();
 		%feature("compactdefaultargs") ErrorStatus;
-		%feature("autodoc", "	* //!Give a status to the Law Returns PipeOk (default implementation)
+		%feature("autodoc", "	* Give a status to the Law Returns PipeOk (default implementation)
 
 	:rtype: GeomFill_PipeError
 ") ErrorStatus;
@@ -2990,7 +2986,7 @@ class GeomFill_LocationLaw : public MMgt_TShared {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -3969,7 +3965,7 @@ class GeomFill_SectionLaw : public MMgt_TShared {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -4393,6 +4389,12 @@ class GeomFill_SequenceOfAx2 : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") GeomFill_SequenceOfAx2;
 		 GeomFill_SequenceOfAx2 ();
+		%feature("compactdefaultargs") GeomFill_SequenceOfAx2;
+		%feature("autodoc", "	:param Other:
+	:type Other: GeomFill_SequenceOfAx2 &
+	:rtype: None
+") GeomFill_SequenceOfAx2;
+		 GeomFill_SequenceOfAx2 (const GeomFill_SequenceOfAx2 & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;
@@ -4539,6 +4541,12 @@ class GeomFill_SequenceOfTrsf : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") GeomFill_SequenceOfTrsf;
 		 GeomFill_SequenceOfTrsf ();
+		%feature("compactdefaultargs") GeomFill_SequenceOfTrsf;
+		%feature("autodoc", "	:param Other:
+	:type Other: GeomFill_SequenceOfTrsf &
+	:rtype: None
+") GeomFill_SequenceOfTrsf;
+		 GeomFill_SequenceOfTrsf (const GeomFill_SequenceOfTrsf & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;
@@ -4710,7 +4718,7 @@ class GeomFill_SnglrFunc : public Adaptor3d_Curve {
 ") NbIntervals;
 		Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -4798,7 +4806,7 @@ class GeomFill_SnglrFunc : public Adaptor3d_Curve {
 ") DN;
 		gp_Vec DN (const Standard_Real U,const Standard_Integer N);
 		%feature("compactdefaultargs") Resolution;
-		%feature("autodoc", "	* Returns the parametric resolution corresponding  to the real space resolution <R3d>.
+		%feature("autodoc", "	* Returns the parametric resolution corresponding to the real space resolution <R3d>.
 
 	:param R3d:
 	:type R3d: float
@@ -4840,7 +4848,7 @@ class GeomFill_Sweep {
 ") GeomFill_Sweep;
 		 GeomFill_Sweep (const Handle_GeomFill_LocationLaw & Location,const Standard_Boolean WithKpart = Standard_True);
 		%feature("compactdefaultargs") SetDomain;
-		%feature("autodoc", "	* Set parametric information [<First>, <Last>] Sets the parametric bound of the  sweeping surface to build. <SectionFirst>, <SectionLast> gives coresponding bounds parameter on the section law of <First> and <Last> V-Iso on Sweeping Surface S(u,v) is defined by Location(v) and Section(w) where w = SectionFirst + (v - First) / (Last-First) * (SectionLast - SectionFirst) By default w = v, and First and Last are given by First and Last parameter stored in LocationLaw.
+		%feature("autodoc", "	* Set parametric information [<First>, <Last>] Sets the parametric bound of the sweeping surface to build. <SectionFirst>, <SectionLast> gives coresponding bounds parameter on the section law of <First> and <Last> //! V-Iso on Sweeping Surface S(u,v) is defined by Location(v) and Section(w) where w = SectionFirst + (v - First) / (Last-First) * (SectionLast - SectionFirst) //! By default w = v, and First and Last are given by First and Last parameter stored in LocationLaw.
 
 	:param First:
 	:type First: float
@@ -4854,7 +4862,7 @@ class GeomFill_Sweep {
 ") SetDomain;
 		void SetDomain (const Standard_Real First,const Standard_Real Last,const Standard_Real SectionFirst,const Standard_Real SectionLast);
 		%feature("compactdefaultargs") SetTolerance;
-		%feature("autodoc", "	* Set Approximation Tolerance Tol3d : Tolerance to surface approximation Tol2d : Tolerance used to perform curve approximation  Normaly the 2d curve are approximated with a  tolerance given by the resolution method define in  <LocationLaw> but if this tolerance is too large Tol2d  is used. TolAngular : Tolerance (in radian) to control the angle  beetween tangents on the section law and  tangent of iso-v on approximed surface
+		%feature("autodoc", "	* Set Approximation Tolerance Tol3d : Tolerance to surface approximation Tol2d : Tolerance used to perform curve approximation Normaly the 2d curve are approximated with a tolerance given by the resolution method define in <LocationLaw> but if this tolerance is too large Tol2d is used. TolAngular : Tolerance (in radian) to control the angle beetween tangents on the section law and tangent of iso-v on approximed surface
 
 	:param Tol3d:
 	:type Tol3d: float
@@ -4894,7 +4902,7 @@ class GeomFill_Sweep {
 ") VReversed;
 		Standard_Boolean VReversed ();
 		%feature("compactdefaultargs") Build;
-		%feature("autodoc", "	* Build the Sweeep Surface ApproxStyle defines Approximation Strategy - GeomFill_Section : The composed Function : Location X Section  is directly approximed. - GeomFill_Location : The location law is approximed, and the  SweepSurface is build algebric composition  of approximed location law and section law  This option is Ok, if Section.Surface() methode  is effective. Continuity : The continuity in v waiting on the surface Degmax : The maximum degree in v requiered on the surface Segmax : The maximum number of span in v requiered on  the surface raise If Domain are infinite or Profile not Setted.
+		%feature("autodoc", "	* Build the Sweeep Surface ApproxStyle defines Approximation Strategy - GeomFill_Section : The composed Function : Location X Section is directly approximed. - GeomFill_Location : The location law is approximed, and the SweepSurface is build algebric composition of approximed location law and section law This option is Ok, if Section.Surface() methode is effective. Continuity : The continuity in v waiting on the surface Degmax : The maximum degree in v requiered on the surface Segmax : The maximum number of span in v requiered on the surface //! raise If Domain are infinite or Profile not Setted.
 
 	:param Section:
 	:type Section: Handle_GeomFill_SectionLaw &
@@ -5120,7 +5128,7 @@ class GeomFill_SweepFunction : public Approx_SweepFunction {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -5267,7 +5275,7 @@ class GeomFill_Tensor {
 ") GeomFill_Tensor;
 		 GeomFill_Tensor (const Standard_Integer NbRow,const Standard_Integer NbCol,const Standard_Integer NbMat);
 		%feature("compactdefaultargs") Init;
-		%feature("autodoc", "	* //!Initialize all the elements of a Tensor to InitialValue.
+		%feature("autodoc", "	* Initialize all the elements of a Tensor to InitialValue.
 
 	:param InitialValue:
 	:type InitialValue: float
@@ -5434,7 +5442,7 @@ class GeomFill_TrihedronLaw : public MMgt_TShared {
 ") Copy;
 		virtual Handle_GeomFill_TrihedronLaw Copy ();
 		%feature("compactdefaultargs") ErrorStatus;
-		%feature("autodoc", "	* //!Give a status to the Law  Returns PipeOk (default implementation)
+		%feature("autodoc", "	* Give a status to the Law Returns PipeOk (default implementation)
 
 	:rtype: GeomFill_PipeError
 ") ErrorStatus;
@@ -5508,7 +5516,7 @@ class GeomFill_TrihedronLaw : public MMgt_TShared {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -5842,7 +5850,7 @@ class GeomFill_ConstantBiNormal : public GeomFill_TrihedronLaw {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -6119,7 +6127,7 @@ class GeomFill_CorrectedFrenet : public GeomFill_TrihedronLaw {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -6326,7 +6334,7 @@ class GeomFill_CurveAndTrihedron : public GeomFill_LocationLaw {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -6719,7 +6727,7 @@ class GeomFill_Darboux : public GeomFill_TrihedronLaw {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -7017,7 +7025,7 @@ class GeomFill_DiscreteTrihedron : public GeomFill_TrihedronLaw {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -7194,7 +7202,7 @@ class GeomFill_DraftTrihedron : public GeomFill_TrihedronLaw {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -7405,7 +7413,7 @@ class GeomFill_EvolvedSection : public GeomFill_SectionLaw {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -7632,7 +7640,7 @@ class GeomFill_Fixed : public GeomFill_TrihedronLaw {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -7805,7 +7813,7 @@ class GeomFill_Frenet : public GeomFill_TrihedronLaw {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -8072,7 +8080,7 @@ class GeomFill_LocationDraft : public GeomFill_LocationLaw {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -8369,7 +8377,7 @@ class GeomFill_LocationGuide : public GeomFill_LocationLaw {
 ") TraceNumber;
 		virtual Standard_Integer TraceNumber ();
 		%feature("compactdefaultargs") ErrorStatus;
-		%feature("autodoc", "	* //!Give a status to the Law Returns PipeOk (default implementation)
+		%feature("autodoc", "	* Give a status to the Law Returns PipeOk (default implementation)
 
 	:rtype: GeomFill_PipeError
 ") ErrorStatus;
@@ -8383,7 +8391,7 @@ class GeomFill_LocationGuide : public GeomFill_LocationLaw {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -9157,7 +9165,7 @@ class GeomFill_UniformSection : public GeomFill_SectionLaw {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -9386,7 +9394,7 @@ class GeomFill_GuideTrihedronAC : public GeomFill_TrihedronWithGuide {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -9513,7 +9521,7 @@ class GeomFill_GuideTrihedronPlan : public GeomFill_TrihedronWithGuide {
 ") Copy;
 		virtual Handle_GeomFill_TrihedronLaw Copy ();
 		%feature("compactdefaultargs") ErrorStatus;
-		%feature("autodoc", "	* //!Give a status to the Law  Returns PipeOk (default implementation)
+		%feature("autodoc", "	* Give a status to the Law Returns PipeOk (default implementation)
 
 	:rtype: GeomFill_PipeError
 ") ErrorStatus;
@@ -9595,7 +9603,7 @@ class GeomFill_GuideTrihedronPlan : public GeomFill_TrihedronWithGuide {
 ") NbIntervals;
 		virtual Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &

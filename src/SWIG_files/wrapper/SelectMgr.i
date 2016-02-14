@@ -39,7 +39,6 @@ import OCC.GarbageCollector
 %include SelectMgr_headers.i
 
 /* typedefs */
-typedef SelectMgr_DataMapOfObjectOwners::Iterator SelectMgr_DataMapIteratorOfMapOfObjectOwners;
 typedef SelectMgr_SelectableObject * SelectMgr_SOPtr;
 /* end typedefs declaration */
 

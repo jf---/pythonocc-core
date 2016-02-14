@@ -89,7 +89,7 @@ enum gp_TrsfForm {
 class gp {
 	public:
 		%feature("compactdefaultargs") Resolution;
-		%feature("autodoc", "	* Parabola. Method of package gp In geometric computations, defines the tolerance criterion used to determine when two numbers can be considered equal. Many class functions use this tolerance criterion, for example, to avoid division by zero in geometric computations. In the documentation, tolerance criterion is always referred to as gp::Resolution().
+		%feature("autodoc", "	* Method of package gp //! In geometric computations, defines the tolerance criterion used to determine when two numbers can be considered equal. Many class functions use this tolerance criterion, for example, to avoid division by zero in geometric computations. In the documentation, tolerance criterion is always referred to as gp::Resolution().
 
 	:rtype: float
 ") Resolution;
@@ -119,37 +119,37 @@ class gp {
 ") DZ;
 		static const gp_Dir  DZ ();
 		%feature("compactdefaultargs") OX;
-		%feature("autodoc", "	* //!Identifies an axis where its origin is Origin and its unit vector coordinates X = 1.0, Y = Z = 0.0
+		%feature("autodoc", "	* Identifies an axis where its origin is Origin and its unit vector coordinates X = 1.0, Y = Z = 0.0
 
 	:rtype: gp_Ax1
 ") OX;
 		static const gp_Ax1  OX ();
 		%feature("compactdefaultargs") OY;
-		%feature("autodoc", "	* //!Identifies an axis where its origin is Origin and its unit vector coordinates Y = 1.0, X = Z = 0.0
+		%feature("autodoc", "	* Identifies an axis where its origin is Origin and its unit vector coordinates Y = 1.0, X = Z = 0.0
 
 	:rtype: gp_Ax1
 ") OY;
 		static const gp_Ax1  OY ();
 		%feature("compactdefaultargs") OZ;
-		%feature("autodoc", "	* //!Identifies an axis where its origin is Origin and its unit vector coordinates Z = 1.0, Y = X = 0.0
+		%feature("autodoc", "	* Identifies an axis where its origin is Origin and its unit vector coordinates Z = 1.0, Y = X = 0.0
 
 	:rtype: gp_Ax1
 ") OZ;
 		static const gp_Ax1  OZ ();
 		%feature("compactdefaultargs") XOY;
-		%feature("autodoc", "	* //!Identifies a coordinate system where its origin is Origin, and its 'main Direction' and 'X Direction' coordinates Z = 1.0, X = Y =0.0 and X direction coordinates X = 1.0, Y = Z = 0.0
+		%feature("autodoc", "	* Identifies a coordinate system where its origin is Origin, and its 'main Direction' and 'X Direction' coordinates Z = 1.0, X = Y =0.0 and X direction coordinates X = 1.0, Y = Z = 0.0
 
 	:rtype: gp_Ax2
 ") XOY;
 		static const gp_Ax2  XOY ();
 		%feature("compactdefaultargs") ZOX;
-		%feature("autodoc", "	* //!Identifies a coordinate system where its origin is Origin, and its 'main Direction' and 'X Direction' coordinates Y = 1.0, X = Z =0.0 and X direction coordinates Z = 1.0, X = Y = 0.0
+		%feature("autodoc", "	* Identifies a coordinate system where its origin is Origin, and its 'main Direction' and 'X Direction' coordinates Y = 1.0, X = Z =0.0 and X direction coordinates Z = 1.0, X = Y = 0.0
 
 	:rtype: gp_Ax2
 ") ZOX;
 		static const gp_Ax2  ZOX ();
 		%feature("compactdefaultargs") YOZ;
-		%feature("autodoc", "	* //!Identifies a coordinate system where its origin is Origin, and its 'main Direction' and 'X Direction' coordinates X = 1.0, Z = Y =0.0 and X direction coordinates Y = 1.0, X = Z = 0.0 In 2D space
+		%feature("autodoc", "	* Identifies a coordinate system where its origin is Origin, and its 'main Direction' and 'X Direction' coordinates X = 1.0, Z = Y =0.0 and X direction coordinates Y = 1.0, X = Z = 0.0 In 2D space
 
 	:rtype: gp_Ax2
 ") YOZ;
@@ -205,7 +205,7 @@ def __del__(self):
 class gp_Ax1 {
 	public:
 		%feature("compactdefaultargs") gp_Ax1;
-		%feature("autodoc", "	* Creates an axis object representing Z axis of  the reference co-ordinate system.
+		%feature("autodoc", "	* Creates an axis object representing Z axis of the reference co-ordinate system.
 
 	:rtype: None
 ") gp_Ax1;
@@ -407,7 +407,7 @@ class gp_Ax1 {
 ") Transform;
 		void Transform (const gp_Trsf  T);
 		%feature("compactdefaultargs") Transformed;
-		%feature("autodoc", "	* Applies the transformation T to this axis and creates a new one. Translates an axis plaxement in the direction of the vector <V>. The magnitude of the translation is the vector's magnitude.
+		%feature("autodoc", "	* Applies the transformation T to this axis and creates a new one. //! Translates an axis plaxement in the direction of the vector <V>. The magnitude of the translation is the vector's magnitude.
 
 	:param T:
 	:type T: gp_Trsf
@@ -479,7 +479,7 @@ def __del__(self):
 class gp_Ax2 {
 	public:
 		%feature("compactdefaultargs") gp_Ax2;
-		%feature("autodoc", "	* Creates an object corresponding to the reference  coordinate system (OXYZ).
+		%feature("autodoc", "	* Creates an object corresponding to the reference coordinate system (OXYZ).
 
 	:rtype: None
 ") gp_Ax2;
@@ -769,7 +769,7 @@ def __del__(self):
 class gp_Ax22d {
 	public:
 		%feature("compactdefaultargs") gp_Ax22d;
-		%feature("autodoc", "	* Creates an object representing the reference  co-ordinate system (OXY).
+		%feature("autodoc", "	* Creates an object representing the reference co-ordinate system (OXY).
 
 	:rtype: None
 ") gp_Ax22d;
@@ -1029,7 +1029,7 @@ def __del__(self):
 class gp_Ax2d {
 	public:
 		%feature("compactdefaultargs") gp_Ax2d;
-		%feature("autodoc", "	* Creates an axis object representing X axis of  the reference co-ordinate system.
+		%feature("autodoc", "	* Creates an axis object representing X axis of the reference co-ordinate system.
 
 	:rtype: None
 ") gp_Ax2d;
@@ -1273,7 +1273,7 @@ def __del__(self):
 class gp_Ax3 {
 	public:
 		%feature("compactdefaultargs") gp_Ax3;
-		%feature("autodoc", "	* Creates an object corresponding to the reference  coordinate system (OXYZ).
+		%feature("autodoc", "	* Creates an object corresponding to the reference coordinate system (OXYZ).
 
 	:rtype: None
 ") gp_Ax3;
@@ -3483,7 +3483,7 @@ class gp_Elips {
 ") SetAxis;
 		void SetAxis (const gp_Ax1  A1);
 		%feature("compactdefaultargs") SetLocation;
-		%feature("autodoc", "	* //!Modifies this ellipse, by redefining its local coordinate so that its origin becomes P.
+		%feature("autodoc", "	* Modifies this ellipse, by redefining its local coordinate so that its origin becomes P.
 
 	:param P:
 	:type P: gp_Pnt
@@ -3877,13 +3877,13 @@ class gp_Elips2d {
 ") Coefficients;
 		void Coefficients (Standard_Real  A,Standard_Real  B,Standard_Real  C,Standard_Real  D,Standard_Real  E,Standard_Real  F);
 		%feature("compactdefaultargs") Directrix1;
-		%feature("autodoc", "	* This directrix is the line normal to the XAxis of the ellipse in the local plane (Z = 0) at a distance d = MajorRadius / e from the center of the ellipse, where e is the eccentricity of the ellipse. This line is parallel to the 'YAxis'. The intersection point between directrix1 and the 'XAxis' is the location point of the directrix1. This point is on the positive side of the 'XAxis'. Raised if Eccentricity = 0.0. (The ellipse degenerates into a circle)
+		%feature("autodoc", "	* This directrix is the line normal to the XAxis of the ellipse in the local plane (Z = 0) at a distance d = MajorRadius / e from the center of the ellipse, where e is the eccentricity of the ellipse. This line is parallel to the 'YAxis'. The intersection point between directrix1 and the 'XAxis' is the location point of the directrix1. This point is on the positive side of the 'XAxis'. //! Raised if Eccentricity = 0.0. (The ellipse degenerates into a circle)
 
 	:rtype: gp_Ax2d
 ") Directrix1;
 		gp_Ax2d Directrix1 ();
 		%feature("compactdefaultargs") Directrix2;
-		%feature("autodoc", "	* This line is obtained by the symmetrical transformation of 'Directrix1' with respect to the minor axis of the ellipse. Raised if Eccentricity = 0.0. (The ellipse degenerates into a circle).
+		%feature("autodoc", "	* This line is obtained by the symmetrical transformation of 'Directrix1' with respect to the minor axis of the ellipse. //! Raised if Eccentricity = 0.0. (The ellipse degenerates into a circle).
 
 	:rtype: gp_Ax2d
 ") Directrix2;
@@ -3963,7 +3963,7 @@ class gp_Elips2d {
 ") Reversed;
 		gp_Elips2d Reversed ();
 		%feature("compactdefaultargs") IsDirect;
-		%feature("autodoc", "	* Returns true if the local coordinate system is direct  and false in the other case.
+		%feature("autodoc", "	* Returns true if the local coordinate system is direct and false in the other case.
 
 	:rtype: bool
 ") IsDirect;
@@ -4256,22 +4256,22 @@ class gp_GTrsf {
 	:rtype: gp_GTrsf
 ") Inverted;
 		gp_GTrsf Inverted ();
-		%feature("compactdefaultargs") Multiply;
-		%feature("autodoc", "	* Computes the transformation composed from T and <self>. In a C++ implementation you can also write Tcomposed = <self> * T. Example : GTrsf T1, T2, Tcomp; ............... //composition : Tcomp = T2.Multiplied(T1); // or (Tcomp = T2 * T1) // transformation of a point XYZ P(10.,3.,4.); XYZ P1(P); Tcomp.Transforms(P1); //using Tcomp XYZ P2(P); T1.Transforms(P2); //using T1 then T2 T2.Transforms(P2); // P1 = P2 !!! C++: alias operator *=
-
-	:param T:
-	:type T: gp_GTrsf
-	:rtype: None
-") Multiply;
-		void Multiply (const gp_GTrsf  T);
 		%feature("compactdefaultargs") Multiplied;
-		%feature("autodoc", "	* Computes the transformation composed with <self> and T. <self> = T * <self>
+		%feature("autodoc", "	* Computes the transformation composed from T and <self>. In a C++ implementation you can also write Tcomposed = <self> * T. Example : GTrsf T1, T2, Tcomp; ............... //composition : Tcomp = T2.Multiplied(T1); // or (Tcomp = T2 * T1) // transformation of a point XYZ P(10.,3.,4.); XYZ P1(P); Tcomp.Transforms(P1); //using Tcomp XYZ P2(P); T1.Transforms(P2); //using T1 then T2 T2.Transforms(P2); // P1 = P2 !!!
 
 	:param T:
 	:type T: gp_GTrsf
 	:rtype: gp_GTrsf
 ") Multiplied;
 		gp_GTrsf Multiplied (const gp_GTrsf  T);
+		%feature("compactdefaultargs") Multiply;
+		%feature("autodoc", "	* Computes the transformation composed with <self> and T. <self> = <self> * T C++: alias operator *=
+
+	:param T:
+	:type T: gp_GTrsf
+	:rtype: None
+") Multiply;
+		void Multiply (const gp_GTrsf  T);
 		%feature("compactdefaultargs") PreMultiply;
 		%feature("autodoc", "	* Computes the product of the transformation T and this transformation and assigns the result to this transformation. this = T * this
 
@@ -4287,7 +4287,7 @@ class gp_GTrsf {
 ") Power;
 		void Power (const Standard_Integer N);
 		%feature("compactdefaultargs") Powered;
-		%feature("autodoc", "	* Computes: - the product of this transformation multiplied by itself N times, if N is positive, or - the product of the inverse of this transformation multiplied by itself |N| times, if N is negative. If N equals zero, the result is equal to the Identity transformation. I.e.: <self> * <self> * .......* <self>, N time. if N =0 <self> = Identity if N < 0 <self> = <self>.Inverse() *...........* <self>.Inverse(). Raises an exception if N < 0 and if the matrix of the transformation not inversible.
+		%feature("autodoc", "	* Computes: - the product of this transformation multiplied by itself N times, if N is positive, or - the product of the inverse of this transformation multiplied by itself |N| times, if N is negative. If N equals zero, the result is equal to the Identity transformation. I.e.: <self> * <self> * .......* <self>, N time. if N =0 <self> = Identity if N < 0 <self> = <self>.Inverse() *...........* <self>.Inverse(). //! Raises an exception if N < 0 and if the matrix of the transformation not inversible.
 
 	:param N:
 	:type N: int
@@ -4484,18 +4484,6 @@ class gp_GTrsf2d {
 	:rtype: gp_GTrsf2d
 ") Inverted;
 		gp_GTrsf2d Inverted ();
-		%feature("compactdefaultargs") Multiply;
-		%feature("autodoc", "	:param T:
-	:type T: gp_GTrsf2d
-	:rtype: None
-") Multiply;
-		void Multiply (const gp_GTrsf2d  T);
-		%feature("compactdefaultargs") operator *=;
-		%feature("autodoc", "	:param T:
-	:type T: gp_GTrsf2d
-	:rtype: None
-") operator*=;
-		void operator *= (const gp_GTrsf2d  T);
 		%feature("compactdefaultargs") Multiplied;
 		%feature("autodoc", "	* Computes the transformation composed with T and <self>. In a C++ implementation you can also write Tcomposed = <self> * T. Example : GTrsf2d T1, T2, Tcomp; ............... //composition : Tcomp = T2.Multiplied(T1); // or (Tcomp = T2 * T1) // transformation of a point XY P(10.,3.); XY P1(P); Tcomp.Transforms(P1); //using Tcomp XY P2(P); T1.Transforms(P2); //using T1 then T2 T2.Transforms(P2); // P1 = P2 !!!
 
@@ -4510,6 +4498,18 @@ class gp_GTrsf2d {
 	:rtype: gp_GTrsf2d
 ") operator*;
 		gp_GTrsf2d operator * (const gp_GTrsf2d  T);
+		%feature("compactdefaultargs") Multiply;
+		%feature("autodoc", "	:param T:
+	:type T: gp_GTrsf2d
+	:rtype: None
+") Multiply;
+		void Multiply (const gp_GTrsf2d  T);
+		%feature("compactdefaultargs") operator *=;
+		%feature("autodoc", "	:param T:
+	:type T: gp_GTrsf2d
+	:rtype: None
+") operator*=;
+		void operator *= (const gp_GTrsf2d  T);
 		%feature("compactdefaultargs") PreMultiply;
 		%feature("autodoc", "	* Computes the product of the transformation T and this transformation, and assigns the result to this transformation: this = T * this
 
@@ -4525,7 +4525,7 @@ class gp_GTrsf2d {
 ") Power;
 		void Power (const Standard_Integer N);
 		%feature("compactdefaultargs") Powered;
-		%feature("autodoc", "	* Computes the following composition of transformations <self> * <self> * .......* <self>, N time. if N = 0 <self> = Identity if N < 0 <self> = <self>.Inverse() *...........* <self>.Inverse(). Raises an exception if N < 0 and if the matrix of the transformation is not inversible.
+		%feature("autodoc", "	* Computes the following composition of transformations <self> * <self> * .......* <self>, N time. if N = 0 <self> = Identity if N < 0 <self> = <self>.Inverse() *...........* <self>.Inverse(). //! Raises an exception if N < 0 and if the matrix of the transformation is not inversible.
 
 	:param N:
 	:type N: int
@@ -4545,7 +4545,7 @@ class gp_GTrsf2d {
 ") Transformed;
 		gp_XY Transformed (const gp_XY  Coord);
 		%feature("compactdefaultargs") Transforms;
-		%feature("autodoc", "	* Applies this transformation to the coordinates: - of the number pair Coord, or - X and Y. Note: - Transforms modifies X, Y, or the coordinate pair Coord, while - Transformed creates a new coordinate pair.
+		%feature("autodoc", "	* Applies this transformation to the coordinates: - of the number pair Coord, or - X and Y. //! Note: - Transforms modifies X, Y, or the coordinate pair Coord, while - Transformed creates a new coordinate pair.
 
 	:param X:
 	:type X: float
@@ -5165,7 +5165,7 @@ class gp_Hypr2d {
 ") Reversed;
 		gp_Hypr2d Reversed ();
 		%feature("compactdefaultargs") IsDirect;
-		%feature("autodoc", "	* Returns true if the local coordinate system is direct  and false in the other case.
+		%feature("autodoc", "	* Returns true if the local coordinate system is direct and false in the other case.
 
 	:rtype: bool
 ") IsDirect;
@@ -5325,7 +5325,7 @@ def __del__(self):
 class gp_Lin {
 	public:
 		%feature("compactdefaultargs") gp_Lin;
-		%feature("autodoc", "	* Creates a Line corresponding to Z axis of the  reference coordinate system.
+		%feature("autodoc", "	* Creates a Line corresponding to Z axis of the reference coordinate system.
 
 	:rtype: None
 ") gp_Lin;
@@ -5607,7 +5607,7 @@ def __del__(self):
 class gp_Lin2d {
 	public:
 		%feature("compactdefaultargs") gp_Lin2d;
-		%feature("autodoc", "	* Creates a Line corresponding to X axis of the  reference coordinate system.
+		%feature("autodoc", "	* Creates a Line corresponding to X axis of the reference coordinate system.
 
 	:rtype: None
 ") gp_Lin2d;
@@ -7071,7 +7071,7 @@ class gp_Parab2d {
 ") Reversed;
 		gp_Parab2d Reversed ();
 		%feature("compactdefaultargs") IsDirect;
-		%feature("autodoc", "	* Returns true if the local coordinate system is direct  and false in the other case.
+		%feature("autodoc", "	* Returns true if the local coordinate system is direct and false in the other case.
 
 	:rtype: bool
 ") IsDirect;
@@ -7221,7 +7221,7 @@ def __del__(self):
 class gp_Pln {
 	public:
 		%feature("compactdefaultargs") gp_Pln;
-		%feature("autodoc", "	* Creates a plane coincident with OXY plane of the  reference coordinate system.
+		%feature("autodoc", "	* Creates a plane coincident with OXY plane of the reference coordinate system.
 
 	:rtype: None
 ") gp_Pln;
@@ -8279,7 +8279,7 @@ class gp_Quaternion {
 ") GetVectorAndAngle;
 		void GetVectorAndAngle (gp_Vec  theAxis,Standard_Real  theAngle);
 		%feature("compactdefaultargs") SetMatrix;
-		%feature("autodoc", "	* Create a unit quaternion by rotation matrix matrix must contain only rotation (not scale or shear)  For numerical stability we find first the greatest component of quaternion and than search others from this one
+		%feature("autodoc", "	* Create a unit quaternion by rotation matrix matrix must contain only rotation (not scale or shear) //! For numerical stability we find first the greatest component of quaternion and than search others from this one
 
 	:param theMat:
 	:type theMat: gp_Mat
@@ -8801,7 +8801,7 @@ class gp_Sphere {
 ") Direct;
 		Standard_Boolean Direct ();
 		%feature("compactdefaultargs") Location;
-		%feature("autodoc", "	* //!--- Purpose ; Returns the center of the sphere.
+		%feature("autodoc", "	* --- Purpose ; Returns the center of the sphere.
 
 	:rtype: gp_Pnt
 ") Location;
@@ -9369,7 +9369,7 @@ class gp_Trsf {
 ") SetDisplacement;
 		void SetDisplacement (const gp_Ax3  FromSystem1,const gp_Ax3  ToSystem2);
 		%feature("compactdefaultargs") SetTransformation;
-		%feature("autodoc", "	* Modifies this transformation so that it transforms the coordinates of any point, (x, y, z), relative to a source coordinate system into the coordinates (x', y', z') which are relative to a target coordinate system, but which represent the same point The transformation is from the coordinate system 'FromSystem1' to the coordinate system 'ToSystem2'. Example : In a C++ implementation : Real x1, y1, z1; // are the coordinates of a point in the  // local system FromSystem1 Real x2, y2, z2; // are the coordinates of a point in the  // local system ToSystem2 gp_Pnt P1 (x1, y1, z1) Trsf T; T.SetTransformation (FromSystem1, ToSystem2); gp_Pnt P2 = P1.Transformed (T); P2.Coord (x2, y2, z2);
+		%feature("autodoc", "	* Modifies this transformation so that it transforms the coordinates of any point, (x, y, z), relative to a source coordinate system into the coordinates (x', y', z') which are relative to a target coordinate system, but which represent the same point The transformation is from the coordinate system 'FromSystem1' to the coordinate system 'ToSystem2'. Example : In a C++ implementation : Real x1, y1, z1; // are the coordinates of a point in the // local system FromSystem1 Real x2, y2, z2; // are the coordinates of a point in the // local system ToSystem2 gp_Pnt P1 (x1, y1, z1) Trsf T; T.SetTransformation (FromSystem1, ToSystem2); gp_Pnt P2 = P1.Transformed (T); P2.Coord (x2, y2, z2);
 
 	:param FromSystem1:
 	:type FromSystem1: gp_Ax3
@@ -9431,7 +9431,7 @@ class gp_Trsf {
 ") SetScaleFactor;
 		void SetScaleFactor (const Standard_Real S);
 		%feature("compactdefaultargs") SetValues;
-		%feature("autodoc", "	* Sets the coefficients of the transformation. The transformation of the point x,y,z is the point x',y',z' with :  x' = a11 x + a12 y + a13 z + a14 y' = a21 x + a22 y + a23 z + a24 z' = a31 x + a32 y + a43 z + a34  Tolang and TolDist are used to test for null angles and null distances to determine the form of the transformation (identity, translation, etc..).  The method Value(i,j) will return aij. Raises ConstructionError if the determinant of the aij is null. Or if the matrix as not a uniform scale.
+		%feature("autodoc", "	* Sets the coefficients of the transformation. The transformation of the point x,y,z is the point x',y',z' with : //! x' = a11 x + a12 y + a13 z + a14 y' = a21 x + a22 y + a23 z + a24 z' = a31 x + a32 y + a33 z + a34 //! The method Value(i,j) will return aij. Raises ConstructionError if the determinant of the aij is null. The matrix is orthogonalized before future using.
 
 	:param a11:
 	:type a11: float
@@ -9457,13 +9457,9 @@ class gp_Trsf {
 	:type a33: float
 	:param a34:
 	:type a34: float
-	:param Tolang:
-	:type Tolang: float
-	:param TolDist:
-	:type TolDist: float
 	:rtype: None
 ") SetValues;
-		void SetValues (const Standard_Real a11,const Standard_Real a12,const Standard_Real a13,const Standard_Real a14,const Standard_Real a21,const Standard_Real a22,const Standard_Real a23,const Standard_Real a24,const Standard_Real a31,const Standard_Real a32,const Standard_Real a33,const Standard_Real a34,const Standard_Real Tolang,const Standard_Real TolDist);
+		void SetValues (const Standard_Real a11,const Standard_Real a12,const Standard_Real a13,const Standard_Real a14,const Standard_Real a21,const Standard_Real a22,const Standard_Real a23,const Standard_Real a24,const Standard_Real a31,const Standard_Real a32,const Standard_Real a33,const Standard_Real a34);
 		%feature("compactdefaultargs") IsNegative;
 		%feature("autodoc", "	* Returns true if the determinant of the vectorial part of this transformation is negative.
 
@@ -9549,7 +9545,7 @@ class gp_Trsf {
 ") operator*;
 		gp_Trsf operator * (const gp_Trsf  T);
 		%feature("compactdefaultargs") Multiply;
-		%feature("autodoc", "	* Computes the transformation composed with T and <self>. In a C++ implementation you can also write Tcomposed = <self> * T. Example : Trsf T1, T2, Tcomp; ............... //composition : Tcomp = T2.Multiplied(T1); // or (Tcomp = T2 * T1) // transformation of a point Pnt P1(10.,3.,4.); Pnt P2 = P1.Transformed(Tcomp); //using Tcomp Pnt P3 = P1.Transformed(T1); //using T1 then T2 P3.Transform(T2); // P3 = P2 !!! Computes the transformation composed with <self> and T. <self> = T * <self>
+		%feature("autodoc", "	* Computes the transformation composed with <self> and T. <self> = <self> * T
 
 	:param T:
 	:type T: gp_Trsf
@@ -9577,7 +9573,7 @@ class gp_Trsf {
 ") Power;
 		void Power (const Standard_Integer N);
 		%feature("compactdefaultargs") Powered;
-		%feature("autodoc", "	* Computes the following composition of transformations <self> * <self> * .......* <self>, N time. if N = 0 <self> = Identity if N < 0 <self> = <self>.Inverse() *...........* <self>.Inverse(). Raises if N < 0 and if the matrix of the transformation not inversible.
+		%feature("autodoc", "	* Computes the following composition of transformations <self> * <self> * .......* <self>, N time. if N = 0 <self> = Identity if N < 0 <self> = <self>.Inverse() *...........* <self>.Inverse(). //! Raises if N < 0 and if the matrix of the transformation not inversible.
 
 	:param N:
 	:type N: int
@@ -9827,7 +9823,7 @@ class gp_Trsf2d {
 ") operator*;
 		gp_Trsf2d operator * (const gp_Trsf2d  T);
 		%feature("compactdefaultargs") Multiply;
-		%feature("autodoc", "	* Computes the transformation composed from <T> and <self>. In a C++ implementation you can also write Tcomposed = <self> * T. Example : Trsf2d T1, T2, Tcomp; ............... //composition : Tcomp = T2.Multiplied(T1); // or (Tcomp = T2 * T1) // transformation of a point Pnt2d P1(10.,3.,4.); Pnt2d P2 = P1.Transformed(Tcomp); //using Tcomp Pnt2d P3 = P1.Transformed(T1); //using T1 then T2 P3.Transform(T2); // P3 = P2 !!!
+		%feature("autodoc", "	* Computes the transformation composed from <self> and T. <self> = <self> * T
 
 	:param T:
 	:type T: gp_Trsf2d
@@ -9855,7 +9851,7 @@ class gp_Trsf2d {
 ") Power;
 		void Power (const Standard_Integer N);
 		%feature("compactdefaultargs") Powered;
-		%feature("autodoc", "	* Computes the following composition of transformations <self> * <self> * .......* <self>, N time. if N = 0 <self> = Identity if N < 0 <self> = <self>.Inverse() *...........* <self>.Inverse(). Raises if N < 0 and if the matrix of the transformation not inversible.
+		%feature("autodoc", "	* Computes the following composition of transformations <self> * <self> * .......* <self>, N time. if N = 0 <self> = Identity if N < 0 <self> = <self>.Inverse() *...........* <self>.Inverse(). //! Raises if N < 0 and if the matrix of the transformation not inversible.
 
 	:param N:
 	:type N: int
@@ -9878,6 +9874,24 @@ class gp_Trsf2d {
 	:rtype: None
 ") Transforms;
 		void Transforms (gp_XY  Coord);
+		%feature("compactdefaultargs") SetValues;
+		%feature("autodoc", "	* Sets the coefficients of the transformation. The transformation of the point x,y is the point x',y' with : //! x' = a11 x + a12 y + a13 y' = a21 x + a22 y + a23 //! The method Value(i,j) will return aij. Raises ConstructionError if the determinant of the aij is null. If the matrix as not a uniform scale it will be orthogonalized before future using.
+
+	:param a11:
+	:type a11: float
+	:param a12:
+	:type a12: float
+	:param a13:
+	:type a13: float
+	:param a21:
+	:type a21: float
+	:param a22:
+	:type a22: float
+	:param a23:
+	:type a23: float
+	:rtype: None
+") SetValues;
+		void SetValues (const Standard_Real a11,const Standard_Real a12,const Standard_Real a13,const Standard_Real a21,const Standard_Real a22,const Standard_Real a23);
 		%feature("compactdefaultargs") _CSFDB_Getgp_Trsf2dscale;
 		%feature("autodoc", "	:rtype: float
 ") _CSFDB_Getgp_Trsf2dscale;
@@ -10135,7 +10149,7 @@ class gp_Vec {
 ") Magnitude;
 		Standard_Real Magnitude ();
 		%feature("compactdefaultargs") SquareMagnitude;
-		%feature("autodoc", "	* Computes the square magnitude of this vector. Adds two vectors
+		%feature("autodoc", "	* Computes the square magnitude of this vector.
 
 	:rtype: float
 ") SquareMagnitude;
@@ -10179,7 +10193,7 @@ class gp_Vec {
 ") operator-=;
 		void operator -= (const gp_Vec  Right);
 		%feature("compactdefaultargs") Subtracted;
-		%feature("autodoc", "	* Subtracts two vectors Multiplies a vector by a scalar
+		%feature("autodoc", "	* Subtracts two vectors
 
 	:param Right:
 	:type Right: gp_Vec
@@ -10205,7 +10219,7 @@ class gp_Vec {
 ") operator*=;
 		void operator *= (const Standard_Real Scalar);
 		%feature("compactdefaultargs") Multiplied;
-		%feature("autodoc", "	* Multiplies a vector by a scalar Divides a vector by a scalar
+		%feature("autodoc", "	* Multiplies a vector by a scalar
 
 	:param Scalar:
 	:type Scalar: float
@@ -10957,7 +10971,7 @@ class gp_Vec2d {
 ") SetLinearForm;
 		void SetLinearForm (const Standard_Real A1,const gp_Vec2d  V1,const gp_Vec2d  V2);
 		%feature("compactdefaultargs") SetLinearForm;
-		%feature("autodoc", "	* <self> is setted to the following linear form : Left + Right Performs the symmetrical transformation of a vector with respect to the vector V which is the center of the symmetry.
+		%feature("autodoc", "	* <self> is setted to the following linear form : Left + Right //! Performs the symmetrical transformation of a vector with respect to the vector V which is the center of the symmetry.
 
 	:param Left:
 	:type Left: gp_Vec2d
@@ -10973,7 +10987,7 @@ class gp_Vec2d {
 ") Mirror;
 		void Mirror (const gp_Vec2d  V);
 		%feature("compactdefaultargs") Mirrored;
-		%feature("autodoc", "	* Performs the symmetrical transformation of a vector with respect to the vector V which is the center of the symmetry. Performs the symmetrical transformation of a vector with respect to an axis placement which is the axis of the symmetry.
+		%feature("autodoc", "	* Performs the symmetrical transformation of a vector with respect to the vector V which is the center of the symmetry. //! Performs the symmetrical transformation of a vector with respect to an axis placement which is the axis of the symmetry.
 
 	:param V:
 	:type V: gp_Vec2d
@@ -11120,6 +11134,12 @@ class gp_XY {
 	:rtype: float
 ") Coord;
 		Standard_Real Coord (const Standard_Integer Index);
+		%feature("compactdefaultargs") ChangeCoord;
+		%feature("autodoc", "	:param theIndex:
+	:type theIndex: int
+	:rtype: float
+") ChangeCoord;
+		Standard_Real & ChangeCoord (const Standard_Integer theIndex);
 		%feature("compactdefaultargs") Coord;
 		%feature("autodoc", "	* For this number pair, returns its coordinates X and Y.
 
@@ -11555,13 +11575,19 @@ class gp_XYZ {
 ") SetZ;
 		void SetZ (const Standard_Real Z);
 		%feature("compactdefaultargs") Coord;
-		%feature("autodoc", "	* returns the coordinate of range Index : Index = 1 => X is returned Index = 2 => Y is returned Index = 3 => Z is returned Raises OutOfRange if Index != {1, 2, 3}.
+		%feature("autodoc", "	* returns the coordinate of range Index : Index = 1 => X is returned Index = 2 => Y is returned Index = 3 => Z is returned //! Raises OutOfRange if Index != {1, 2, 3}.
 
 	:param Index:
 	:type Index: int
 	:rtype: float
 ") Coord;
 		Standard_Real Coord (const Standard_Integer Index);
+		%feature("compactdefaultargs") ChangeCoord;
+		%feature("autodoc", "	:param theIndex:
+	:type theIndex: int
+	:rtype: float
+") ChangeCoord;
+		Standard_Real & ChangeCoord (const Standard_Integer theIndex);
 		%feature("compactdefaultargs") Coord;
 		%feature("autodoc", "	:param X:
 	:type X: float

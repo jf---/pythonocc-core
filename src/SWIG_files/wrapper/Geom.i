@@ -368,10 +368,6 @@ class Geom_HSequenceOfBSplineSurface : public MMgt_TShared {
 		%feature("autodoc", "	:rtype: Geom_SequenceOfBSplineSurface
 ") ChangeSequence;
 		Geom_SequenceOfBSplineSurface & ChangeSequence ();
-		%feature("compactdefaultargs") ShallowCopy;
-		%feature("autodoc", "	:rtype: Handle_Geom_HSequenceOfBSplineSurface
-") ShallowCopy;
-		Handle_Geom_HSequenceOfBSplineSurface ShallowCopy ();
 };
 
 
@@ -423,201 +419,6 @@ def __del__(self):
 %}
 
 %extend Handle_Geom_HSequenceOfBSplineSurface {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
-
-%nodefaultctor Geom_HSequenceOfSurface;
-class Geom_HSequenceOfSurface : public MMgt_TShared {
-	public:
-		%feature("compactdefaultargs") Geom_HSequenceOfSurface;
-		%feature("autodoc", "	:rtype: None
-") Geom_HSequenceOfSurface;
-		 Geom_HSequenceOfSurface ();
-		%feature("compactdefaultargs") IsEmpty;
-		%feature("autodoc", "	:rtype: bool
-") IsEmpty;
-		Standard_Boolean IsEmpty ();
-		%feature("compactdefaultargs") Length;
-		%feature("autodoc", "	:rtype: int
-") Length;
-		Standard_Integer Length ();
-		%feature("compactdefaultargs") Clear;
-		%feature("autodoc", "	:rtype: None
-") Clear;
-		void Clear ();
-		%feature("compactdefaultargs") Append;
-		%feature("autodoc", "	:param anItem:
-	:type anItem: Handle_Geom_Surface &
-	:rtype: None
-") Append;
-		void Append (const Handle_Geom_Surface & anItem);
-		%feature("compactdefaultargs") Append;
-		%feature("autodoc", "	:param aSequence:
-	:type aSequence: Handle_Geom_HSequenceOfSurface &
-	:rtype: None
-") Append;
-		void Append (const Handle_Geom_HSequenceOfSurface & aSequence);
-		%feature("compactdefaultargs") Prepend;
-		%feature("autodoc", "	:param anItem:
-	:type anItem: Handle_Geom_Surface &
-	:rtype: None
-") Prepend;
-		void Prepend (const Handle_Geom_Surface & anItem);
-		%feature("compactdefaultargs") Prepend;
-		%feature("autodoc", "	:param aSequence:
-	:type aSequence: Handle_Geom_HSequenceOfSurface &
-	:rtype: None
-") Prepend;
-		void Prepend (const Handle_Geom_HSequenceOfSurface & aSequence);
-		%feature("compactdefaultargs") Reverse;
-		%feature("autodoc", "	:rtype: None
-") Reverse;
-		void Reverse ();
-		%feature("compactdefaultargs") InsertBefore;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:param anItem:
-	:type anItem: Handle_Geom_Surface &
-	:rtype: None
-") InsertBefore;
-		void InsertBefore (const Standard_Integer anIndex,const Handle_Geom_Surface & anItem);
-		%feature("compactdefaultargs") InsertBefore;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:param aSequence:
-	:type aSequence: Handle_Geom_HSequenceOfSurface &
-	:rtype: None
-") InsertBefore;
-		void InsertBefore (const Standard_Integer anIndex,const Handle_Geom_HSequenceOfSurface & aSequence);
-		%feature("compactdefaultargs") InsertAfter;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:param anItem:
-	:type anItem: Handle_Geom_Surface &
-	:rtype: None
-") InsertAfter;
-		void InsertAfter (const Standard_Integer anIndex,const Handle_Geom_Surface & anItem);
-		%feature("compactdefaultargs") InsertAfter;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:param aSequence:
-	:type aSequence: Handle_Geom_HSequenceOfSurface &
-	:rtype: None
-") InsertAfter;
-		void InsertAfter (const Standard_Integer anIndex,const Handle_Geom_HSequenceOfSurface & aSequence);
-		%feature("compactdefaultargs") Exchange;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:param anOtherIndex:
-	:type anOtherIndex: int
-	:rtype: None
-") Exchange;
-		void Exchange (const Standard_Integer anIndex,const Standard_Integer anOtherIndex);
-		%feature("compactdefaultargs") Split;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:rtype: Handle_Geom_HSequenceOfSurface
-") Split;
-		Handle_Geom_HSequenceOfSurface Split (const Standard_Integer anIndex);
-		%feature("compactdefaultargs") SetValue;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:param anItem:
-	:type anItem: Handle_Geom_Surface &
-	:rtype: None
-") SetValue;
-		void SetValue (const Standard_Integer anIndex,const Handle_Geom_Surface & anItem);
-		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:rtype: Handle_Geom_Surface
-") Value;
-		const Handle_Geom_Surface & Value (const Standard_Integer anIndex);
-		%feature("compactdefaultargs") ChangeValue;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:rtype: Handle_Geom_Surface
-") ChangeValue;
-		Handle_Geom_Surface & ChangeValue (const Standard_Integer anIndex);
-		%feature("compactdefaultargs") Remove;
-		%feature("autodoc", "	:param anIndex:
-	:type anIndex: int
-	:rtype: None
-") Remove;
-		void Remove (const Standard_Integer anIndex);
-		%feature("compactdefaultargs") Remove;
-		%feature("autodoc", "	:param fromIndex:
-	:type fromIndex: int
-	:param toIndex:
-	:type toIndex: int
-	:rtype: None
-") Remove;
-		void Remove (const Standard_Integer fromIndex,const Standard_Integer toIndex);
-		%feature("compactdefaultargs") Sequence;
-		%feature("autodoc", "	:rtype: Geom_SequenceOfSurface
-") Sequence;
-		const Geom_SequenceOfSurface & Sequence ();
-		%feature("compactdefaultargs") ChangeSequence;
-		%feature("autodoc", "	:rtype: Geom_SequenceOfSurface
-") ChangeSequence;
-		Geom_SequenceOfSurface & ChangeSequence ();
-		%feature("compactdefaultargs") ShallowCopy;
-		%feature("autodoc", "	:rtype: Handle_Geom_HSequenceOfSurface
-") ShallowCopy;
-		Handle_Geom_HSequenceOfSurface ShallowCopy ();
-};
-
-
-%feature("shadow") Geom_HSequenceOfSurface::~Geom_HSequenceOfSurface %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend Geom_HSequenceOfSurface {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend Geom_HSequenceOfSurface {
-	Handle_Geom_HSequenceOfSurface GetHandle() {
-	return *(Handle_Geom_HSequenceOfSurface*) &$self;
-	}
-};
-
-%nodefaultctor Handle_Geom_HSequenceOfSurface;
-class Handle_Geom_HSequenceOfSurface : public Handle_MMgt_TShared {
-
-    public:
-        // constructors
-        Handle_Geom_HSequenceOfSurface();
-        Handle_Geom_HSequenceOfSurface(const Handle_Geom_HSequenceOfSurface &aHandle);
-        Handle_Geom_HSequenceOfSurface(const Geom_HSequenceOfSurface *anItem);
-        void Nullify();
-        Standard_Boolean IsNull() const;
-        static const Handle_Geom_HSequenceOfSurface DownCast(const Handle_Standard_Transient &AnObject);
-
-};
-%extend Handle_Geom_HSequenceOfSurface {
-    Geom_HSequenceOfSurface* GetObject() {
-    return (Geom_HSequenceOfSurface*)$self->Access();
-    }
-};
-%feature("shadow") Handle_Geom_HSequenceOfSurface::~Handle_Geom_HSequenceOfSurface %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_Geom_HSequenceOfSurface {
     void _kill_pointed() {
         delete $self;
     }
@@ -774,79 +575,6 @@ def __del__(self):
     }
 };
 
-%nodefaultctor Geom_SequenceNodeOfSequenceOfSurface;
-class Geom_SequenceNodeOfSequenceOfSurface : public TCollection_SeqNode {
-	public:
-		%feature("compactdefaultargs") Geom_SequenceNodeOfSequenceOfSurface;
-		%feature("autodoc", "	:param I:
-	:type I: Handle_Geom_Surface &
-	:param n:
-	:type n: TCollection_SeqNodePtr &
-	:param p:
-	:type p: TCollection_SeqNodePtr &
-	:rtype: None
-") Geom_SequenceNodeOfSequenceOfSurface;
-		 Geom_SequenceNodeOfSequenceOfSurface (const Handle_Geom_Surface & I,const TCollection_SeqNodePtr & n,const TCollection_SeqNodePtr & p);
-		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	:rtype: Handle_Geom_Surface
-") Value;
-		Handle_Geom_Surface & Value ();
-};
-
-
-%feature("shadow") Geom_SequenceNodeOfSequenceOfSurface::~Geom_SequenceNodeOfSequenceOfSurface %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend Geom_SequenceNodeOfSequenceOfSurface {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend Geom_SequenceNodeOfSequenceOfSurface {
-	Handle_Geom_SequenceNodeOfSequenceOfSurface GetHandle() {
-	return *(Handle_Geom_SequenceNodeOfSequenceOfSurface*) &$self;
-	}
-};
-
-%nodefaultctor Handle_Geom_SequenceNodeOfSequenceOfSurface;
-class Handle_Geom_SequenceNodeOfSequenceOfSurface : public Handle_TCollection_SeqNode {
-
-    public:
-        // constructors
-        Handle_Geom_SequenceNodeOfSequenceOfSurface();
-        Handle_Geom_SequenceNodeOfSequenceOfSurface(const Handle_Geom_SequenceNodeOfSequenceOfSurface &aHandle);
-        Handle_Geom_SequenceNodeOfSequenceOfSurface(const Geom_SequenceNodeOfSequenceOfSurface *anItem);
-        void Nullify();
-        Standard_Boolean IsNull() const;
-        static const Handle_Geom_SequenceNodeOfSequenceOfSurface DownCast(const Handle_Standard_Transient &AnObject);
-
-};
-%extend Handle_Geom_SequenceNodeOfSequenceOfSurface {
-    Geom_SequenceNodeOfSequenceOfSurface* GetObject() {
-    return (Geom_SequenceNodeOfSequenceOfSurface*)$self->Access();
-    }
-};
-%feature("shadow") Handle_Geom_SequenceNodeOfSequenceOfSurface::~Handle_Geom_SequenceNodeOfSequenceOfSurface %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_Geom_SequenceNodeOfSequenceOfSurface {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
-
 %nodefaultctor Geom_SequenceOfBSplineSurface;
 class Geom_SequenceOfBSplineSurface : public TCollection_BaseSequence {
 	public:
@@ -854,6 +582,12 @@ class Geom_SequenceOfBSplineSurface : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") Geom_SequenceOfBSplineSurface;
 		 Geom_SequenceOfBSplineSurface ();
+		%feature("compactdefaultargs") Geom_SequenceOfBSplineSurface;
+		%feature("autodoc", "	:param Other:
+	:type Other: Geom_SequenceOfBSplineSurface &
+	:rtype: None
+") Geom_SequenceOfBSplineSurface;
+		 Geom_SequenceOfBSplineSurface (const Geom_SequenceOfBSplineSurface & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;
@@ -993,152 +727,6 @@ def __del__(self):
 		delete $self;
 	}
 };
-%nodefaultctor Geom_SequenceOfSurface;
-class Geom_SequenceOfSurface : public TCollection_BaseSequence {
-	public:
-		%feature("compactdefaultargs") Geom_SequenceOfSurface;
-		%feature("autodoc", "	:rtype: None
-") Geom_SequenceOfSurface;
-		 Geom_SequenceOfSurface ();
-		%feature("compactdefaultargs") Clear;
-		%feature("autodoc", "	:rtype: None
-") Clear;
-		void Clear ();
-		%feature("compactdefaultargs") Assign;
-		%feature("autodoc", "	:param Other:
-	:type Other: Geom_SequenceOfSurface &
-	:rtype: Geom_SequenceOfSurface
-") Assign;
-		const Geom_SequenceOfSurface & Assign (const Geom_SequenceOfSurface & Other);
-		%feature("compactdefaultargs") operator =;
-		%feature("autodoc", "	:param Other:
-	:type Other: Geom_SequenceOfSurface &
-	:rtype: Geom_SequenceOfSurface
-") operator=;
-		const Geom_SequenceOfSurface & operator = (const Geom_SequenceOfSurface & Other);
-		%feature("compactdefaultargs") Append;
-		%feature("autodoc", "	:param T:
-	:type T: Handle_Geom_Surface &
-	:rtype: None
-") Append;
-		void Append (const Handle_Geom_Surface & T);
-		%feature("compactdefaultargs") Append;
-		%feature("autodoc", "	:param S:
-	:type S: Geom_SequenceOfSurface &
-	:rtype: None
-") Append;
-		void Append (Geom_SequenceOfSurface & S);
-		%feature("compactdefaultargs") Prepend;
-		%feature("autodoc", "	:param T:
-	:type T: Handle_Geom_Surface &
-	:rtype: None
-") Prepend;
-		void Prepend (const Handle_Geom_Surface & T);
-		%feature("compactdefaultargs") Prepend;
-		%feature("autodoc", "	:param S:
-	:type S: Geom_SequenceOfSurface &
-	:rtype: None
-") Prepend;
-		void Prepend (Geom_SequenceOfSurface & S);
-		%feature("compactdefaultargs") InsertBefore;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:param T:
-	:type T: Handle_Geom_Surface &
-	:rtype: None
-") InsertBefore;
-		void InsertBefore (const Standard_Integer Index,const Handle_Geom_Surface & T);
-		%feature("compactdefaultargs") InsertBefore;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:param S:
-	:type S: Geom_SequenceOfSurface &
-	:rtype: None
-") InsertBefore;
-		void InsertBefore (const Standard_Integer Index,Geom_SequenceOfSurface & S);
-		%feature("compactdefaultargs") InsertAfter;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:param T:
-	:type T: Handle_Geom_Surface &
-	:rtype: None
-") InsertAfter;
-		void InsertAfter (const Standard_Integer Index,const Handle_Geom_Surface & T);
-		%feature("compactdefaultargs") InsertAfter;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:param S:
-	:type S: Geom_SequenceOfSurface &
-	:rtype: None
-") InsertAfter;
-		void InsertAfter (const Standard_Integer Index,Geom_SequenceOfSurface & S);
-		%feature("compactdefaultargs") First;
-		%feature("autodoc", "	:rtype: Handle_Geom_Surface
-") First;
-		const Handle_Geom_Surface & First ();
-		%feature("compactdefaultargs") Last;
-		%feature("autodoc", "	:rtype: Handle_Geom_Surface
-") Last;
-		const Handle_Geom_Surface & Last ();
-		%feature("compactdefaultargs") Split;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:param Sub:
-	:type Sub: Geom_SequenceOfSurface &
-	:rtype: None
-") Split;
-		void Split (const Standard_Integer Index,Geom_SequenceOfSurface & Sub);
-		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:rtype: Handle_Geom_Surface
-") Value;
-		const Handle_Geom_Surface & Value (const Standard_Integer Index);
-		%feature("compactdefaultargs") SetValue;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:param I:
-	:type I: Handle_Geom_Surface &
-	:rtype: None
-") SetValue;
-		void SetValue (const Standard_Integer Index,const Handle_Geom_Surface & I);
-		%feature("compactdefaultargs") ChangeValue;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:rtype: Handle_Geom_Surface
-") ChangeValue;
-		Handle_Geom_Surface & ChangeValue (const Standard_Integer Index);
-		%feature("compactdefaultargs") Remove;
-		%feature("autodoc", "	:param Index:
-	:type Index: int
-	:rtype: None
-") Remove;
-		void Remove (const Standard_Integer Index);
-		%feature("compactdefaultargs") Remove;
-		%feature("autodoc", "	:param FromIndex:
-	:type FromIndex: int
-	:param ToIndex:
-	:type ToIndex: int
-	:rtype: None
-") Remove;
-		void Remove (const Standard_Integer FromIndex,const Standard_Integer ToIndex);
-};
-
-
-%feature("shadow") Geom_SequenceOfSurface::~Geom_SequenceOfSurface %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend Geom_SequenceOfSurface {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor Geom_Transformation;
 class Geom_Transformation : public MMgt_TShared {
 	public:
@@ -1201,7 +789,7 @@ class Geom_Transformation : public MMgt_TShared {
 ") SetScale;
 		void SetScale (const gp_Pnt & P,const Standard_Real S);
 		%feature("compactdefaultargs") SetTransformation;
-		%feature("autodoc", "	* Makes a transformation allowing passage from the coordinate system 'FromSystem1' to the coordinate system 'ToSystem2'. Example : In a C++ implementation : Real x1, y1, z1; // are the coordinates of a point in the  // local system FromSystem1 Real x2, y2, z2; // are the coordinates of a point in the  // local system ToSystem2 gp_Pnt P1 (x1, y1, z1) Geom_Transformation T; T.SetTransformation (FromSystem1, ToSystem2); gp_Pnt P2 = P1.Transformed (T); P2.Coord (x2, y2, z2);
+		%feature("autodoc", "	* Makes a transformation allowing passage from the coordinate system 'FromSystem1' to the coordinate system 'ToSystem2'. Example : In a C++ implementation : Real x1, y1, z1; // are the coordinates of a point in the // local system FromSystem1 Real x2, y2, z2; // are the coordinates of a point in the // local system ToSystem2 gp_Pnt P1 (x1, y1, z1) Geom_Transformation T; T.SetTransformation (FromSystem1, ToSystem2); gp_Pnt P2 = P1.Transformed (T); P2.Coord (x2, y2, z2);
 
 	:param FromSystem1:
 	:type FromSystem1: gp_Ax3
@@ -1269,7 +857,7 @@ class Geom_Transformation : public MMgt_TShared {
 ") Trsf;
 		const gp_Trsf  Trsf ();
 		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	* Returns the coefficients of the global matrix of tranformation. It is a 3 rows X 4 columns matrix. Raised if Row < 1 or Row > 3 or Col < 1 or Col > 4 Computes the reverse transformation.
+		%feature("autodoc", "	* Returns the coefficients of the global matrix of tranformation. It is a 3 rows X 4 columns matrix. //! Raised if Row < 1 or Row > 3 or Col < 1 or Col > 4 //! Computes the reverse transformation.
 
 	:param Row:
 	:type Row: int
@@ -1307,7 +895,7 @@ class Geom_Transformation : public MMgt_TShared {
 ") Multiply;
 		void Multiply (const Handle_Geom_Transformation & Other);
 		%feature("compactdefaultargs") Power;
-		%feature("autodoc", "	* Computes the following composition of transformations if N > 0 <self> * <self> * .......* <self>. if N = 0 Identity if N < 0 <self>.Invert() * .........* <self>.Invert() Raised if N < 0 and if the transformation is not inversible
+		%feature("autodoc", "	* Computes the following composition of transformations if N > 0 <self> * <self> * .......* <self>. if N = 0 Identity if N < 0 <self>.Invert() * .........* <self>.Invert() //! Raised if N < 0 and if the transformation is not inversible
 
 	:param N:
 	:type N: int
@@ -1523,7 +1111,7 @@ class Geom_Curve : public Geom_Geometry {
 ") Reverse;
 		virtual void Reverse ();
 		%feature("compactdefaultargs") ReversedParameter;
-		%feature("autodoc", "	* Returns the parameter on the reversed curve for the point of parameter U on <self>.  me->Reversed()->Value(me->ReversedParameter(U))  is the same point as  me->Value(U)
+		%feature("autodoc", "	* Returns the parameter on the reversed curve for the point of parameter U on <self>. //! me->Reversed()->Value(me->ReversedParameter(U)) //! is the same point as //! me->Value(U)
 
 	:param U:
 	:type U: float
@@ -1531,7 +1119,7 @@ class Geom_Curve : public Geom_Geometry {
 ") ReversedParameter;
 		virtual Standard_Real ReversedParameter (const Standard_Real U);
 		%feature("compactdefaultargs") TransformedParameter;
-		%feature("autodoc", "	* Returns the parameter on the transformed curve for the transform of the point of parameter U on <self>.  me->Transformed(T)->Value(me->TransformedParameter(U,T))  is the same point as  me->Value(U).Transformed(T)  This methods returns <U>  It can be redefined. For example on the Line.
+		%feature("autodoc", "	* Returns the parameter on the transformed curve for the transform of the point of parameter U on <self>. //! me->Transformed(T)->Value(me->TransformedParameter(U,T)) //! is the same point as //! me->Value(U).Transformed(T) //! This methods returns <U> //! It can be redefined. For example on the Line.
 
 	:param U:
 	:type U: float
@@ -1541,7 +1129,7 @@ class Geom_Curve : public Geom_Geometry {
 ") TransformedParameter;
 		virtual Standard_Real TransformedParameter (const Standard_Real U,const gp_Trsf & T);
 		%feature("compactdefaultargs") ParametricTransformation;
-		%feature("autodoc", "	* Returns a coefficient to compute the parameter on the transformed curve for the transform of the point on <self>.  Transformed(T)->Value(U * ParametricTransformation(T))  is the same point as  Value(U).Transformed(T)  This methods returns 1.  It can be redefined. For example on the Line.
+		%feature("autodoc", "	* Returns a coefficient to compute the parameter on the transformed curve for the transform of the point on <self>. //! Transformed(T)->Value(U * ParametricTransformation(T)) //! is the same point as //! Value(U).Transformed(T) //! This methods returns 1. //! It can be redefined. For example on the Line.
 
 	:param T:
 	:type T: gp_Trsf
@@ -1599,7 +1187,7 @@ class Geom_Curve : public Geom_Geometry {
 ") IsCN;
 		virtual Standard_Boolean IsCN (const Standard_Integer N);
 		%feature("compactdefaultargs") D0;
-		%feature("autodoc", "	* Returns in P the point of parameter U. If the curve is periodic then the returned point is P(U) with U = Ustart + (U - Uend) where Ustart and Uend are the parametric bounds of the curve. Raised only for the 'OffsetCurve' if it is not possible to compute the current point. For example when the first derivative on the basis curve and the offset direction are parallel.
+		%feature("autodoc", "	* Returns in P the point of parameter U. If the curve is periodic then the returned point is P(U) with U = Ustart + (U - Uend) where Ustart and Uend are the parametric bounds of the curve. //! Raised only for the 'OffsetCurve' if it is not possible to compute the current point. For example when the first derivative on the basis curve and the offset direction are parallel.
 
 	:param U:
 	:type U: float
@@ -1651,7 +1239,7 @@ class Geom_Curve : public Geom_Geometry {
 ") D3;
 		virtual void D3 (const Standard_Real U,gp_Pnt & P,gp_Vec & V1,gp_Vec & V2,gp_Vec & V3);
 		%feature("compactdefaultargs") DN;
-		%feature("autodoc", "	* The returned vector gives the value of the derivative for the order of derivation N. Raised if the continuity of the curve is not CN. Raised if the derivative cannot be computed  easily. e.g. rational bspline and n > 3. Raised if N < 1.
+		%feature("autodoc", "	* The returned vector gives the value of the derivative for the order of derivation N. Raised if the continuity of the curve is not CN. //! Raised if the derivative cannot be computed easily. e.g. rational bspline and n > 3. Raised if N < 1.
 
 	:param U:
 	:type U: float
@@ -1661,7 +1249,7 @@ class Geom_Curve : public Geom_Geometry {
 ") DN;
 		virtual gp_Vec DN (const Standard_Real U,const Standard_Integer N);
 		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	* Computes the point of parameter U on <self>. If the curve is periodic then the returned point is P(U) with U = Ustart + (U - Uend) where Ustart and Uend are the parametric bounds of the curve. it is implemented with D0. Raised only for the 'OffsetCurve' if it is not possible to compute the current point. For example when the first derivative on the basis curve and the offset direction are parallel.
+		%feature("autodoc", "	* Computes the point of parameter U on <self>. If the curve is periodic then the returned point is P(U) with U = Ustart + (U - Uend) where Ustart and Uend are the parametric bounds of the curve. it is implemented with D0. //! Raised only for the 'OffsetCurve' if it is not possible to compute the current point. For example when the first derivative on the basis curve and the offset direction are parallel.
 
 	:param U:
 	:type U: float
@@ -1851,7 +1439,7 @@ class Geom_Surface : public Geom_Geometry {
 ") UReversed;
 		Handle_Geom_Surface UReversed ();
 		%feature("compactdefaultargs") UReversedParameter;
-		%feature("autodoc", "	* Returns the parameter on the Ureversed surface for the point of parameter U on <self>.  me->UReversed()->Value(me->UReversedParameter(U),V)  is the same point as  me->Value(U,V)
+		%feature("autodoc", "	* Returns the parameter on the Ureversed surface for the point of parameter U on <self>. //! me->UReversed()->Value(me->UReversedParameter(U),V) //! is the same point as //! me->Value(U,V)
 
 	:param U:
 	:type U: float
@@ -1871,7 +1459,7 @@ class Geom_Surface : public Geom_Geometry {
 ") VReversed;
 		Handle_Geom_Surface VReversed ();
 		%feature("compactdefaultargs") VReversedParameter;
-		%feature("autodoc", "	* Returns the parameter on the Vreversed surface for the point of parameter V on <self>.  me->VReversed()->Value(U,me->VReversedParameter(V))  is the same point as  me->Value(U,V)
+		%feature("autodoc", "	* Returns the parameter on the Vreversed surface for the point of parameter V on <self>. //! me->VReversed()->Value(U,me->VReversedParameter(V)) //! is the same point as //! me->Value(U,V)
 
 	:param V:
 	:type V: float
@@ -1879,7 +1467,7 @@ class Geom_Surface : public Geom_Geometry {
 ") VReversedParameter;
 		virtual Standard_Real VReversedParameter (const Standard_Real V);
 		%feature("compactdefaultargs") TransformParameters;
-		%feature("autodoc", "	* Computes the parameters on the transformed surface for the transform of the point of parameters U,V on <self>.  me->Transformed(T)->Value(U',V')  is the same point as  me->Value(U,V).Transformed(T)  Where U',V' are the new values of U,V after calling  me->TranformParameters(U,V,T)  This methods does not change <U> and <V>  It can be redefined. For example on the Plane, Cylinder, Cone, Revolved and Extruded surfaces.
+		%feature("autodoc", "	* Computes the parameters on the transformed surface for the transform of the point of parameters U,V on <self>. //! me->Transformed(T)->Value(U',V') //! is the same point as //! me->Value(U,V).Transformed(T) //! Where U',V' are the new values of U,V after calling //! me->TranformParameters(U,V,T) //! This methods does not change <U> and <V> //! It can be redefined. For example on the Plane, Cylinder, Cone, Revolved and Extruded surfaces.
 
 	:param U:
 	:type U: float &
@@ -1891,7 +1479,7 @@ class Geom_Surface : public Geom_Geometry {
 ") TransformParameters;
 		virtual void TransformParameters (Standard_Real &OutValue,Standard_Real &OutValue,const gp_Trsf & T);
 		%feature("compactdefaultargs") ParametricTransformation;
-		%feature("autodoc", "	* Returns a 2d transformation used to find the new parameters of a point on the transformed surface.  me->Transformed(T)->Value(U',V')  is the same point as  me->Value(U,V).Transformed(T)  Where U',V' are obtained by transforming U,V with th 2d transformation returned by  me->ParametricTransformation(T)  This methods returns an identity transformation  It can be redefined. For example on the Plane, Cylinder, Cone, Revolved and Extruded surfaces.
+		%feature("autodoc", "	* Returns a 2d transformation used to find the new parameters of a point on the transformed surface. //! me->Transformed(T)->Value(U',V') //! is the same point as //! me->Value(U,V).Transformed(T) //! Where U',V' are obtained by transforming U,V with th 2d transformation returned by //! me->ParametricTransformation(T) //! This methods returns an identity transformation //! It can be redefined. For example on the Plane, Cylinder, Cone, Revolved and Extruded surfaces.
 
 	:param T:
 	:type T: gp_Trsf
@@ -1987,7 +1575,7 @@ class Geom_Surface : public Geom_Geometry {
 ") IsCNv;
 		virtual Standard_Boolean IsCNv (const Standard_Integer N);
 		%feature("compactdefaultargs") D0;
-		%feature("autodoc", "	* Computes the point of parameter U,V on the surface. Raised only for an 'OffsetSurface' if it is not possible to compute the current point.
+		%feature("autodoc", "	* Computes the point of parameter U,V on the surface. //! Raised only for an 'OffsetSurface' if it is not possible to compute the current point.
 
 	:param U:
 	:type U: float
@@ -2067,7 +1655,7 @@ class Geom_Surface : public Geom_Geometry {
 ") D3;
 		virtual void D3 (const Standard_Real U,const Standard_Real V,gp_Pnt & P,gp_Vec & D1U,gp_Vec & D1V,gp_Vec & D2U,gp_Vec & D2V,gp_Vec & D2UV,gp_Vec & D3U,gp_Vec & D3V,gp_Vec & D3UUV,gp_Vec & D3UVV);
 		%feature("compactdefaultargs") DN;
-		%feature("autodoc", "	* //!---Purpose ; Computes the derivative of order Nu in the direction U and Nv in the direction V at the point P(U, V). Raised if the continuity of the surface is not CNu in the U direction or not CNv in the V direction. Raised if Nu + Nv < 1 or Nu < 0 or Nv < 0.
+		%feature("autodoc", "	* ---Purpose ; Computes the derivative of order Nu in the direction U and Nv in the direction V at the point P(U, V). //! Raised if the continuity of the surface is not CNu in the U direction or not CNv in the V direction. Raised if Nu + Nv < 1 or Nu < 0 or Nv < 0.
 
 	:param U:
 	:type U: float
@@ -2081,7 +1669,7 @@ class Geom_Surface : public Geom_Geometry {
 ") DN;
 		virtual gp_Vec DN (const Standard_Real U,const Standard_Real V,const Standard_Integer Nu,const Standard_Integer Nv);
 		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	* Computes the point of parameter U on the surface. It is implemented with D0 Raised only for an 'OffsetSurface' if it is not possible to compute the current point.
+		%feature("autodoc", "	* Computes the point of parameter U on the surface. //! It is implemented with D0 //! Raised only for an 'OffsetSurface' if it is not possible to compute the current point.
 
 	:param U:
 	:type U: float
@@ -2222,7 +1810,7 @@ class Geom_Vector : public Geom_Geometry {
 ") Z;
 		Standard_Real Z ();
 		%feature("compactdefaultargs") Cross;
-		%feature("autodoc", "	* Computes the cross product between <self> and <Other>. Raised if <self> is a 'Direction' and if <self> and <Other> are parallel because it is not possible to build a 'Direction' with null length.
+		%feature("autodoc", "	* Computes the cross product between <self> and <Other>. //! Raised if <self> is a 'Direction' and if <self> and <Other> are parallel because it is not possible to build a 'Direction' with null length.
 
 	:param Other:
 	:type Other: Handle_Geom_Vector &
@@ -2230,7 +1818,7 @@ class Geom_Vector : public Geom_Geometry {
 ") Cross;
 		virtual void Cross (const Handle_Geom_Vector & Other);
 		%feature("compactdefaultargs") Crossed;
-		%feature("autodoc", "	* Computes the cross product between <self> and <Other>. A new direction is returned. Raised if <self> is a 'Direction' and if the two vectors are parallel because it is not possible to create a 'Direction' with null length.
+		%feature("autodoc", "	* Computes the cross product between <self> and <Other>. A new direction is returned. //! Raised if <self> is a 'Direction' and if the two vectors are parallel because it is not possible to create a 'Direction' with null length.
 
 	:param Other:
 	:type Other: Handle_Geom_Vector &
@@ -2238,7 +1826,7 @@ class Geom_Vector : public Geom_Geometry {
 ") Crossed;
 		virtual Handle_Geom_Vector Crossed (const Handle_Geom_Vector & Other);
 		%feature("compactdefaultargs") CrossCross;
-		%feature("autodoc", "	* Computes the triple vector product <self> ^(V1 ^ V2). Raised if <self> is a 'Direction' and if V1 and V2 are parallel or <self> and (V1 ^ V2) are parallel
+		%feature("autodoc", "	* Computes the triple vector product <self> ^(V1 ^ V2). //! Raised if <self> is a 'Direction' and if V1 and V2 are parallel or <self> and (V1 ^ V2) are parallel
 
 	:param V1:
 	:type V1: Handle_Geom_Vector &
@@ -2248,7 +1836,7 @@ class Geom_Vector : public Geom_Geometry {
 ") CrossCross;
 		virtual void CrossCross (const Handle_Geom_Vector & V1,const Handle_Geom_Vector & V2);
 		%feature("compactdefaultargs") CrossCrossed;
-		%feature("autodoc", "	* Computes the triple vector product <self> ^(V1 ^ V2). Raised if <self> is a direction and if V1 and V2 are parallel or <self> and (V1 ^ V2) are parallel
+		%feature("autodoc", "	* Computes the triple vector product <self> ^(V1 ^ V2). //! Raised if <self> is a direction and if V1 and V2 are parallel or <self> and (V1 ^ V2) are parallel
 
 	:param V1:
 	:type V1: Handle_Geom_Vector &
@@ -2486,7 +2074,7 @@ class Geom_Axis2Placement : public Geom_AxisPlacement {
 ") SetAx2;
 		void SetAx2 (const gp_Ax2 & A2);
 		%feature("compactdefaultargs") SetDirection;
-		%feature("autodoc", "	* Changes the main direction of the axis placement. The 'Xdirection' is modified : New XDirection = V ^ (Previous_Xdirection ^ V). Raised if V and the previous 'XDirection' are parallel because it is impossible to calculate the new 'XDirection' and the new 'YDirection'.
+		%feature("autodoc", "	* Changes the main direction of the axis placement. The 'Xdirection' is modified : New XDirection = V ^ (Previous_Xdirection ^ V). //! Raised if V and the previous 'XDirection' are parallel because it is impossible to calculate the new 'XDirection' and the new 'YDirection'.
 
 	:param V:
 	:type V: gp_Dir
@@ -2904,7 +2492,7 @@ def __del__(self):
 class Geom_Conic : public Geom_Curve {
 	public:
 		%feature("compactdefaultargs") SetAxis;
-		%feature("autodoc", "	* Changes the orientation of the conic's plane. The normal axis to the plane is A1. The XAxis and the YAxis are recomputed. raised if the A1 is parallel to the XAxis of the conic.
+		%feature("autodoc", "	* Changes the orientation of the conic's plane. The normal axis to the plane is A1. The XAxis and the YAxis are recomputed. //! raised if the A1 is parallel to the XAxis of the conic.
 
 	:param A1:
 	:type A1: gp_Ax1
@@ -3051,7 +2639,7 @@ def __del__(self):
 class Geom_Direction : public Geom_Vector {
 	public:
 		%feature("compactdefaultargs") Geom_Direction;
-		%feature("autodoc", "	* Creates a unit vector with it 3 cartesian coordinates. Raised if Sqrt( X*X + Y*Y + Z*Z) <= Resolution from gp.
+		%feature("autodoc", "	* Creates a unit vector with it 3 cartesian coordinates. //! Raised if Sqrt( X*X + Y*Y + Z*Z) <= Resolution from gp.
 
 	:param X:
 	:type X: float
@@ -3071,7 +2659,7 @@ class Geom_Direction : public Geom_Vector {
 ") Geom_Direction;
 		 Geom_Direction (const gp_Dir & V);
 		%feature("compactdefaultargs") SetCoord;
-		%feature("autodoc", "	* Sets <self> to X,Y,Z coordinates. Raised if Sqrt( X*X + Y*Y + Z*Z) <= Resolution from gp.
+		%feature("autodoc", "	* Sets <self> to X,Y,Z coordinates. //! Raised if Sqrt( X*X + Y*Y + Z*Z) <= Resolution from gp.
 
 	:param X:
 	:type X: float
@@ -3091,7 +2679,7 @@ class Geom_Direction : public Geom_Vector {
 ") SetDir;
 		void SetDir (const gp_Dir & V);
 		%feature("compactdefaultargs") SetX;
-		%feature("autodoc", "	* Changes the X coordinate of <self>. Raised if Sqrt( X*X + Y*Y + Z*Z) <= Resolution from gp.
+		%feature("autodoc", "	* Changes the X coordinate of <self>. //! Raised if Sqrt( X*X + Y*Y + Z*Z) <= Resolution from gp.
 
 	:param X:
 	:type X: float
@@ -3099,7 +2687,7 @@ class Geom_Direction : public Geom_Vector {
 ") SetX;
 		void SetX (const Standard_Real X);
 		%feature("compactdefaultargs") SetY;
-		%feature("autodoc", "	* Changes the Y coordinate of <self>. Raised if Sqrt( X*X + Y*Y + Z*Z) <= Resolution from gp.
+		%feature("autodoc", "	* Changes the Y coordinate of <self>. //! Raised if Sqrt( X*X + Y*Y + Z*Z) <= Resolution from gp.
 
 	:param Y:
 	:type Y: float
@@ -3107,7 +2695,7 @@ class Geom_Direction : public Geom_Vector {
 ") SetY;
 		void SetY (const Standard_Real Y);
 		%feature("compactdefaultargs") SetZ;
-		%feature("autodoc", "	* Changes the Z coordinate of <self>. Raised if Sqrt( X*X + Y*Y + Z*Z) <= Resolution from gp.
+		%feature("autodoc", "	* Changes the Z coordinate of <self>. //! Raised if Sqrt( X*X + Y*Y + Z*Z) <= Resolution from gp.
 
 	:param Z:
 	:type Z: float
@@ -3133,7 +2721,7 @@ class Geom_Direction : public Geom_Vector {
 ") SquareMagnitude;
 		Standard_Real SquareMagnitude ();
 		%feature("compactdefaultargs") Cross;
-		%feature("autodoc", "	* Computes the cross product between <self> and <Other>. Raised if the two vectors are parallel because it is not possible to have a direction with null length.
+		%feature("autodoc", "	* Computes the cross product between <self> and <Other>. //! Raised if the two vectors are parallel because it is not possible to have a direction with null length.
 
 	:param Other:
 	:type Other: Handle_Geom_Vector &
@@ -3141,7 +2729,7 @@ class Geom_Direction : public Geom_Vector {
 ") Cross;
 		void Cross (const Handle_Geom_Vector & Other);
 		%feature("compactdefaultargs") CrossCross;
-		%feature("autodoc", "	* Computes the triple vector product <self> ^(V1 ^ V2). Raised if V1 and V2 are parallel or <self> and (V1 ^ V2) are parallel
+		%feature("autodoc", "	* Computes the triple vector product <self> ^(V1 ^ V2). //! Raised if V1 and V2 are parallel or <self> and (V1 ^ V2) are parallel
 
 	:param V1:
 	:type V1: Handle_Geom_Vector &
@@ -3151,7 +2739,7 @@ class Geom_Direction : public Geom_Vector {
 ") CrossCross;
 		void CrossCross (const Handle_Geom_Vector & V1,const Handle_Geom_Vector & V2);
 		%feature("compactdefaultargs") Crossed;
-		%feature("autodoc", "	* Computes the cross product between <self> and <Other>. A new direction is returned. Raised if the two vectors are parallel because it is not possible to have a direction with null length.
+		%feature("autodoc", "	* Computes the cross product between <self> and <Other>. A new direction is returned. //! Raised if the two vectors are parallel because it is not possible to have a direction with null length.
 
 	:param Other:
 	:type Other: Handle_Geom_Vector &
@@ -3159,7 +2747,7 @@ class Geom_Direction : public Geom_Vector {
 ") Crossed;
 		Handle_Geom_Vector Crossed (const Handle_Geom_Vector & Other);
 		%feature("compactdefaultargs") CrossCrossed;
-		%feature("autodoc", "	* Computes the triple vector product <self> ^(V1 ^ V2). Raised if V1 and V2 are parallel or <self> and (V1 ^ V2) are parallel
+		%feature("autodoc", "	* Computes the triple vector product <self> ^(V1 ^ V2). //! Raised if V1 and V2 are parallel or <self> and (V1 ^ V2) are parallel
 
 	:param V1:
 	:type V1: Handle_Geom_Vector &
@@ -3242,7 +2830,7 @@ def __del__(self):
 class Geom_ElementarySurface : public Geom_Surface {
 	public:
 		%feature("compactdefaultargs") SetAxis;
-		%feature("autodoc", "	* Changes the main axis (ZAxis) of the elementary surface. Raised if the direction of A1 is parallel to the XAxis of the coordinate system of the surface.
+		%feature("autodoc", "	* Changes the main axis (ZAxis) of the elementary surface. //! Raised if the direction of A1 is parallel to the XAxis of the coordinate system of the surface.
 
 	:param A1:
 	:type A1: gp_Ax1
@@ -3290,7 +2878,7 @@ class Geom_ElementarySurface : public Geom_Surface {
 ") UReverse;
 		virtual void UReverse ();
 		%feature("compactdefaultargs") UReversedParameter;
-		%feature("autodoc", "	* Return the parameter on the Ureversed surface for the point of parameter U on <self>.  me->UReversed()->Value(me->UReversedParameter(U),V)  is the same point as me->Value(U,V)
+		%feature("autodoc", "	* Return the parameter on the Ureversed surface for the point of parameter U on <self>. //! me->UReversed()->Value(me->UReversedParameter(U),V) is the same point as me->Value(U,V)
 
 	:param U:
 	:type U: float
@@ -3304,7 +2892,7 @@ class Geom_ElementarySurface : public Geom_Surface {
 ") VReverse;
 		virtual void VReverse ();
 		%feature("compactdefaultargs") VReversedParameter;
-		%feature("autodoc", "	* Return the parameter on the Vreversed surface for the point of parameter V on <self>.  me->VReversed()->Value(U,me->VReversedParameter(V))  is the same point as me->Value(U,V)
+		%feature("autodoc", "	* Return the parameter on the Vreversed surface for the point of parameter V on <self>. //! me->VReversed()->Value(U,me->VReversedParameter(V)) is the same point as me->Value(U,V)
 
 	:param V:
 	:type V: float
@@ -3585,7 +3173,7 @@ class Geom_Line : public Geom_Curve {
 ") Transform;
 		void Transform (const gp_Trsf & T);
 		%feature("compactdefaultargs") TransformedParameter;
-		%feature("autodoc", "	* Returns the parameter on the transformed curve for the transform of the point of parameter U on <self>.  me->Transformed(T)->Value(me->TransformedParameter(U,T))  is the same point as  me->Value(U).Transformed(T)  This methods returns <U> * T.ScaleFactor()
+		%feature("autodoc", "	* Returns the parameter on the transformed curve for the transform of the point of parameter U on <self>. //! me->Transformed(T)->Value(me->TransformedParameter(U,T)) //! is the same point as //! me->Value(U).Transformed(T) //! This methods returns <U> * T.ScaleFactor()
 
 	:param U:
 	:type U: float
@@ -3595,7 +3183,7 @@ class Geom_Line : public Geom_Curve {
 ") TransformedParameter;
 		virtual Standard_Real TransformedParameter (const Standard_Real U,const gp_Trsf & T);
 		%feature("compactdefaultargs") ParametricTransformation;
-		%feature("autodoc", "	* Returns a coefficient to compute the parameter on the transformed curve for the transform of the point on <self>.  Transformed(T)->Value(U * ParametricTransformation(T))  is the same point as  Value(U).Transformed(T)  This methods returns T.ScaleFactor()
+		%feature("autodoc", "	* Returns a coefficient to compute the parameter on the transformed curve for the transform of the point on <self>. //! Transformed(T)->Value(U * ParametricTransformation(T)) //! is the same point as //! Value(U).Transformed(T) //! This methods returns T.ScaleFactor()
 
 	:param T:
 	:type T: gp_Trsf
@@ -3668,7 +3256,7 @@ def __del__(self):
 class Geom_OffsetCurve : public Geom_Curve {
 	public:
 		%feature("compactdefaultargs") Geom_OffsetCurve;
-		%feature("autodoc", "	* C is the basis curve, Offset is the distance between <self> and the basis curve at any point. V defines the fixed reference direction (offset direction). If P is a point on the basis curve and T the first derivative with non zero length at this point, the corresponding point on the offset curve is in the direction of the vector-product N = V ^ T where N is a unitary vector. Warnings : In this package the entities are not shared. The OffsetCurve is built with a copy of the curve C. So when C is modified the OffsetCurve is not modified Raised if the basis curve C is not at least C1. Warnings : No check is done to know if ||V^T|| != 0.0 at any point.
+		%feature("autodoc", "	* C is the basis curve, Offset is the distance between <self> and the basis curve at any point. V defines the fixed reference direction (offset direction). If P is a point on the basis curve and T the first derivative with non zero length at this point, the corresponding point on the offset curve is in the direction of the vector-product N = V ^ T where N is a unitary vector. Warnings : In this package the entities are not shared. The OffsetCurve is built with a copy of the curve C. So when C is modified the OffsetCurve is not modified //! Raised if the basis curve C is not at least C1. Warnings : No check is done to know if ||V^T|| != 0.0 at any point.
 
 	:param C:
 	:type C: Handle_Geom_Curve &
@@ -3786,7 +3374,7 @@ class Geom_OffsetCurve : public Geom_Curve {
 ") D3;
 		void D3 (const Standard_Real U,gp_Pnt & P,gp_Vec & V1,gp_Vec & V2,gp_Vec & V3);
 		%feature("compactdefaultargs") DN;
-		%feature("autodoc", "	* The returned vector gives the value of the derivative for the order of derivation N. The following functions compute the value and derivatives on the offset curve and returns the derivatives on the basis curve too. The computation of the value and derivatives on the basis curve are used to evaluate the offset curve Warning: The exception UndefinedValue or UndefinedDerivative is raised if it is not possible to compute a unique offset direction. Raised if N < 1.
+		%feature("autodoc", "	* The returned vector gives the value of the derivative for the order of derivation N. //! The following functions compute the value and derivatives on the offset curve and returns the derivatives on the basis curve too. The computation of the value and derivatives on the basis curve are used to evaluate the offset curve //! Warning: The exception UndefinedValue or UndefinedDerivative is raised if it is not possible to compute a unique offset direction. Raised if N < 1.
 
 	:param U:
 	:type U: float
@@ -3924,7 +3512,7 @@ class Geom_OffsetCurve : public Geom_Curve {
 ") TransformedParameter;
 		virtual Standard_Real TransformedParameter (const Standard_Real U,const gp_Trsf & T);
 		%feature("compactdefaultargs") ParametricTransformation;
-		%feature("autodoc", "	* Returns a coefficient to compute the parameter on the transformed curve for the transform of the point on <self>.  Transformed(T)->Value(U * ParametricTransformation(T)) is the same point as Value(U).Transformed(T) This methods calls the basis curve method.
+		%feature("autodoc", "	* Returns a coefficient to compute the parameter on the transformed curve for the transform of the point on <self>. //! Transformed(T)->Value(U * ParametricTransformation(T)) is the same point as Value(U).Transformed(T) This methods calls the basis curve method.
 
 	:param T:
 	:type T: gp_Trsf
@@ -4143,7 +3731,7 @@ class Geom_OffsetSurface : public Geom_Surface {
 ") UIso;
 		Handle_Geom_Curve UIso (const Standard_Real U);
 		%feature("compactdefaultargs") VIso;
-		%feature("autodoc", "	* Computes the V isoparametric curve. Te followings methods compute value and derivatives. Warnings An exception is raised if a unique normal vector is not defined on the basis surface for the parametric value (U,V). No check is done at the creation time and we suppose in this package that the offset surface can be defined at any point.
+		%feature("autodoc", "	* Computes the V isoparametric curve. //! Te followings methods compute value and derivatives. //! Warnings An exception is raised if a unique normal vector is not defined on the basis surface for the parametric value (U,V). No check is done at the creation time and we suppose in this package that the offset surface can be defined at any point.
 
 	:param V:
 	:type V: float
@@ -4151,7 +3739,7 @@ class Geom_OffsetSurface : public Geom_Surface {
 ") VIso;
 		Handle_Geom_Curve VIso (const Standard_Real V);
 		%feature("compactdefaultargs") D0;
-		%feature("autodoc", "	* P (U, V) = Pbasis + Offset * Ndir where Ndir = D1Ubasis ^ D1Vbasis / ||D1Ubasis ^ D1Vbasis|| is the normal direction of the basis surface. Pbasis, D1Ubasis, D1Vbasis are the point and the first derivatives on the basis surface. If Ndir is undefined this method computes an approched normal direction using the following limited development : Ndir = N0 + DNdir/DU + DNdir/DV + Eps with Eps->0 which requires to compute the second derivatives on the basis surface. If the normal direction cannot be approximate for this order of derivation the exception UndefinedValue is raised. Raised if the continuity of the basis surface is not C1. Raised if the order of derivation required to compute the normal direction is greater than the second order.
+		%feature("autodoc", "	* P (U, V) = Pbasis + Offset * Ndir where Ndir = D1Ubasis ^ D1Vbasis / ||D1Ubasis ^ D1Vbasis|| is the normal direction of the basis surface. Pbasis, D1Ubasis, D1Vbasis are the point and the first derivatives on the basis surface. If Ndir is undefined this method computes an approched normal direction using the following limited development : Ndir = N0 + DNdir/DU + DNdir/DV + Eps with Eps->0 which requires to compute the second derivatives on the basis surface. If the normal direction cannot be approximate for this order of derivation the exception UndefinedValue is raised. //! Raised if the continuity of the basis surface is not C1. Raised if the order of derivation required to compute the normal direction is greater than the second order.
 
 	:param U:
 	:type U: float
@@ -4179,7 +3767,7 @@ class Geom_OffsetSurface : public Geom_Surface {
 ") D1;
 		void D1 (const Standard_Real U,const Standard_Real V,gp_Pnt & P,gp_Vec & D1U,gp_Vec & D1V);
 		%feature("compactdefaultargs") D2;
-		%feature("autodoc", "	* //!---Purpose ; Raised if the continuity of the basis surface is not C3.
+		%feature("autodoc", "	* ---Purpose ; Raised if the continuity of the basis surface is not C3.
 
 	:param U:
 	:type U: float
@@ -4231,7 +3819,7 @@ class Geom_OffsetSurface : public Geom_Surface {
 ") D3;
 		void D3 (const Standard_Real U,const Standard_Real V,gp_Pnt & P,gp_Vec & D1U,gp_Vec & D1V,gp_Vec & D2U,gp_Vec & D2V,gp_Vec & D2UV,gp_Vec & D3U,gp_Vec & D3V,gp_Vec & D3UUV,gp_Vec & D3UVV);
 		%feature("compactdefaultargs") DN;
-		%feature("autodoc", "	* Computes the derivative of order Nu in the direction u and Nv in the direction v. //!---Purpose ; Raised if the continuity of the basis surface is not CNu + 1 in the U direction and CNv + 1 in the V direction. Raised if Nu + Nv < 1 or Nu < 0 or Nv < 0. The following methods compute the value and derivatives on the offset surface and returns the derivatives on the basis surface too. The computation of the value and derivatives on the basis surface are used to evaluate the offset surface. Warnings : The exception UndefinedValue or UndefinedDerivative is raised if it is not possible to compute a unique offset direction.
+		%feature("autodoc", "	* Computes the derivative of order Nu in the direction u and Nv in the direction v. ---Purpose ; Raised if the continuity of the basis surface is not CNu + 1 in the U direction and CNv + 1 in the V direction. Raised if Nu + Nv < 1 or Nu < 0 or Nv < 0. //! The following methods compute the value and derivatives on the offset surface and returns the derivatives on the basis surface too. The computation of the value and derivatives on the basis surface are used to evaluate the offset surface. //! Warnings : The exception UndefinedValue or UndefinedDerivative is raised if it is not possible to compute a unique offset direction.
 
 	:param U:
 	:type U: float
@@ -4245,7 +3833,7 @@ class Geom_OffsetSurface : public Geom_Surface {
 ") DN;
 		gp_Vec DN (const Standard_Real U,const Standard_Real V,const Standard_Integer Nu,const Standard_Integer Nv);
 		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	* P (U, V) = Pbasis + Offset * Ndir where Ndir = D1Ubasis ^ D1Vbasis / ||D1Ubasis ^ D1Vbasis|| is the normal direction of the surface. If Ndir is undefined this method computes an approched normal direction using the following limited development : Ndir = N0 + DNdir/DU + DNdir/DV + Eps with Eps->0 which requires to compute the second derivatives on the basis surface. If the normal direction cannot be approximate for this order of derivation the exception UndefinedValue is raised. Raised if the continuity of the basis surface is not C1. Raised if the order of derivation required to compute the normal direction is greater than the second order.
+		%feature("autodoc", "	* P (U, V) = Pbasis + Offset * Ndir where Ndir = D1Ubasis ^ D1Vbasis / ||D1Ubasis ^ D1Vbasis|| is the normal direction of the surface. If Ndir is undefined this method computes an approched normal direction using the following limited development : Ndir = N0 + DNdir/DU + DNdir/DV + Eps with Eps->0 which requires to compute the second derivatives on the basis surface. If the normal direction cannot be approximate for this order of derivation the exception UndefinedValue is raised. //! Raised if the continuity of the basis surface is not C1. Raised if the order of derivation required to compute the normal direction is greater than the second order.
 
 	:param U:
 	:type U: float
@@ -4445,7 +4033,7 @@ class Geom_OffsetSurface : public Geom_Surface {
 ") Transform;
 		void Transform (const gp_Trsf & T);
 		%feature("compactdefaultargs") TransformParameters;
-		%feature("autodoc", "	* Computes the parameters on the transformed surface for the transform of the point of parameters U,V on <self>.  me->Transformed(T)->Value(U',V')  is the same point as  me->Value(U,V).Transformed(T)  Where U',V' are the new values of U,V after calling  me->TranformParameters(U,V,T) This methods calls the basis surface method.
+		%feature("autodoc", "	* Computes the parameters on the transformed surface for the transform of the point of parameters U,V on <self>. //! me->Transformed(T)->Value(U',V') //! is the same point as //! me->Value(U,V).Transformed(T) //! Where U',V' are the new values of U,V after calling //! me->TranformParameters(U,V,T) This methods calls the basis surface method.
 
 	:param U:
 	:type U: float &
@@ -4457,7 +4045,7 @@ class Geom_OffsetSurface : public Geom_Surface {
 ") TransformParameters;
 		virtual void TransformParameters (Standard_Real &OutValue,Standard_Real &OutValue,const gp_Trsf & T);
 		%feature("compactdefaultargs") ParametricTransformation;
-		%feature("autodoc", "	* Returns a 2d transformation used to find the new parameters of a point on the transformed surface.  me->Transformed(T)->Value(U',V')  is the same point as  me->Value(U,V).Transformed(T)  Where U',V' are obtained by transforming U,V with th 2d transformation returned by  me->ParametricTransformation(T)  This methods calls the basis surface method.
+		%feature("autodoc", "	* Returns a 2d transformation used to find the new parameters of a point on the transformed surface. //! me->Transformed(T)->Value(U',V') //! is the same point as //! me->Value(U,V).Transformed(T) //! Where U',V' are obtained by transforming U,V with th 2d transformation returned by //! me->ParametricTransformation(T) //! This methods calls the basis surface method.
 
 	:param T:
 	:type T: gp_Trsf
@@ -4811,13 +4399,13 @@ class Geom_VectorWithMagnitude : public Geom_Vector {
 ") Multiply;
 		void Multiply (const Standard_Real Scalar);
 		%feature("compactdefaultargs") Normalize;
-		%feature("autodoc", "	* Normalizes <self>. Raised if the magnitude of the vector is lower or equal to Resolution from package gp.
+		%feature("autodoc", "	* Normalizes <self>. //! Raised if the magnitude of the vector is lower or equal to Resolution from package gp.
 
 	:rtype: None
 ") Normalize;
 		void Normalize ();
 		%feature("compactdefaultargs") Normalized;
-		%feature("autodoc", "	* Returns a copy of <self> Normalized. Raised if the magnitude of the vector is lower or equal to Resolution from package gp.
+		%feature("autodoc", "	* Returns a copy of <self> Normalized. //! Raised if the magnitude of the vector is lower or equal to Resolution from package gp.
 
 	:rtype: Handle_Geom_VectorWithMagnitude
 ") Normalized;
@@ -4912,7 +4500,7 @@ def __del__(self):
 class Geom_BSplineCurve : public Geom_BoundedCurve {
 	public:
 		%feature("compactdefaultargs") Geom_BSplineCurve;
-		%feature("autodoc", "	* Creates a non-rational B_spline curve on the  basis <Knots, Multiplicities> of degree <Degree>.
+		%feature("autodoc", "	* Creates a non-rational B_spline curve on the basis <Knots, Multiplicities> of degree <Degree>.
 
 	:param Poles:
 	:type Poles: TColgp_Array1OfPnt
@@ -4928,7 +4516,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") Geom_BSplineCurve;
 		 Geom_BSplineCurve (const TColgp_Array1OfPnt & Poles,const TColStd_Array1OfReal & Knots,const TColStd_Array1OfInteger & Multiplicities,const Standard_Integer Degree,const Standard_Boolean Periodic = Standard_False);
 		%feature("compactdefaultargs") Geom_BSplineCurve;
-		%feature("autodoc", "	* Creates a rational B_spline curve on the basis  <Knots, Multiplicities> of degree <Degree>. Raises ConstructionError subject to the following conditions 0 < Degree <= MaxDegree. Weights.Length() == Poles.Length() Knots.Length() == Mults.Length() >= 2 Knots(i) < Knots(i+1) (Knots are increasing) 1 <= Mults(i) <= Degree On a non periodic curve the first and last multiplicities may be Degree+1 (this is even recommanded if you want the curve to start and finish on the first and last pole). On a periodic curve the first and the last multicities must be the same. on non-periodic curves Poles.Length() == Sum(Mults(i)) - Degree - 1 >= 2 on periodic curves Poles.Length() == Sum(Mults(i)) except the first or last
+		%feature("autodoc", "	* Creates a rational B_spline curve on the basis <Knots, Multiplicities> of degree <Degree>. Raises ConstructionError subject to the following conditions 0 < Degree <= MaxDegree. //! Weights.Length() == Poles.Length() //! Knots.Length() == Mults.Length() >= 2 //! Knots(i) < Knots(i+1) (Knots are increasing) //! 1 <= Mults(i) <= Degree //! On a non periodic curve the first and last multiplicities may be Degree+1 (this is even recommanded if you want the curve to start and finish on the first and last pole). //! On a periodic curve the first and the last multicities must be the same. //! on non-periodic curves //! Poles.Length() == Sum(Mults(i)) - Degree - 1 >= 2 //! on periodic curves //! Poles.Length() == Sum(Mults(i)) except the first or last
 
 	:param Poles:
 	:type Poles: TColgp_Array1OfPnt
@@ -4956,7 +4544,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") IncreaseDegree;
 		void IncreaseDegree (const Standard_Integer Degree);
 		%feature("compactdefaultargs") IncreaseMultiplicity;
-		%feature("autodoc", "	* //!Increases the multiplicity of the knot <Index> to  <M>. If <M> is lower or equal to the current  multiplicity nothing is done. If <M> is higher than  the degree the degree is used. If <Index> is not in [FirstUKnotIndex, LastUKnotIndex]
+		%feature("autodoc", "	* Increases the multiplicity of the knot <Index> to <M>. //! If <M> is lower or equal to the current multiplicity nothing is done. If <M> is higher than the degree the degree is used. If <Index> is not in [FirstUKnotIndex, LastUKnotIndex]
 
 	:param Index:
 	:type Index: int
@@ -4966,7 +4554,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") IncreaseMultiplicity;
 		void IncreaseMultiplicity (const Standard_Integer Index,const Standard_Integer M);
 		%feature("compactdefaultargs") IncreaseMultiplicity;
-		%feature("autodoc", "	* //!Increases the multiplicities of the knots in  [I1,I2] to <M>. For each knot if <M> is lower or equal to the  current multiplicity nothing is done. If <M> is  higher than the degree the degree is used. If <I1,I2> are not in [FirstUKnotIndex, LastUKnotIndex]
+		%feature("autodoc", "	* Increases the multiplicities of the knots in [I1,I2] to <M>. //! For each knot if <M> is lower or equal to the current multiplicity nothing is done. If <M> is higher than the degree the degree is used. If <I1,I2> are not in [FirstUKnotIndex, LastUKnotIndex]
 
 	:param I1:
 	:type I1: int
@@ -4978,7 +4566,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") IncreaseMultiplicity;
 		void IncreaseMultiplicity (const Standard_Integer I1,const Standard_Integer I2,const Standard_Integer M);
 		%feature("compactdefaultargs") IncrementMultiplicity;
-		%feature("autodoc", "	* //!Increment the multiplicities of the knots in  [I1,I2] by <M>. If <M> is not positive nithing is done. For each knot the resulting multiplicity is  limited to the Degree. If <I1,I2> are not in [FirstUKnotIndex, LastUKnotIndex]
+		%feature("autodoc", "	* Increment the multiplicities of the knots in [I1,I2] by <M>. //! If <M> is not positive nithing is done. //! For each knot the resulting multiplicity is limited to the Degree. If <I1,I2> are not in [FirstUKnotIndex, LastUKnotIndex]
 
 	:param I1:
 	:type I1: int
@@ -4990,7 +4578,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") IncrementMultiplicity;
 		void IncrementMultiplicity (const Standard_Integer I1,const Standard_Integer I2,const Standard_Integer M);
 		%feature("compactdefaultargs") InsertKnot;
-		%feature("autodoc", "	* Inserts a knot value in the sequence of knots. If <U> is an existing knot the multiplicity is increased by <M>.  If U is not on the parameter range nothing is done.  If the multiplicity is negative or null nothing is done. The new multiplicity is limited to the degree.  The tolerance criterion for knots equality is the max of Epsilon(U) and ParametricTolerance.
+		%feature("autodoc", "	* Inserts a knot value in the sequence of knots. If <U> is an existing knot the multiplicity is increased by <M>. //! If U is not on the parameter range nothing is done. //! If the multiplicity is negative or null nothing is done. The new multiplicity is limited to the degree. //! The tolerance criterion for knots equality is the max of Epsilon(U) and ParametricTolerance.
 
 	:param U:
 	:type U: float
@@ -5004,7 +4592,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") InsertKnot;
 		void InsertKnot (const Standard_Real U,const Standard_Integer M = 1,const Standard_Real ParametricTolerance = 0.0,const Standard_Boolean Add = Standard_True);
 		%feature("compactdefaultargs") InsertKnots;
-		%feature("autodoc", "	* Inserts a set of knots values in the sequence of knots.  For each U = Knots(i), M = Mults(i)  If <U> is an existing knot the multiplicity is increased by <M> if <Add> is True, increased to <M> if <Add> is False.  If U is not on the parameter range nothing is done.  If the multiplicity is negative or null nothing is done. The new multiplicity is limited to the degree.  The tolerance criterion for knots equality is the max of Epsilon(U) and ParametricTolerance.
+		%feature("autodoc", "	* Inserts a set of knots values in the sequence of knots. //! For each U = Knots(i), M = Mults(i) //! If <U> is an existing knot the multiplicity is increased by <M> if <Add> is True, increased to <M> if <Add> is False. //! If U is not on the parameter range nothing is done. //! If the multiplicity is negative or null nothing is done. The new multiplicity is limited to the degree. //! The tolerance criterion for knots equality is the max of Epsilon(U) and ParametricTolerance.
 
 	:param Knots:
 	:type Knots: TColStd_Array1OfReal &
@@ -5036,7 +4624,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") Reverse;
 		void Reverse ();
 		%feature("compactdefaultargs") ReversedParameter;
-		%feature("autodoc", "	* Returns the parameter on the reversed curve for the point of parameter U on <self>.  returns UFirst + ULast - U
+		%feature("autodoc", "	* Returns the parameter on the reversed curve for the point of parameter U on <self>. //! returns UFirst + ULast - U
 
 	:param U:
 	:type U: float
@@ -5072,7 +4660,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") SetKnots;
 		void SetKnots (const TColStd_Array1OfReal & K);
 		%feature("compactdefaultargs") SetKnot;
-		%feature("autodoc", "	* Changes the knot of range Index with its multiplicity. You can increase the multiplicity of a knot but it is not allowed to decrease the multiplicity of an existing knot. Raised if K >= Knots(Index+1) or K <= Knots(Index-1). Raised if M is greater than Degree or lower than the previous multiplicity of knot of range Index. Raised if Index < 1 || Index > NbKnots
+		%feature("autodoc", "	* Changes the knot of range Index with its multiplicity. You can increase the multiplicity of a knot but it is not allowed to decrease the multiplicity of an existing knot. //! Raised if K >= Knots(Index+1) or K <= Knots(Index-1). Raised if M is greater than Degree or lower than the previous multiplicity of knot of range Index. Raised if Index < 1 || Index > NbKnots
 
 	:param Index:
 	:type Index: int
@@ -5084,7 +4672,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") SetKnot;
 		void SetKnot (const Standard_Integer Index,const Standard_Real K,const Standard_Integer M);
 		%feature("compactdefaultargs") PeriodicNormalization;
-		%feature("autodoc", "	* returns the parameter normalized within  the period if the curve is periodic : otherwise  does not do anything
+		%feature("autodoc", "	* returns the parameter normalized within the period if the curve is periodic : otherwise does not do anything
 
 	:param U:
 	:type U: float &
@@ -5144,7 +4732,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") SetPole;
 		void SetPole (const Standard_Integer Index,const gp_Pnt & P,const Standard_Real Weight);
 		%feature("compactdefaultargs") SetWeight;
-		%feature("autodoc", "	* Changes the weight for the pole of range Index. If the curve was non rational it can become rational. If the curve was rational it can become non rational. Raised if Index < 1 || Index > NbPoles Raised if Weight <= 0.0
+		%feature("autodoc", "	* Changes the weight for the pole of range Index. If the curve was non rational it can become rational. If the curve was rational it can become non rational. //! Raised if Index < 1 || Index > NbPoles Raised if Weight <= 0.0
 
 	:param Index:
 	:type Index: int
@@ -5282,7 +4870,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") D3;
 		void D3 (const Standard_Real U,gp_Pnt & P,gp_Vec & V1,gp_Vec & V2,gp_Vec & V3);
 		%feature("compactdefaultargs") DN;
-		%feature("autodoc", "	* For the point of parameter U of this BSpline curve, computes the vector corresponding to the Nth derivative. Warning On a point where the continuity of the curve is not the one requested, this function impacts the part defined by the parameter with a value greater than U, i.e. the part of the curve to the 'right' of the singularity. Exceptions Standard_RangeError if N is less than 1. The following functions compute the point of parameter U and the derivatives at this point on the B-spline curve arc defined between the knot FromK1 and the knot ToK2. U can be out of bounds [Knot (FromK1), Knot (ToK2)] but for the computation we only use the definition of the curve between these two knots. This method is useful to compute local derivative, if the order of continuity of the whole curve is not greater enough. Inside the parametric domain Knot (FromK1), Knot (ToK2) the evaluations are the same as if we consider the whole definition of the curve. Of course the evaluations are different outside this parametric domain.
+		%feature("autodoc", "	* For the point of parameter U of this BSpline curve, computes the vector corresponding to the Nth derivative. Warning On a point where the continuity of the curve is not the one requested, this function impacts the part defined by the parameter with a value greater than U, i.e. the part of the curve to the 'right' of the singularity. Exceptions Standard_RangeError if N is less than 1. //! The following functions compute the point of parameter U and the derivatives at this point on the B-spline curve arc defined between the knot FromK1 and the knot ToK2. U can be out of bounds [Knot (FromK1), Knot (ToK2)] but for the computation we only use the definition of the curve between these two knots. This method is useful to compute local derivative, if the order of continuity of the whole curve is not greater enough. Inside the parametric domain Knot (FromK1), Knot (ToK2) the evaluations are the same as if we consider the whole definition of the curve. Of course the evaluations are different outside this parametric domain.
 
 	:param U:
 	:type U: float
@@ -5292,7 +4880,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") DN;
 		gp_Vec DN (const Standard_Real U,const Standard_Integer N);
 		%feature("compactdefaultargs") LocalValue;
-		%feature("autodoc", "	* Raised if FromK1 = ToK2. Raised if FromK1 and ToK2 are not in the range [FirstUKnotIndex, LastUKnotIndex].
+		%feature("autodoc", "	* Raised if FromK1 = ToK2. //! Raised if FromK1 and ToK2 are not in the range [FirstUKnotIndex, LastUKnotIndex].
 
 	:param U:
 	:type U: float
@@ -5304,7 +4892,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") LocalValue;
 		gp_Pnt LocalValue (const Standard_Real U,const Standard_Integer FromK1,const Standard_Integer ToK2);
 		%feature("compactdefaultargs") LocalD0;
-		%feature("autodoc", "	* Raised if FromK1 = ToK2. Raised if FromK1 and ToK2 are not in the range [FirstUKnotIndex, LastUKnotIndex].
+		%feature("autodoc", "	* Raised if FromK1 = ToK2. //! Raised if FromK1 and ToK2 are not in the range [FirstUKnotIndex, LastUKnotIndex].
 
 	:param U:
 	:type U: float
@@ -5318,7 +4906,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") LocalD0;
 		void LocalD0 (const Standard_Real U,const Standard_Integer FromK1,const Standard_Integer ToK2,gp_Pnt & P);
 		%feature("compactdefaultargs") LocalD1;
-		%feature("autodoc", "	* Raised if the local continuity of the curve is not C1 between the knot K1 and the knot K2. Raised if FromK1 = ToK2. Raised if FromK1 and ToK2 are not in the range [FirstUKnotIndex, LastUKnotIndex].
+		%feature("autodoc", "	* Raised if the local continuity of the curve is not C1 between the knot K1 and the knot K2. Raised if FromK1 = ToK2. //! Raised if FromK1 and ToK2 are not in the range [FirstUKnotIndex, LastUKnotIndex].
 
 	:param U:
 	:type U: float
@@ -5334,7 +4922,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") LocalD1;
 		void LocalD1 (const Standard_Real U,const Standard_Integer FromK1,const Standard_Integer ToK2,gp_Pnt & P,gp_Vec & V1);
 		%feature("compactdefaultargs") LocalD2;
-		%feature("autodoc", "	* Raised if the local continuity of the curve is not C2 between the knot K1 and the knot K2. Raised if FromK1 = ToK2. Raised if FromK1 and ToK2 are not in the range [FirstUKnotIndex, LastUKnotIndex].
+		%feature("autodoc", "	* Raised if the local continuity of the curve is not C2 between the knot K1 and the knot K2. Raised if FromK1 = ToK2. //! Raised if FromK1 and ToK2 are not in the range [FirstUKnotIndex, LastUKnotIndex].
 
 	:param U:
 	:type U: float
@@ -5352,7 +4940,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") LocalD2;
 		void LocalD2 (const Standard_Real U,const Standard_Integer FromK1,const Standard_Integer ToK2,gp_Pnt & P,gp_Vec & V1,gp_Vec & V2);
 		%feature("compactdefaultargs") LocalD3;
-		%feature("autodoc", "	* Raised if the local continuity of the curve is not C3 between the knot K1 and the knot K2. Raised if FromK1 = ToK2. Raised if FromK1 and ToK2 are not in the range [FirstUKnotIndex, LastUKnotIndex].
+		%feature("autodoc", "	* Raised if the local continuity of the curve is not C3 between the knot K1 and the knot K2. Raised if FromK1 = ToK2. //! Raised if FromK1 and ToK2 are not in the range [FirstUKnotIndex, LastUKnotIndex].
 
 	:param U:
 	:type U: float
@@ -5372,7 +4960,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") LocalD3;
 		void LocalD3 (const Standard_Real U,const Standard_Integer FromK1,const Standard_Integer ToK2,gp_Pnt & P,gp_Vec & V1,gp_Vec & V2,gp_Vec & V3);
 		%feature("compactdefaultargs") LocalDN;
-		%feature("autodoc", "	* Raised if the local continuity of the curve is not CN between the knot K1 and the knot K2. Raised if FromK1 = ToK2. Raised if N < 1. Raises if FromK1 and ToK2 are not in the range [FirstUKnotIndex, LastUKnotIndex].
+		%feature("autodoc", "	* Raised if the local continuity of the curve is not CN between the knot K1 and the knot K2. Raised if FromK1 = ToK2. Raised if N < 1. //! Raises if FromK1 and ToK2 are not in the range [FirstUKnotIndex, LastUKnotIndex].
 
 	:param U:
 	:type U: float
@@ -5412,7 +5000,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") Knot;
 		Standard_Real Knot (const Standard_Integer Index);
 		%feature("compactdefaultargs") Knots;
-		%feature("autodoc", "	* returns the knot values of the B-spline curve; Warning A knot with a multiplicity greater than 1 is not repeated in the knot table. The Multiplicity function can be used to obtain the multiplicity of each knot. Raised if the length of K is not equal to the number of knots.
+		%feature("autodoc", "	* returns the knot values of the B-spline curve; Warning A knot with a multiplicity greater than 1 is not repeated in the knot table. The Multiplicity function can be used to obtain the multiplicity of each knot. //! Raised if the length of K is not equal to the number of knots.
 
 	:param K:
 	:type K: TColStd_Array1OfReal &
@@ -5470,7 +5058,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") Multiplicity;
 		Standard_Integer Multiplicity (const Standard_Integer Index);
 		%feature("compactdefaultargs") Multiplicities;
-		%feature("autodoc", "	* Returns the multiplicity of the knots of the curve. Raised if the length of M is not equal to NbKnots.
+		%feature("autodoc", "	* Returns the multiplicity of the knots of the curve. //! Raised if the length of M is not equal to NbKnots.
 
 	:param M:
 	:type M: TColStd_Array1OfInteger &
@@ -5498,7 +5086,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") Pole;
 		gp_Pnt Pole (const Standard_Integer Index);
 		%feature("compactdefaultargs") Poles;
-		%feature("autodoc", "	* Returns the poles of the B-spline curve; Raised if the length of P is not equal to the number of poles.
+		%feature("autodoc", "	* Returns the poles of the B-spline curve; //! Raised if the length of P is not equal to the number of poles.
 
 	:param P:
 	:type P: TColgp_Array1OfPnt
@@ -5520,7 +5108,7 @@ class Geom_BSplineCurve : public Geom_BoundedCurve {
 ") Weight;
 		Standard_Real Weight (const Standard_Integer Index);
 		%feature("compactdefaultargs") Weights;
-		%feature("autodoc", "	* Returns the weights of the B-spline curve; Raised if the length of W is not equal to NbPoles.
+		%feature("autodoc", "	* Returns the weights of the B-spline curve; //! Raised if the length of W is not equal to NbPoles.
 
 	:param W:
 	:type W: TColStd_Array1OfReal &
@@ -5627,7 +5215,7 @@ def __del__(self):
 class Geom_BSplineSurface : public Geom_BoundedSurface {
 	public:
 		%feature("compactdefaultargs") Geom_BSplineSurface;
-		%feature("autodoc", "	* Creates a non-rational b-spline surface (weights  default value is 1.). The following conditions must be verified. 0 < UDegree <= MaxDegree. UKnots.Length() == UMults.Length() >= 2 UKnots(i) < UKnots(i+1) (Knots are increasing) 1 <= UMults(i) <= UDegree On a non uperiodic surface the first and last umultiplicities may be UDegree+1 (this is even recommanded if you want the curve to start and finish on the first and last pole). On a uperiodic surface the first and the last umultiplicities must be the same. on non-uperiodic surfaces Poles.ColLength() == Sum(UMults(i)) - UDegree - 1 >= 2 on uperiodic surfaces Poles.ColLength() == Sum(UMults(i)) except the first or last The previous conditions for U holds also for V, with the RowLength of the poles.
+		%feature("autodoc", "	* Creates a non-rational b-spline surface (weights default value is 1.). The following conditions must be verified. 0 < UDegree <= MaxDegree. UKnots.Length() == UMults.Length() >= 2 UKnots(i) < UKnots(i+1) (Knots are increasing) 1 <= UMults(i) <= UDegree On a non uperiodic surface the first and last umultiplicities may be UDegree+1 (this is even recommanded if you want the curve to start and finish on the first and last pole). On a uperiodic surface the first and the last umultiplicities must be the same. on non-uperiodic surfaces Poles.ColLength() == Sum(UMults(i)) - UDegree - 1 >= 2 on uperiodic surfaces Poles.ColLength() == Sum(UMults(i)) except the first or last The previous conditions for U holds also for V, with the RowLength of the poles.
 
 	:param Poles:
 	:type Poles: TColgp_Array2OfPnt
@@ -5651,7 +5239,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") Geom_BSplineSurface;
 		 Geom_BSplineSurface (const TColgp_Array2OfPnt & Poles,const TColStd_Array1OfReal & UKnots,const TColStd_Array1OfReal & VKnots,const TColStd_Array1OfInteger & UMults,const TColStd_Array1OfInteger & VMults,const Standard_Integer UDegree,const Standard_Integer VDegree,const Standard_Boolean UPeriodic = Standard_False,const Standard_Boolean VPeriodic = Standard_False);
 		%feature("compactdefaultargs") Geom_BSplineSurface;
-		%feature("autodoc", "	* Creates a non-rational b-spline surface (weights  default value is 1.). The following conditions must be verified. 0 < UDegree <= MaxDegree. UKnots.Length() == UMults.Length() >= 2 UKnots(i) < UKnots(i+1) (Knots are increasing) 1 <= UMults(i) <= UDegree On a non uperiodic surface the first and last umultiplicities may be UDegree+1 (this is even recommanded if you want the curve to start and finish on the first and last pole). On a uperiodic surface the first and the last umultiplicities must be the same. on non-uperiodic surfaces Poles.ColLength() == Sum(UMults(i)) - UDegree - 1 >= 2 on uperiodic surfaces Poles.ColLength() == Sum(UMults(i)) except the first or last The previous conditions for U holds also for V, with the RowLength of the poles.
+		%feature("autodoc", "	* Creates a non-rational b-spline surface (weights default value is 1.). //! The following conditions must be verified. 0 < UDegree <= MaxDegree. //! UKnots.Length() == UMults.Length() >= 2 //! UKnots(i) < UKnots(i+1) (Knots are increasing) 1 <= UMults(i) <= UDegree //! On a non uperiodic surface the first and last umultiplicities may be UDegree+1 (this is even recommanded if you want the curve to start and finish on the first and last pole). //! On a uperiodic surface the first and the last umultiplicities must be the same. //! on non-uperiodic surfaces //! Poles.ColLength() == Sum(UMults(i)) - UDegree - 1 >= 2 //! on uperiodic surfaces //! Poles.ColLength() == Sum(UMults(i)) except the first or last //! The previous conditions for U holds also for V, with the RowLength of the poles.
 
 	:param Poles:
 	:type Poles: TColgp_Array2OfPnt
@@ -5695,7 +5283,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") SetVPeriodic;
 		void SetVPeriodic ();
 		%feature("compactdefaultargs") PeriodicNormalization;
-		%feature("autodoc", "	* returns the parameter normalized within  the period if the surface is periodic : otherwise  does not do anything
+		%feature("autodoc", "	* returns the parameter normalized within the period if the surface is periodic : otherwise does not do anything
 
 	:param U:
 	:type U: float &
@@ -5813,7 +5401,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") RemoveVKnot;
 		Standard_Boolean RemoveVKnot (const Standard_Integer Index,const Standard_Integer M,const Standard_Real Tolerance);
 		%feature("compactdefaultargs") IncreaseUMultiplicity;
-		%feature("autodoc", "	* Increases the multiplicity of the knot of range UIndex in the UKnots sequence. M is the new multiplicity. M must be greater than the previous multiplicity and lower or equal to the degree of the surface in the U parametric direction. Raised if M is not in the range [1, UDegree] Raised if UIndex is not in the range [FirstUKnotIndex, LastUKnotIndex] given by the methods with the same name.
+		%feature("autodoc", "	* Increases the multiplicity of the knot of range UIndex in the UKnots sequence. M is the new multiplicity. M must be greater than the previous multiplicity and lower or equal to the degree of the surface in the U parametric direction. Raised if M is not in the range [1, UDegree] //! Raised if UIndex is not in the range [FirstUKnotIndex, LastUKnotIndex] given by the methods with the same name.
 
 	:param UIndex:
 	:type UIndex: int
@@ -5823,7 +5411,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") IncreaseUMultiplicity;
 		void IncreaseUMultiplicity (const Standard_Integer UIndex,const Standard_Integer M);
 		%feature("compactdefaultargs") IncreaseUMultiplicity;
-		%feature("autodoc", "	* Increases until order M the multiplicity of the set of knots FromI1,...., ToI2 in the U direction. This method can be used to make a B_spline surface into a PiecewiseBezier B_spline surface. If <self> was uniform, it can become non uniform. Raised if FromI1 or ToI2 is out of the range [FirstUKnotIndex, LastUKnotIndex]. M should be greater than the previous multiplicity of the all the knots FromI1,..., ToI2 and lower or equal to the Degree of the surface in the U parametric direction.
+		%feature("autodoc", "	* Increases until order M the multiplicity of the set of knots FromI1,...., ToI2 in the U direction. This method can be used to make a B_spline surface into a PiecewiseBezier B_spline surface. If <self> was uniform, it can become non uniform. //! Raised if FromI1 or ToI2 is out of the range [FirstUKnotIndex, LastUKnotIndex]. //! M should be greater than the previous multiplicity of the all the knots FromI1,..., ToI2 and lower or equal to the Degree of the surface in the U parametric direction.
 
 	:param FromI1:
 	:type FromI1: int
@@ -5835,7 +5423,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") IncreaseUMultiplicity;
 		void IncreaseUMultiplicity (const Standard_Integer FromI1,const Standard_Integer ToI2,const Standard_Integer M);
 		%feature("compactdefaultargs") IncrementUMultiplicity;
-		%feature("autodoc", "	* Increments the multiplicity of the consecutives uknots FromI1..ToI2 by step. The multiplicity of each knot FromI1,.....,ToI2 must be lower or equal to the UDegree of the B_spline. Raised if FromI1 or ToI2 is not in the range [FirstUKnotIndex, LastUKnotIndex] Raised if one knot has a multiplicity greater than UDegree.
+		%feature("autodoc", "	* Increments the multiplicity of the consecutives uknots FromI1..ToI2 by step. The multiplicity of each knot FromI1,.....,ToI2 must be lower or equal to the UDegree of the B_spline. //! Raised if FromI1 or ToI2 is not in the range [FirstUKnotIndex, LastUKnotIndex] //! Raised if one knot has a multiplicity greater than UDegree.
 
 	:param FromI1:
 	:type FromI1: int
@@ -5847,7 +5435,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") IncrementUMultiplicity;
 		void IncrementUMultiplicity (const Standard_Integer FromI1,const Standard_Integer ToI2,const Standard_Integer Step);
 		%feature("compactdefaultargs") IncreaseVMultiplicity;
-		%feature("autodoc", "	* Increases the multiplicity of a knot in the V direction. M is the new multiplicity. M should be greater than the previous multiplicity and lower than the degree of the surface in the V parametric direction. Raised if VIndex is not in the range [FirstVKnotIndex, LastVKnotIndex] given by the methods with the same name.
+		%feature("autodoc", "	* Increases the multiplicity of a knot in the V direction. M is the new multiplicity. //! M should be greater than the previous multiplicity and lower than the degree of the surface in the V parametric direction. //! Raised if VIndex is not in the range [FirstVKnotIndex, LastVKnotIndex] given by the methods with the same name.
 
 	:param VIndex:
 	:type VIndex: int
@@ -5857,7 +5445,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") IncreaseVMultiplicity;
 		void IncreaseVMultiplicity (const Standard_Integer VIndex,const Standard_Integer M);
 		%feature("compactdefaultargs") IncreaseVMultiplicity;
-		%feature("autodoc", "	* Increases until order M the multiplicity of the set of knots FromI1,...., ToI2 in the V direction. This method can be used to make a BSplineSurface into a PiecewiseBezier B_spline surface. If <self> was uniform, it can become non-uniform. Raised if FromI1 or ToI2 is out of the range [FirstVKnotIndex, LastVKnotIndex] given by the methods with the same name. M should be greater than the previous multiplicity of the all the knots FromI1,..., ToI2 and lower or equal to the Degree of the surface in the V parametric direction.
+		%feature("autodoc", "	* Increases until order M the multiplicity of the set of knots FromI1,...., ToI2 in the V direction. This method can be used to make a BSplineSurface into a PiecewiseBezier B_spline surface. If <self> was uniform, it can become non-uniform. //! Raised if FromI1 or ToI2 is out of the range [FirstVKnotIndex, LastVKnotIndex] given by the methods with the same name. //! M should be greater than the previous multiplicity of the all the knots FromI1,..., ToI2 and lower or equal to the Degree of the surface in the V parametric direction.
 
 	:param FromI1:
 	:type FromI1: int
@@ -5869,7 +5457,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") IncreaseVMultiplicity;
 		void IncreaseVMultiplicity (const Standard_Integer FromI1,const Standard_Integer ToI2,const Standard_Integer M);
 		%feature("compactdefaultargs") IncrementVMultiplicity;
-		%feature("autodoc", "	* Increments the multiplicity of the consecutives vknots FromI1..ToI2 by step. The multiplicity of each knot FromI1,.....,ToI2 must be lower or equal to the VDegree of the B_spline. Raised if FromI1 or ToI2 is not in the range [FirstVKnotIndex, LastVKnotIndex] Raised if one knot has a multiplicity greater than VDegree.
+		%feature("autodoc", "	* Increments the multiplicity of the consecutives vknots FromI1..ToI2 by step. The multiplicity of each knot FromI1,.....,ToI2 must be lower or equal to the VDegree of the B_spline. //! Raised if FromI1 or ToI2 is not in the range [FirstVKnotIndex, LastVKnotIndex] //! Raised if one knot has a multiplicity greater than VDegree.
 
 	:param FromI1:
 	:type FromI1: int
@@ -5881,7 +5469,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") IncrementVMultiplicity;
 		void IncrementVMultiplicity (const Standard_Integer FromI1,const Standard_Integer ToI2,const Standard_Integer Step);
 		%feature("compactdefaultargs") InsertUKnot;
-		%feature("autodoc", "	* Inserts a knot value in the sequence of UKnots. If U is a knot value this method increases the multiplicity of the knot if the previous multiplicity was lower than M else it does nothing. The tolerance criterion is ParametricTolerance. ParametricTolerance should be greater or equal than Resolution from package gp. Raised if U is out of the bounds [U1, U2] given by the methods Bounds, the criterion ParametricTolerance is used. Raised if M is not in the range [1, UDegree].
+		%feature("autodoc", "	* Inserts a knot value in the sequence of UKnots. If U is a knot value this method increases the multiplicity of the knot if the previous multiplicity was lower than M else it does nothing. The tolerance criterion is ParametricTolerance. ParametricTolerance should be greater or equal than Resolution from package gp. //! Raised if U is out of the bounds [U1, U2] given by the methods Bounds, the criterion ParametricTolerance is used. Raised if M is not in the range [1, UDegree].
 
 	:param U:
 	:type U: float
@@ -5895,7 +5483,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") InsertUKnot;
 		void InsertUKnot (const Standard_Real U,const Standard_Integer M,const Standard_Real ParametricTolerance,const Standard_Boolean Add = Standard_True);
 		%feature("compactdefaultargs") InsertVKnot;
-		%feature("autodoc", "	* Inserts a knot value in the sequence of VKnots. If V is a knot value this method increases the multiplicity of the knot if the previous multiplicity was lower than M otherwise it does nothing. The tolerance criterion is ParametricTolerance. ParametricTolerance should be greater or equal than Resolution from package gp. raises if V is out of the Bounds [V1, V2] given by the methods Bounds, the criterion ParametricTolerance is used. raises if M is not in the range [1, VDegree].
+		%feature("autodoc", "	* Inserts a knot value in the sequence of VKnots. If V is a knot value this method increases the multiplicity of the knot if the previous multiplicity was lower than M otherwise it does nothing. The tolerance criterion is ParametricTolerance. ParametricTolerance should be greater or equal than Resolution from package gp. //! raises if V is out of the Bounds [V1, V2] given by the methods Bounds, the criterion ParametricTolerance is used. raises if M is not in the range [1, VDegree].
 
 	:param V:
 	:type V: float
@@ -5909,7 +5497,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") InsertVKnot;
 		void InsertVKnot (const Standard_Real V,const Standard_Integer M,const Standard_Real ParametricTolerance,const Standard_Boolean Add = Standard_True);
 		%feature("compactdefaultargs") Segment;
-		%feature("autodoc", "	* Segments the surface between U1 and U2 in the U-Direction.  between V1 and V2 in the V-Direction. The control points are modified, the first and the last point are not the same. Warnings : Even if <self> is not closed it can become closed after the segmentation for example if U1 or U2 are out of the bounds of the surface <self> or if the surface makes loop. raises if U2 < U1 or V2 < V1
+		%feature("autodoc", "	* Segments the surface between U1 and U2 in the U-Direction. between V1 and V2 in the V-Direction. The control points are modified, the first and the last point are not the same. Warnings : Even if <self> is not closed it can become closed after the segmentation for example if U1 or U2 are out of the bounds of the surface <self> or if the surface makes loop. raises if U2 < U1 or V2 < V1
 
 	:param U1:
 	:type U1: float
@@ -5923,7 +5511,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") Segment;
 		void Segment (const Standard_Real U1,const Standard_Real U2,const Standard_Real V1,const Standard_Real V2);
 		%feature("compactdefaultargs") CheckAndSegment;
-		%feature("autodoc", "	* Segments the surface between U1 and U2 in the U-Direction.  between V1 and V2 in the V-Direction. same as Segment but do nothing if U1 and U2 (resp. V1 and V2) are equal to the bounds in U (resp. in V) of <self>. For example, if <self> is periodic in V, it will be always periodic in V after the segmentation if the bounds in V are unchanged Warnings : Even if <self> is not closed it can become closed after the segmentation for example if U1 or U2 are out of the bounds of the surface <self> or if the surface makes loop. raises if U2 < U1 or V2 < V1
+		%feature("autodoc", "	* Segments the surface between U1 and U2 in the U-Direction. between V1 and V2 in the V-Direction. //! same as Segment but do nothing if U1 and U2 (resp. V1 and V2) are equal to the bounds in U (resp. in V) of <self>. For example, if <self> is periodic in V, it will be always periodic in V after the segmentation if the bounds in V are unchanged //! Warnings : Even if <self> is not closed it can become closed after the segmentation for example if U1 or U2 are out of the bounds of the surface <self> or if the surface makes loop. raises if U2 < U1 or V2 < V1
 
 	:param U1:
 	:type U1: float
@@ -5937,7 +5525,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") CheckAndSegment;
 		void CheckAndSegment (const Standard_Real U1,const Standard_Real U2,const Standard_Real V1,const Standard_Real V2);
 		%feature("compactdefaultargs") SetUKnot;
-		%feature("autodoc", "	* Substitutes the UKnots of range UIndex with K. Raised if UIndex < 1 or UIndex > NbUKnots Raised if K >= UKnots(UIndex+1) or K <= UKnots(UIndex-1)
+		%feature("autodoc", "	* Substitutes the UKnots of range UIndex with K. //! Raised if UIndex < 1 or UIndex > NbUKnots //! Raised if K >= UKnots(UIndex+1) or K <= UKnots(UIndex-1)
 
 	:param UIndex:
 	:type UIndex: int
@@ -5947,7 +5535,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") SetUKnot;
 		void SetUKnot (const Standard_Integer UIndex,const Standard_Real K);
 		%feature("compactdefaultargs") SetUKnots;
-		%feature("autodoc", "	* Changes all the U-knots of the surface. The multiplicity of the knots are not modified. Raised if there is an index such that UK (Index+1) <= UK (Index). Raised if UK.Lower() < 1 or UK.Upper() > NbUKnots
+		%feature("autodoc", "	* Changes all the U-knots of the surface. The multiplicity of the knots are not modified. //! Raised if there is an index such that UK (Index+1) <= UK (Index). //! Raised if UK.Lower() < 1 or UK.Upper() > NbUKnots
 
 	:param UK:
 	:type UK: TColStd_Array1OfReal &
@@ -5955,7 +5543,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") SetUKnots;
 		void SetUKnots (const TColStd_Array1OfReal & UK);
 		%feature("compactdefaultargs") SetUKnot;
-		%feature("autodoc", "	* Changes the value of the UKnots of range UIndex and increases its multiplicity. Raised if UIndex is not in the range [FirstUKnotIndex, LastUKnotIndex] given by the methods with the same name. Raised if K >= UKnots(UIndex+1) or K <= UKnots(UIndex-1) M must be lower than UDegree and greater than the previous multiplicity of the knot of range UIndex.
+		%feature("autodoc", "	* Changes the value of the UKnots of range UIndex and increases its multiplicity. //! Raised if UIndex is not in the range [FirstUKnotIndex, LastUKnotIndex] given by the methods with the same name. //! Raised if K >= UKnots(UIndex+1) or K <= UKnots(UIndex-1) M must be lower than UDegree and greater than the previous multiplicity of the knot of range UIndex.
 
 	:param UIndex:
 	:type UIndex: int
@@ -5967,7 +5555,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") SetUKnot;
 		void SetUKnot (const Standard_Integer UIndex,const Standard_Real K,const Standard_Integer M);
 		%feature("compactdefaultargs") SetVKnot;
-		%feature("autodoc", "	* Substitutes the VKnots of range VIndex with K. Raised if VIndex < 1 or VIndex > NbVKnots Raised if K >= VKnots(VIndex+1) or K <= VKnots(VIndex-1)
+		%feature("autodoc", "	* Substitutes the VKnots of range VIndex with K. //! Raised if VIndex < 1 or VIndex > NbVKnots //! Raised if K >= VKnots(VIndex+1) or K <= VKnots(VIndex-1)
 
 	:param VIndex:
 	:type VIndex: int
@@ -5977,7 +5565,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") SetVKnot;
 		void SetVKnot (const Standard_Integer VIndex,const Standard_Real K);
 		%feature("compactdefaultargs") SetVKnots;
-		%feature("autodoc", "	* Changes all the V-knots of the surface. The multiplicity of the knots are not modified. Raised if there is an index such that VK (Index+1) <= VK (Index). Raised if VK.Lower() < 1 or VK.Upper() > NbVKnots
+		%feature("autodoc", "	* Changes all the V-knots of the surface. The multiplicity of the knots are not modified. //! Raised if there is an index such that VK (Index+1) <= VK (Index). //! Raised if VK.Lower() < 1 or VK.Upper() > NbVKnots
 
 	:param VK:
 	:type VK: TColStd_Array1OfReal &
@@ -5985,7 +5573,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") SetVKnots;
 		void SetVKnots (const TColStd_Array1OfReal & VK);
 		%feature("compactdefaultargs") SetVKnot;
-		%feature("autodoc", "	* Changes the value of the VKnots of range VIndex and increases its multiplicity. Raised if VIndex is not in the range [FirstVKnotIndex, LastVKnotIndex] given by the methods with the same name. Raised if K >= VKnots(VIndex+1) or K <= VKnots(VIndex-1) M must be lower than VDegree and greater than the previous multiplicity of the knot of range VIndex.
+		%feature("autodoc", "	* Changes the value of the VKnots of range VIndex and increases its multiplicity. //! Raised if VIndex is not in the range [FirstVKnotIndex, LastVKnotIndex] given by the methods with the same name. //! Raised if K >= VKnots(VIndex+1) or K <= VKnots(VIndex-1) M must be lower than VDegree and greater than the previous multiplicity of the knot of range VIndex.
 
 	:param VIndex:
 	:type VIndex: int
@@ -6029,7 +5617,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") LocateV;
 		void LocateV (const Standard_Real V,const Standard_Real ParametricTolerance,Standard_Integer &OutValue,Standard_Integer &OutValue,const Standard_Boolean WithKnotRepetition = Standard_False);
 		%feature("compactdefaultargs") SetPole;
-		%feature("autodoc", "	* Substitutes the pole of range (UIndex, VIndex) with P. If the surface is rational the weight of range (UIndex, VIndex) is not modified. Raised if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles.
+		%feature("autodoc", "	* Substitutes the pole of range (UIndex, VIndex) with P. If the surface is rational the weight of range (UIndex, VIndex) is not modified. //! Raised if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles.
 
 	:param UIndex:
 	:type UIndex: int
@@ -6041,7 +5629,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") SetPole;
 		void SetPole (const Standard_Integer UIndex,const Standard_Integer VIndex,const gp_Pnt & P);
 		%feature("compactdefaultargs") SetPole;
-		%feature("autodoc", "	* Substitutes the pole and the weight of range (UIndex, VIndex) with P and W. Raised if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles. Raised if Weight <= Resolution from package gp.
+		%feature("autodoc", "	* Substitutes the pole and the weight of range (UIndex, VIndex) with P and W. //! Raised if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles. Raised if Weight <= Resolution from package gp.
 
 	:param UIndex:
 	:type UIndex: int
@@ -6055,7 +5643,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") SetPole;
 		void SetPole (const Standard_Integer UIndex,const Standard_Integer VIndex,const gp_Pnt & P,const Standard_Real Weight);
 		%feature("compactdefaultargs") SetPoleCol;
-		%feature("autodoc", "	* Changes a column of poles or a part of this column. Raised if Vindex < 1 or VIndex > NbVPoles. Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbUPoles.
+		%feature("autodoc", "	* Changes a column of poles or a part of this column. Raised if Vindex < 1 or VIndex > NbVPoles. //! Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbUPoles.
 
 	:param VIndex:
 	:type VIndex: int
@@ -6065,7 +5653,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") SetPoleCol;
 		void SetPoleCol (const Standard_Integer VIndex,const TColgp_Array1OfPnt & CPoles);
 		%feature("compactdefaultargs") SetPoleCol;
-		%feature("autodoc", "	* Changes a column of poles or a part of this column with the corresponding weights. If the surface was rational it can become non rational. If the surface was non rational it can become rational. Raised if Vindex < 1 or VIndex > NbVPoles. Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbUPoles Raised if the bounds of CPoleWeights are not the same as the bounds of CPoles. Raised if one of the weight value of CPoleWeights is lower or equal to Resolution from package gp.
+		%feature("autodoc", "	* Changes a column of poles or a part of this column with the corresponding weights. If the surface was rational it can become non rational. If the surface was non rational it can become rational. Raised if Vindex < 1 or VIndex > NbVPoles. //! Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbUPoles Raised if the bounds of CPoleWeights are not the same as the bounds of CPoles. Raised if one of the weight value of CPoleWeights is lower or equal to Resolution from package gp.
 
 	:param VIndex:
 	:type VIndex: int
@@ -6077,7 +5665,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") SetPoleCol;
 		void SetPoleCol (const Standard_Integer VIndex,const TColgp_Array1OfPnt & CPoles,const TColStd_Array1OfReal & CPoleWeights);
 		%feature("compactdefaultargs") SetPoleRow;
-		%feature("autodoc", "	* Changes a row of poles or a part of this row with the corresponding weights. If the surface was rational it can become non rational. If the surface was non rational it can become rational. Raised if Uindex < 1 or UIndex > NbUPoles. Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbVPoles raises if the bounds of CPoleWeights are not the same as the bounds of CPoles. Raised if one of the weight value of CPoleWeights is lower or equal to Resolution from package gp.
+		%feature("autodoc", "	* Changes a row of poles or a part of this row with the corresponding weights. If the surface was rational it can become non rational. If the surface was non rational it can become rational. Raised if Uindex < 1 or UIndex > NbUPoles. //! Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbVPoles raises if the bounds of CPoleWeights are not the same as the bounds of CPoles. Raised if one of the weight value of CPoleWeights is lower or equal to Resolution from package gp.
 
 	:param UIndex:
 	:type UIndex: int
@@ -6089,7 +5677,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") SetPoleRow;
 		void SetPoleRow (const Standard_Integer UIndex,const TColgp_Array1OfPnt & CPoles,const TColStd_Array1OfReal & CPoleWeights);
 		%feature("compactdefaultargs") SetPoleRow;
-		%feature("autodoc", "	* Changes a row of poles or a part of this row. Raised if Uindex < 1 or UIndex > NbUPoles. Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbVPoles.
+		%feature("autodoc", "	* Changes a row of poles or a part of this row. Raised if Uindex < 1 or UIndex > NbUPoles. //! Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbVPoles.
 
 	:param UIndex:
 	:type UIndex: int
@@ -6099,7 +5687,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") SetPoleRow;
 		void SetPoleRow (const Standard_Integer UIndex,const TColgp_Array1OfPnt & CPoles);
 		%feature("compactdefaultargs") SetWeight;
-		%feature("autodoc", "	* Changes the weight of the pole of range UIndex, VIndex. If the surface was non rational it can become rational. If the surface was rational it can become non rational. Raised if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles Raised if weight is lower or equal to Resolution from package gp
+		%feature("autodoc", "	* Changes the weight of the pole of range UIndex, VIndex. If the surface was non rational it can become rational. If the surface was rational it can become non rational. //! Raised if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles //! Raised if weight is lower or equal to Resolution from package gp
 
 	:param UIndex:
 	:type UIndex: int
@@ -6111,7 +5699,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") SetWeight;
 		void SetWeight (const Standard_Integer UIndex,const Standard_Integer VIndex,const Standard_Real Weight);
 		%feature("compactdefaultargs") SetWeightCol;
-		%feature("autodoc", "	* Changes a column of weights of a part of this column. Raised if VIndex < 1 or VIndex > NbVPoles Raised if CPoleWeights.Lower() < 1 or  CPoleWeights.Upper() > NbUPoles. Raised if a weight value is lower or equal to Resolution from package gp.
+		%feature("autodoc", "	* Changes a column of weights of a part of this column. //! Raised if VIndex < 1 or VIndex > NbVPoles //! Raised if CPoleWeights.Lower() < 1 or CPoleWeights.Upper() > NbUPoles. Raised if a weight value is lower or equal to Resolution from package gp.
 
 	:param VIndex:
 	:type VIndex: int
@@ -6121,7 +5709,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") SetWeightCol;
 		void SetWeightCol (const Standard_Integer VIndex,const TColStd_Array1OfReal & CPoleWeights);
 		%feature("compactdefaultargs") SetWeightRow;
-		%feature("autodoc", "	* Changes a row of weights or a part of this row. Raised if UIndex < 1 or UIndex > NbUPoles Raised if CPoleWeights.Lower() < 1 or  CPoleWeights.Upper() > NbVPoles. Raised if a weight value is lower or equal to Resolution from package gp.
+		%feature("autodoc", "	* Changes a row of weights or a part of this row. //! Raised if UIndex < 1 or UIndex > NbUPoles //! Raised if CPoleWeights.Lower() < 1 or CPoleWeights.Upper() > NbVPoles. Raised if a weight value is lower or equal to Resolution from package gp.
 
 	:param UIndex:
 	:type UIndex: int
@@ -6131,7 +5719,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") SetWeightRow;
 		void SetWeightRow (const Standard_Integer UIndex,const TColStd_Array1OfReal & CPoleWeights);
 		%feature("compactdefaultargs") MovePoint;
-		%feature("autodoc", "	* Move a point with parameter U and V to P. given u,v as parameters) to reach a new position UIndex1, UIndex2, VIndex1, VIndex2:  indicates the poles which can be moved if Problem in BSplineBasis calculation, no change for the curve and UFirstIndex, VLastIndex = 0 VFirstIndex, VLastIndex = 0 Raised if UIndex1 < UIndex2 or VIndex1 < VIndex2 or  UIndex1 < 1 || UIndex1 > NbUPoles or  UIndex2 < 1 || UIndex2 > NbUPoles  VIndex1 < 1 || VIndex1 > NbVPoles or  VIndex2 < 1 || VIndex2 > NbVPoles characteristics of the surface
+		%feature("autodoc", "	* Move a point with parameter U and V to P. given u,v as parameters) to reach a new position UIndex1, UIndex2, VIndex1, VIndex2: indicates the poles which can be moved if Problem in BSplineBasis calculation, no change for the curve and UFirstIndex, VLastIndex = 0 VFirstIndex, VLastIndex = 0 //! Raised if UIndex1 < UIndex2 or VIndex1 < VIndex2 or UIndex1 < 1 || UIndex1 > NbUPoles or UIndex2 < 1 || UIndex2 > NbUPoles VIndex1 < 1 || VIndex1 > NbVPoles or VIndex2 < 1 || VIndex2 > NbVPoles characteristics of the surface
 
 	:param U:
 	:type U: float
@@ -6193,7 +5781,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") IsUPeriodic;
 		Standard_Boolean IsUPeriodic ();
 		%feature("compactdefaultargs") IsURational;
-		%feature("autodoc", "	* Returns False if for each row of weights all the weights are identical. The tolerance criterion is resolution from package gp. Example :  |1.0, 1.0, 1.0| if Weights = |0.5, 0.5, 0.5| returns False  |2.0, 2.0, 2.0|
+		%feature("autodoc", "	* Returns False if for each row of weights all the weights are identical. The tolerance criterion is resolution from package gp. Example : |1.0, 1.0, 1.0| if Weights = |0.5, 0.5, 0.5| returns False |2.0, 2.0, 2.0|
 
 	:rtype: bool
 ") IsURational;
@@ -6205,7 +5793,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") IsVPeriodic;
 		Standard_Boolean IsVPeriodic ();
 		%feature("compactdefaultargs") IsVRational;
-		%feature("autodoc", "	* Returns False if for each column of weights all the weights are identical. The tolerance criterion is resolution from package gp. Examples :  |1.0, 2.0, 0.5| if Weights = |1.0, 2.0, 0.5| returns False  |1.0, 2.0, 0.5|
+		%feature("autodoc", "	* Returns False if for each column of weights all the weights are identical. The tolerance criterion is resolution from package gp. Examples : |1.0, 2.0, 0.5| if Weights = |1.0, 2.0, 0.5| returns False |1.0, 2.0, 0.5|
 
 	:rtype: bool
 ") IsVRational;
@@ -6289,7 +5877,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") NbVPoles;
 		Standard_Integer NbVPoles ();
 		%feature("compactdefaultargs") Pole;
-		%feature("autodoc", "	* Returns the pole of range (UIndex, VIndex). Raised if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles.
+		%feature("autodoc", "	* Returns the pole of range (UIndex, VIndex). //! Raised if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles.
 
 	:param UIndex:
 	:type UIndex: int
@@ -6299,7 +5887,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") Pole;
 		gp_Pnt Pole (const Standard_Integer UIndex,const Standard_Integer VIndex);
 		%feature("compactdefaultargs") Poles;
-		%feature("autodoc", "	* Returns the poles of the B-spline surface. Raised if the length of P in the U and V direction is not equal to NbUpoles and NbVPoles.
+		%feature("autodoc", "	* Returns the poles of the B-spline surface. //! Raised if the length of P in the U and V direction is not equal to NbUpoles and NbVPoles.
 
 	:param P:
 	:type P: TColgp_Array2OfPnt
@@ -6327,7 +5915,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") UKnotDistribution;
 		GeomAbs_BSplKnotDistribution UKnotDistribution ();
 		%feature("compactdefaultargs") UKnots;
-		%feature("autodoc", "	* Returns the knots in the U direction. Raised if the length of Ku is not equal to the number of knots in the U direction.
+		%feature("autodoc", "	* Returns the knots in the U direction. //! Raised if the length of Ku is not equal to the number of knots in the U direction.
 
 	:param Ku:
 	:type Ku: TColStd_Array1OfReal &
@@ -6335,7 +5923,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") UKnots;
 		void UKnots (TColStd_Array1OfReal & Ku);
 		%feature("compactdefaultargs") UKnotSequence;
-		%feature("autodoc", "	* Returns the uknots sequence. In this sequence the knots with a multiplicity greater than 1 are repeated. Example : Ku = {k1, k1, k1, k2, k3, k3, k4, k4, k4} Raised if the length of Ku is not equal to NbUPoles + UDegree + 1
+		%feature("autodoc", "	* Returns the uknots sequence. In this sequence the knots with a multiplicity greater than 1 are repeated. Example : Ku = {k1, k1, k1, k2, k3, k3, k4, k4, k4} //! Raised if the length of Ku is not equal to NbUPoles + UDegree + 1
 
 	:param Ku:
 	:type Ku: TColStd_Array1OfReal &
@@ -6351,7 +5939,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") UMultiplicity;
 		Standard_Integer UMultiplicity (const Standard_Integer UIndex);
 		%feature("compactdefaultargs") UMultiplicities;
-		%feature("autodoc", "	* Returns the multiplicities of the knots in the U direction. Raised if the length of Mu is not equal to the number of knots in the U direction.
+		%feature("autodoc", "	* Returns the multiplicities of the knots in the U direction. //! Raised if the length of Mu is not equal to the number of knots in the U direction.
 
 	:param Mu:
 	:type Mu: TColStd_Array1OfInteger &
@@ -6379,7 +5967,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") VKnotDistribution;
 		GeomAbs_BSplKnotDistribution VKnotDistribution ();
 		%feature("compactdefaultargs") VKnots;
-		%feature("autodoc", "	* Returns the knots in the V direction. Raised if the length of Kv is not equal to the number of knots in the V direction.
+		%feature("autodoc", "	* Returns the knots in the V direction. //! Raised if the length of Kv is not equal to the number of knots in the V direction.
 
 	:param Kv:
 	:type Kv: TColStd_Array1OfReal &
@@ -6387,7 +5975,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") VKnots;
 		void VKnots (TColStd_Array1OfReal & Kv);
 		%feature("compactdefaultargs") VKnotSequence;
-		%feature("autodoc", "	* Returns the vknots sequence. In this sequence the knots with a multiplicity greater than 1 are repeated. Example : Kv = {k1, k1, k1, k2, k3, k3, k4, k4, k4} Raised if the length of Kv is not equal to NbVPoles + VDegree + 1
+		%feature("autodoc", "	* Returns the vknots sequence. In this sequence the knots with a multiplicity greater than 1 are repeated. Example : Kv = {k1, k1, k1, k2, k3, k3, k4, k4, k4} //! Raised if the length of Kv is not equal to NbVPoles + VDegree + 1
 
 	:param Kv:
 	:type Kv: TColStd_Array1OfReal &
@@ -6403,7 +5991,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") VMultiplicity;
 		Standard_Integer VMultiplicity (const Standard_Integer VIndex);
 		%feature("compactdefaultargs") VMultiplicities;
-		%feature("autodoc", "	* Returns the multiplicities of the knots in the V direction. Raised if the length of Mv is not equal to the number of knots in the V direction.
+		%feature("autodoc", "	* Returns the multiplicities of the knots in the V direction. //! Raised if the length of Mv is not equal to the number of knots in the V direction.
 
 	:param Mv:
 	:type Mv: TColStd_Array1OfInteger &
@@ -6411,7 +5999,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") VMultiplicities;
 		void VMultiplicities (TColStd_Array1OfInteger & Mv);
 		%feature("compactdefaultargs") Weight;
-		%feature("autodoc", "	* Returns the weight value of range UIndex, VIndex. Raised if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles.
+		%feature("autodoc", "	* Returns the weight value of range UIndex, VIndex. //! Raised if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles.
 
 	:param UIndex:
 	:type UIndex: int
@@ -6421,7 +6009,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") Weight;
 		Standard_Real Weight (const Standard_Integer UIndex,const Standard_Integer VIndex);
 		%feature("compactdefaultargs") Weights;
-		%feature("autodoc", "	* Returns the weights of the B-spline surface. Raised if the length of W in the U and V direction is not equal to NbUPoles and NbVPoles. value and derivatives computation
+		%feature("autodoc", "	* Returns the weights of the B-spline surface. //! Raised if the length of W in the U and V direction is not equal to NbUPoles and NbVPoles. value and derivatives computation
 
 	:param W:
 	:type W: TColStd_Array2OfReal &
@@ -6507,7 +6095,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") D3;
 		void D3 (const Standard_Real U,const Standard_Real V,gp_Pnt & P,gp_Vec & D1U,gp_Vec & D1V,gp_Vec & D2U,gp_Vec & D2V,gp_Vec & D2UV,gp_Vec & D3U,gp_Vec & D3V,gp_Vec & D3UUV,gp_Vec & D3UVV);
 		%feature("compactdefaultargs") DN;
-		%feature("autodoc", "	* Nu is the order of derivation in the U parametric direction and Nv is the order of derivation in the V parametric direction. Raised if the continuity of the surface is not CNu in the U direction and CNv in the V direction. Raised if Nu + Nv < 1 or Nu < 0 or Nv < 0. The following functions computes the point for the parametric values (U, V) and the derivatives at this point on the B-spline surface patch delimited with the knots FromUK1, FromVK1 and the knots ToUK2, ToVK2. (U, V) can be out of these parametric bounds but for the computation we only use the definition of the surface between these knots. This method is useful to compute local derivative, if the order of continuity of the whole surface is not greater enough. Inside the parametric knot's domain previously defined the evaluations are the same as if we consider the whole definition of the surface. Of course the evaluations are different outside this parametric domain.
+		%feature("autodoc", "	* Nu is the order of derivation in the U parametric direction and Nv is the order of derivation in the V parametric direction. //! Raised if the continuity of the surface is not CNu in the U direction and CNv in the V direction. //! Raised if Nu + Nv < 1 or Nu < 0 or Nv < 0. //! The following functions computes the point for the parametric values (U, V) and the derivatives at this point on the B-spline surface patch delimited with the knots FromUK1, FromVK1 and the knots ToUK2, ToVK2. (U, V) can be out of these parametric bounds but for the computation we only use the definition of the surface between these knots. This method is useful to compute local derivative, if the order of continuity of the whole surface is not greater enough. Inside the parametric knot's domain previously defined the evaluations are the same as if we consider the whole definition of the surface. Of course the evaluations are different outside this parametric domain.
 
 	:param U:
 	:type U: float
@@ -6521,7 +6109,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") DN;
 		gp_Vec DN (const Standard_Real U,const Standard_Real V,const Standard_Integer Nu,const Standard_Integer Nv);
 		%feature("compactdefaultargs") LocalD0;
-		%feature("autodoc", "	* Raised if FromUK1 = ToUK2 or FromVK1 = ToVK2. Raised if FromUK1, ToUK2 are not in the range [FirstUKnotIndex, LastUKnotIndex] or if FromVK1, ToVK2 are not in the range [FirstVKnotIndex, LastVKnotIndex]
+		%feature("autodoc", "	* Raised if FromUK1 = ToUK2 or FromVK1 = ToVK2. //! Raised if FromUK1, ToUK2 are not in the range [FirstUKnotIndex, LastUKnotIndex] or if FromVK1, ToVK2 are not in the range [FirstVKnotIndex, LastVKnotIndex]
 
 	:param U:
 	:type U: float
@@ -6541,7 +6129,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") LocalD0;
 		void LocalD0 (const Standard_Real U,const Standard_Real V,const Standard_Integer FromUK1,const Standard_Integer ToUK2,const Standard_Integer FromVK1,const Standard_Integer ToVK2,gp_Pnt & P);
 		%feature("compactdefaultargs") LocalD1;
-		%feature("autodoc", "	* Raised if the local continuity of the surface is not C1 between the knots FromUK1, ToUK2 and FromVK1, ToVK2. Raised if FromUK1 = ToUK2 or FromVK1 = ToVK2. Raised if FromUK1, ToUK2 are not in the range [FirstUKnotIndex, LastUKnotIndex] or if FromVK1, ToVK2 are not in the range [FirstVKnotIndex, LastVKnotIndex]
+		%feature("autodoc", "	* Raised if the local continuity of the surface is not C1 between the knots FromUK1, ToUK2 and FromVK1, ToVK2. Raised if FromUK1 = ToUK2 or FromVK1 = ToVK2. //! Raised if FromUK1, ToUK2 are not in the range [FirstUKnotIndex, LastUKnotIndex] or if FromVK1, ToVK2 are not in the range [FirstVKnotIndex, LastVKnotIndex]
 
 	:param U:
 	:type U: float
@@ -6565,7 +6153,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") LocalD1;
 		void LocalD1 (const Standard_Real U,const Standard_Real V,const Standard_Integer FromUK1,const Standard_Integer ToUK2,const Standard_Integer FromVK1,const Standard_Integer ToVK2,gp_Pnt & P,gp_Vec & D1U,gp_Vec & D1V);
 		%feature("compactdefaultargs") LocalD2;
-		%feature("autodoc", "	* Raised if the local continuity of the surface is not C2 between the knots FromUK1, ToUK2 and FromVK1, ToVK2. Raised if FromUK1 = ToUK2 or FromVK1 = ToVK2. Raised if FromUK1, ToUK2 are not in the range [FirstUKnotIndex, LastUKnotIndex] or if FromVK1, ToVK2 are not in the range [FirstVKnotIndex, LastVKnotIndex]
+		%feature("autodoc", "	* Raised if the local continuity of the surface is not C2 between the knots FromUK1, ToUK2 and FromVK1, ToVK2. Raised if FromUK1 = ToUK2 or FromVK1 = ToVK2. //! Raised if FromUK1, ToUK2 are not in the range [FirstUKnotIndex, LastUKnotIndex] or if FromVK1, ToVK2 are not in the range [FirstVKnotIndex, LastVKnotIndex]
 
 	:param U:
 	:type U: float
@@ -6595,7 +6183,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") LocalD2;
 		void LocalD2 (const Standard_Real U,const Standard_Real V,const Standard_Integer FromUK1,const Standard_Integer ToUK2,const Standard_Integer FromVK1,const Standard_Integer ToVK2,gp_Pnt & P,gp_Vec & D1U,gp_Vec & D1V,gp_Vec & D2U,gp_Vec & D2V,gp_Vec & D2UV);
 		%feature("compactdefaultargs") LocalD3;
-		%feature("autodoc", "	* Raised if the local continuity of the surface is not C3 between the knots FromUK1, ToUK2 and FromVK1, ToVK2. Raised if FromUK1 = ToUK2 or FromVK1 = ToVK2. Raised if FromUK1, ToUK2 are not in the range [FirstUKnotIndex, LastUKnotIndex] or if FromVK1, ToVK2 are not in the range [FirstVKnotIndex, LastVKnotIndex]
+		%feature("autodoc", "	* Raised if the local continuity of the surface is not C3 between the knots FromUK1, ToUK2 and FromVK1, ToVK2. Raised if FromUK1 = ToUK2 or FromVK1 = ToVK2. //! Raised if FromUK1, ToUK2 are not in the range [FirstUKnotIndex, LastUKnotIndex] or if FromVK1, ToVK2 are not in the range [FirstVKnotIndex, LastVKnotIndex]
 
 	:param U:
 	:type U: float
@@ -6633,7 +6221,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") LocalD3;
 		void LocalD3 (const Standard_Real U,const Standard_Real V,const Standard_Integer FromUK1,const Standard_Integer ToUK2,const Standard_Integer FromVK1,const Standard_Integer ToVK2,gp_Pnt & P,gp_Vec & D1U,gp_Vec & D1V,gp_Vec & D2U,gp_Vec & D2V,gp_Vec & D2UV,gp_Vec & D3U,gp_Vec & D3V,gp_Vec & D3UUV,gp_Vec & D3UVV);
 		%feature("compactdefaultargs") LocalDN;
-		%feature("autodoc", "	* Raised if the local continuity of the surface is not CNu between the knots FromUK1, ToUK2 and CNv between the knots FromVK1, ToVK2. Raised if FromUK1 = ToUK2 or FromVK1 = ToVK2. Raised if FromUK1, ToUK2 are not in the range [FirstUKnotIndex, LastUKnotIndex] or if FromVK1, ToVK2 are not in the range [FirstVKnotIndex, LastVKnotIndex]
+		%feature("autodoc", "	* Raised if the local continuity of the surface is not CNu between the knots FromUK1, ToUK2 and CNv between the knots FromVK1, ToVK2. Raised if FromUK1 = ToUK2 or FromVK1 = ToVK2. //! Raised if FromUK1, ToUK2 are not in the range [FirstUKnotIndex, LastUKnotIndex] or if FromVK1, ToVK2 are not in the range [FirstVKnotIndex, LastVKnotIndex]
 
 	:param U:
 	:type U: float
@@ -6655,7 +6243,7 @@ class Geom_BSplineSurface : public Geom_BoundedSurface {
 ") LocalDN;
 		gp_Vec LocalDN (const Standard_Real U,const Standard_Real V,const Standard_Integer FromUK1,const Standard_Integer ToUK2,const Standard_Integer FromVK1,const Standard_Integer ToVK2,const Standard_Integer Nu,const Standard_Integer Nv);
 		%feature("compactdefaultargs") LocalValue;
-		%feature("autodoc", "	* Computes the point of parameter U, V on the BSpline surface patch defines between the knots UK1 UK2, VK1, VK2. U can be out of the bounds [Knot UK1, Knot UK2] and V can be outof the bounds [Knot VK1, Knot VK2] but for the computation we only use the definition of the surface between these knot values. Raises if FromUK1 = ToUK2 or FromVK1 = ToVK2. Raises if FromUK1, ToUK2 are not in the range [FirstUKnotIndex, LastUKnotIndex] or if FromVK1, ToVK2 are not in the range [FirstVKnotIndex, LastVKnotIndex]
+		%feature("autodoc", "	* Computes the point of parameter U, V on the BSpline surface patch defines between the knots UK1 UK2, VK1, VK2. U can be out of the bounds [Knot UK1, Knot UK2] and V can be outof the bounds [Knot VK1, Knot VK2] but for the computation we only use the definition of the surface between these knot values. Raises if FromUK1 = ToUK2 or FromVK1 = ToVK2. //! Raises if FromUK1, ToUK2 are not in the range [FirstUKnotIndex, LastUKnotIndex] or if FromVK1, ToVK2 are not in the range [FirstVKnotIndex, LastVKnotIndex]
 
 	:param U:
 	:type U: float
@@ -6800,7 +6388,7 @@ def __del__(self):
 class Geom_BezierCurve : public Geom_BoundedCurve {
 	public:
 		%feature("compactdefaultargs") Geom_BezierCurve;
-		%feature("autodoc", "	* Creates a non rational Bezier curve with a set of poles  CurvePoles. The weights are defaulted to all being 1.  Raises ConstructionError if the number of poles is greater than MaxDegree + 1  or lower than 2.
+		%feature("autodoc", "	* Creates a non rational Bezier curve with a set of poles CurvePoles. The weights are defaulted to all being 1. Raises ConstructionError if the number of poles is greater than MaxDegree + 1 or lower than 2.
 
 	:param CurvePoles:
 	:type CurvePoles: TColgp_Array1OfPnt
@@ -6826,7 +6414,7 @@ class Geom_BezierCurve : public Geom_BoundedCurve {
 ") Increase;
 		void Increase (const Standard_Integer Degree);
 		%feature("compactdefaultargs") InsertPoleAfter;
-		%feature("autodoc", "	* Inserts a pole P after the pole of range Index. If the curve <self> is rational the weight value for the new pole of range Index is 1.0. raised if Index is not in the range [1, NbPoles] raised if the resulting number of poles is greater than MaxDegree + 1.
+		%feature("autodoc", "	* Inserts a pole P after the pole of range Index. If the curve <self> is rational the weight value for the new pole of range Index is 1.0. raised if Index is not in the range [1, NbPoles] //! raised if the resulting number of poles is greater than MaxDegree + 1.
 
 	:param Index:
 	:type Index: int
@@ -6836,7 +6424,7 @@ class Geom_BezierCurve : public Geom_BoundedCurve {
 ") InsertPoleAfter;
 		void InsertPoleAfter (const Standard_Integer Index,const gp_Pnt & P);
 		%feature("compactdefaultargs") InsertPoleAfter;
-		%feature("autodoc", "	* Inserts a pole with its weight in the set of poles after the pole of range Index. If the curve was non rational it can become rational if all the weights are not identical. Raised if Index is not in the range [1, NbPoles] Raised if the resulting number of poles is greater than MaxDegree + 1. Raised if Weight is lower or equal to Resolution from package gp.
+		%feature("autodoc", "	* Inserts a pole with its weight in the set of poles after the pole of range Index. If the curve was non rational it can become rational if all the weights are not identical. Raised if Index is not in the range [1, NbPoles] //! Raised if the resulting number of poles is greater than MaxDegree + 1. Raised if Weight is lower or equal to Resolution from package gp.
 
 	:param Index:
 	:type Index: int
@@ -6848,7 +6436,7 @@ class Geom_BezierCurve : public Geom_BoundedCurve {
 ") InsertPoleAfter;
 		void InsertPoleAfter (const Standard_Integer Index,const gp_Pnt & P,const Standard_Real Weight);
 		%feature("compactdefaultargs") InsertPoleBefore;
-		%feature("autodoc", "	* Inserts a pole P before the pole of range Index. If the curve <self> is rational the weight value for the new pole of range Index is 1.0. Raised if Index is not in the range [1, NbPoles] Raised if the resulting number of poles is greater than MaxDegree + 1.
+		%feature("autodoc", "	* Inserts a pole P before the pole of range Index. If the curve <self> is rational the weight value for the new pole of range Index is 1.0. Raised if Index is not in the range [1, NbPoles] //! Raised if the resulting number of poles is greater than MaxDegree + 1.
 
 	:param Index:
 	:type Index: int
@@ -6858,7 +6446,7 @@ class Geom_BezierCurve : public Geom_BoundedCurve {
 ") InsertPoleBefore;
 		void InsertPoleBefore (const Standard_Integer Index,const gp_Pnt & P);
 		%feature("compactdefaultargs") InsertPoleBefore;
-		%feature("autodoc", "	* Inserts a pole with its weight in the set of poles after the pole of range Index. If the curve was non rational it can become rational if all the weights are not identical. Raised if Index is not in the range [1, NbPoles] Raised if the resulting number of poles is greater than MaxDegree + 1. Raised if Weight is lower or equal to Resolution from package gp.
+		%feature("autodoc", "	* Inserts a pole with its weight in the set of poles after the pole of range Index. If the curve was non rational it can become rational if all the weights are not identical. Raised if Index is not in the range [1, NbPoles] //! Raised if the resulting number of poles is greater than MaxDegree + 1. Raised if Weight is lower or equal to Resolution from package gp.
 
 	:param Index:
 	:type Index: int
@@ -6884,7 +6472,7 @@ class Geom_BezierCurve : public Geom_BoundedCurve {
 ") Reverse;
 		void Reverse ();
 		%feature("compactdefaultargs") ReversedParameter;
-		%feature("autodoc", "	* Returns the parameter on the reversed curve for the point of parameter U on <self>.  returns 1-U
+		%feature("autodoc", "	* Returns the parameter on the reversed curve for the point of parameter U on <self>. //! returns 1-U
 
 	:param U:
 	:type U: float
@@ -7066,7 +6654,7 @@ class Geom_BezierCurve : public Geom_BoundedCurve {
 ") Pole;
 		gp_Pnt Pole (const Standard_Integer Index);
 		%feature("compactdefaultargs") Poles;
-		%feature("autodoc", "	* Returns all the poles of the curve. Raised if the length of P is not equal to the number of poles.
+		%feature("autodoc", "	* Returns all the poles of the curve. //! Raised if the length of P is not equal to the number of poles.
 
 	:param P:
 	:type P: TColgp_Array1OfPnt
@@ -7082,7 +6670,7 @@ class Geom_BezierCurve : public Geom_BoundedCurve {
 ") Weight;
 		Standard_Real Weight (const Standard_Integer Index);
 		%feature("compactdefaultargs") Weights;
-		%feature("autodoc", "	* Returns all the weights of the curve. Raised if the length of W is not equal to the number of poles.
+		%feature("autodoc", "	* Returns all the weights of the curve. //! Raised if the length of W is not equal to the number of poles.
 
 	:param W:
 	:type W: TColStd_Array1OfReal &
@@ -7179,7 +6767,7 @@ def __del__(self):
 class Geom_BezierSurface : public Geom_BoundedSurface {
 	public:
 		%feature("compactdefaultargs") Geom_BezierSurface;
-		%feature("autodoc", "	* Creates a non-rational Bezier surface with a set of poles. Control points representation : SPoles(Uorigin,Vorigin) ...................SPoles(Uorigin,Vend) .  . .  . SPoles(Uend, Vorigin) .....................SPoles(Uend, Vend) For the double array the row indice corresponds to the parametric U direction and the columns indice corresponds to the parametric V direction. The weights are defaulted to all being 1. Raised if the number of poles of the surface is lower than 2 or greater than MaxDegree + 1 in one of the two directions U or V.
+		%feature("autodoc", "	* Creates a non-rational Bezier surface with a set of poles. Control points representation : SPoles(Uorigin,Vorigin) ...................SPoles(Uorigin,Vend) .  . .  . SPoles(Uend, Vorigin) .....................SPoles(Uend, Vend) For the double array the row indice corresponds to the parametric U direction and the columns indice corresponds to the parametric V direction. The weights are defaulted to all being 1. //! Raised if the number of poles of the surface is lower than 2 or greater than MaxDegree + 1 in one of the two directions U or V.
 
 	:param SurfacePoles:
 	:type SurfacePoles: TColgp_Array2OfPnt
@@ -7187,7 +6775,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") Geom_BezierSurface;
 		 Geom_BezierSurface (const TColgp_Array2OfPnt & SurfacePoles);
 		%feature("compactdefaultargs") Geom_BezierSurface;
-		%feature("autodoc", "	* //!---Purpose Creates a rational Bezier surface with a set of poles and a set of weights. For the double array the row indice corresponds to the parametric U direction and the columns indice corresponds to the parametric V direction. If all the weights are identical the surface is considered as non-rational (the tolerance criterion is Resolution from package gp). Raised if SurfacePoles and PoleWeights have not the same Rowlength or have not the same ColLength. Raised if PoleWeights (i, j) <= Resolution from gp; Raised if the number of poles of the surface is lower than 2 or greater than MaxDegree + 1 in one of the two directions U or V.
+		%feature("autodoc", "	* ---Purpose Creates a rational Bezier surface with a set of poles and a set of weights. For the double array the row indice corresponds to the parametric U direction and the columns indice corresponds to the parametric V direction. If all the weights are identical the surface is considered as non-rational (the tolerance criterion is Resolution from package gp). //! Raised if SurfacePoles and PoleWeights have not the same Rowlength or have not the same ColLength. Raised if PoleWeights (i, j) <= Resolution from gp; Raised if the number of poles of the surface is lower than 2 or greater than MaxDegree + 1 in one of the two directions U or V.
 
 	:param SurfacePoles:
 	:type SurfacePoles: TColgp_Array2OfPnt
@@ -7203,7 +6791,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") ExchangeUV;
 		void ExchangeUV ();
 		%feature("compactdefaultargs") Increase;
-		%feature("autodoc", "	* Increases the degree of this Bezier surface in the two parametric directions. Raised if UDegree < UDegree <self> or VDegree < VDegree <self> Raised if the degree of the surface is greater than MaxDegree in one of the two directions U or V.
+		%feature("autodoc", "	* Increases the degree of this Bezier surface in the two parametric directions. //! Raised if UDegree < UDegree <self> or VDegree < VDegree <self> Raised if the degree of the surface is greater than MaxDegree in one of the two directions U or V.
 
 	:param UDeg:
 	:type UDeg: int
@@ -7213,7 +6801,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") Increase;
 		void Increase (const Standard_Integer UDeg,const Standard_Integer VDeg);
 		%feature("compactdefaultargs") InsertPoleColAfter;
-		%feature("autodoc", "	* Inserts a column of poles. If the surface is rational the weights values associated with CPoles are equal defaulted to 1. Raised if Vindex < 1 or VIndex > NbVPoles. raises if VDegree is greater than MaxDegree. raises if the Length of CPoles is not equal to NbUPoles
+		%feature("autodoc", "	* Inserts a column of poles. If the surface is rational the weights values associated with CPoles are equal defaulted to 1. //! Raised if Vindex < 1 or VIndex > NbVPoles. //! raises if VDegree is greater than MaxDegree. raises if the Length of CPoles is not equal to NbUPoles
 
 	:param VIndex:
 	:type VIndex: int
@@ -7223,7 +6811,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") InsertPoleColAfter;
 		void InsertPoleColAfter (const Standard_Integer VIndex,const TColgp_Array1OfPnt & CPoles);
 		%feature("compactdefaultargs") InsertPoleColAfter;
-		%feature("autodoc", "	* Inserts a column of poles and weights. If the surface was non-rational it can become rational. Raised if Vindex < 1 or VIndex > NbVPoles. Raised if . VDegree is greater than MaxDegree. . the Length of CPoles is not equal to NbUPoles . a weight value is lower or equal to Resolution from package gp
+		%feature("autodoc", "	* Inserts a column of poles and weights. If the surface was non-rational it can become rational. //! Raised if Vindex < 1 or VIndex > NbVPoles. Raised if . VDegree is greater than MaxDegree. . the Length of CPoles is not equal to NbUPoles . a weight value is lower or equal to Resolution from package gp
 
 	:param VIndex:
 	:type VIndex: int
@@ -7235,7 +6823,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") InsertPoleColAfter;
 		void InsertPoleColAfter (const Standard_Integer VIndex,const TColgp_Array1OfPnt & CPoles,const TColStd_Array1OfReal & CPoleWeights);
 		%feature("compactdefaultargs") InsertPoleColBefore;
-		%feature("autodoc", "	* Inserts a column of poles. If the surface is rational the weights values associated with CPoles are equal defaulted to 1. Raised if Vindex < 1 or VIndex > NbVPoles. Raised if VDegree is greater than MaxDegree. Raised if the Length of CPoles is not equal to NbUPoles
+		%feature("autodoc", "	* Inserts a column of poles. If the surface is rational the weights values associated with CPoles are equal defaulted to 1. //! Raised if Vindex < 1 or VIndex > NbVPoles. //! Raised if VDegree is greater than MaxDegree. Raised if the Length of CPoles is not equal to NbUPoles
 
 	:param VIndex:
 	:type VIndex: int
@@ -7245,7 +6833,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") InsertPoleColBefore;
 		void InsertPoleColBefore (const Standard_Integer VIndex,const TColgp_Array1OfPnt & CPoles);
 		%feature("compactdefaultargs") InsertPoleColBefore;
-		%feature("autodoc", "	* Inserts a column of poles and weights. If the surface was non-rational it can become rational. Raised if Vindex < 1 or VIndex > NbVPoles. Raised if : . VDegree is greater than MaxDegree. . the Length of CPoles is not equal to NbUPoles . a weight value is lower or equal to Resolution from package gp
+		%feature("autodoc", "	* Inserts a column of poles and weights. If the surface was non-rational it can become rational. //! Raised if Vindex < 1 or VIndex > NbVPoles. Raised if : . VDegree is greater than MaxDegree. . the Length of CPoles is not equal to NbUPoles . a weight value is lower or equal to Resolution from package gp
 
 	:param VIndex:
 	:type VIndex: int
@@ -7257,7 +6845,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") InsertPoleColBefore;
 		void InsertPoleColBefore (const Standard_Integer VIndex,const TColgp_Array1OfPnt & CPoles,const TColStd_Array1OfReal & CPoleWeights);
 		%feature("compactdefaultargs") InsertPoleRowAfter;
-		%feature("autodoc", "	* Inserts a row of poles. If the surface is rational the weights values associated with CPoles are equal defaulted to 1. Raised if Uindex < 1 or UIndex > NbUPoles. Raised if UDegree is greater than MaxDegree. Raised if the Length of CPoles is not equal to NbVPoles
+		%feature("autodoc", "	* Inserts a row of poles. If the surface is rational the weights values associated with CPoles are equal defaulted to 1. //! Raised if Uindex < 1 or UIndex > NbUPoles. //! Raised if UDegree is greater than MaxDegree. Raised if the Length of CPoles is not equal to NbVPoles
 
 	:param UIndex:
 	:type UIndex: int
@@ -7267,7 +6855,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") InsertPoleRowAfter;
 		void InsertPoleRowAfter (const Standard_Integer UIndex,const TColgp_Array1OfPnt & CPoles);
 		%feature("compactdefaultargs") InsertPoleRowAfter;
-		%feature("autodoc", "	* Inserts a row of poles and weights. If the surface was non-rational it can become rational. Raised if Uindex < 1 or UIndex > NbUPoles. Raised if : . UDegree is greater than MaxDegree. . the Length of CPoles is not equal to NbVPoles . a weight value is lower or equal to Resolution from package gp
+		%feature("autodoc", "	* Inserts a row of poles and weights. If the surface was non-rational it can become rational. //! Raised if Uindex < 1 or UIndex > NbUPoles. Raised if : . UDegree is greater than MaxDegree. . the Length of CPoles is not equal to NbVPoles . a weight value is lower or equal to Resolution from package gp
 
 	:param UIndex:
 	:type UIndex: int
@@ -7279,7 +6867,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") InsertPoleRowAfter;
 		void InsertPoleRowAfter (const Standard_Integer UIndex,const TColgp_Array1OfPnt & CPoles,const TColStd_Array1OfReal & CPoleWeights);
 		%feature("compactdefaultargs") InsertPoleRowBefore;
-		%feature("autodoc", "	* Inserts a row of poles. If the surface is rational the weights values associated with CPoles are equal defaulted to 1. Raised if Uindex < 1 or UIndex > NbUPoles. Raised if UDegree is greater than MaxDegree. Raised if the Length of CPoles is not equal to NbVPoles
+		%feature("autodoc", "	* Inserts a row of poles. If the surface is rational the weights values associated with CPoles are equal defaulted to 1. //! Raised if Uindex < 1 or UIndex > NbUPoles. //! Raised if UDegree is greater than MaxDegree. Raised if the Length of CPoles is not equal to NbVPoles
 
 	:param UIndex:
 	:type UIndex: int
@@ -7289,7 +6877,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") InsertPoleRowBefore;
 		void InsertPoleRowBefore (const Standard_Integer UIndex,const TColgp_Array1OfPnt & CPoles);
 		%feature("compactdefaultargs") InsertPoleRowBefore;
-		%feature("autodoc", "	* Inserts a row of poles and weights. If the surface was non-rational it can become rational. Raised if Uindex < 1 or UIndex > NbUPoles. Raised if : . UDegree is greater than MaxDegree. . the Length of CPoles is not equal to NbVPoles . a weight value is lower or equal to Resolution from pacakage gp
+		%feature("autodoc", "	* Inserts a row of poles and weights. If the surface was non-rational it can become rational. //! Raised if Uindex < 1 or UIndex > NbUPoles. Raised if : . UDegree is greater than MaxDegree. . the Length of CPoles is not equal to NbVPoles . a weight value is lower or equal to Resolution from pacakage gp
 
 	:param UIndex:
 	:type UIndex: int
@@ -7301,7 +6889,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") InsertPoleRowBefore;
 		void InsertPoleRowBefore (const Standard_Integer UIndex,const TColgp_Array1OfPnt & CPoles,const TColStd_Array1OfReal & CPoleWeights);
 		%feature("compactdefaultargs") RemovePoleCol;
-		%feature("autodoc", "	* Removes a column of poles. If the surface was rational it can become non-rational. Raised if NbVPoles <= 2 after removing, a Bezier surface must have at least two columns of poles. Raised if Vindex < 1 or VIndex > NbVPoles
+		%feature("autodoc", "	* Removes a column of poles. If the surface was rational it can become non-rational. //! Raised if NbVPoles <= 2 after removing, a Bezier surface must have at least two columns of poles. Raised if Vindex < 1 or VIndex > NbVPoles
 
 	:param VIndex:
 	:type VIndex: int
@@ -7309,7 +6897,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") RemovePoleCol;
 		void RemovePoleCol (const Standard_Integer VIndex);
 		%feature("compactdefaultargs") RemovePoleRow;
-		%feature("autodoc", "	* Removes a row of poles. If the surface was rational it can become non-rational. Raised if NbUPoles <= 2 after removing, a Bezier surface must have at least two rows of poles. Raised if Uindex < 1 or UIndex > NbUPoles
+		%feature("autodoc", "	* Removes a row of poles. If the surface was rational it can become non-rational. //! Raised if NbUPoles <= 2 after removing, a Bezier surface must have at least two rows of poles. Raised if Uindex < 1 or UIndex > NbUPoles
 
 	:param UIndex:
 	:type UIndex: int
@@ -7331,7 +6919,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") Segment;
 		void Segment (const Standard_Real U1,const Standard_Real U2,const Standard_Real V1,const Standard_Real V2);
 		%feature("compactdefaultargs") SetPole;
-		%feature("autodoc", "	* Modifies a pole value. If the surface is rational the weight of range (UIndex, VIndex) is not modified. Raised if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles.
+		%feature("autodoc", "	* Modifies a pole value. If the surface is rational the weight of range (UIndex, VIndex) is not modified. //! Raised if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles.
 
 	:param UIndex:
 	:type UIndex: int
@@ -7343,7 +6931,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") SetPole;
 		void SetPole (const Standard_Integer UIndex,const Standard_Integer VIndex,const gp_Pnt & P);
 		%feature("compactdefaultargs") SetPole;
-		%feature("autodoc", "	* Substitutes the pole and the weight of range UIndex, VIndex. If the surface <self> is not rational it can become rational. if the surface was rational it can become non-rational. raises if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles. Raised if Weight <= Resolution from package gp.
+		%feature("autodoc", "	* Substitutes the pole and the weight of range UIndex, VIndex. If the surface <self> is not rational it can become rational. if the surface was rational it can become non-rational. //! raises if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles. Raised if Weight <= Resolution from package gp.
 
 	:param UIndex:
 	:type UIndex: int
@@ -7357,7 +6945,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") SetPole;
 		void SetPole (const Standard_Integer UIndex,const Standard_Integer VIndex,const gp_Pnt & P,const Standard_Real Weight);
 		%feature("compactdefaultargs") SetPoleCol;
-		%feature("autodoc", "	* Modifies a column of poles. The length of CPoles can be lower but not greater than NbUPoles so you can modify just a part of the column. Raised if VIndex < 1 or VIndex > NbVPoles Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbUPoles
+		%feature("autodoc", "	* Modifies a column of poles. The length of CPoles can be lower but not greater than NbUPoles so you can modify just a part of the column. Raised if VIndex < 1 or VIndex > NbVPoles //! Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbUPoles
 
 	:param VIndex:
 	:type VIndex: int
@@ -7367,7 +6955,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") SetPoleCol;
 		void SetPoleCol (const Standard_Integer VIndex,const TColgp_Array1OfPnt & CPoles);
 		%feature("compactdefaultargs") SetPoleCol;
-		%feature("autodoc", "	* Modifies a column of poles. If the surface was rational it can become non-rational If the surface was non-rational it can become rational. The length of CPoles can be lower but not greater than NbUPoles so you can modify just a part of the column. Raised if VIndex < 1 or VIndex > NbVPoles Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbUPoles Raised if CPoleWeights and CPoles have not the same bounds. Raised if one of the weight value CPoleWeights (i) is lower or equal to Resolution from package gp.
+		%feature("autodoc", "	* Modifies a column of poles. If the surface was rational it can become non-rational If the surface was non-rational it can become rational. The length of CPoles can be lower but not greater than NbUPoles so you can modify just a part of the column. Raised if VIndex < 1 or VIndex > NbVPoles //! Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbUPoles Raised if CPoleWeights and CPoles have not the same bounds. Raised if one of the weight value CPoleWeights (i) is lower or equal to Resolution from package gp.
 
 	:param VIndex:
 	:type VIndex: int
@@ -7379,7 +6967,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") SetPoleCol;
 		void SetPoleCol (const Standard_Integer VIndex,const TColgp_Array1OfPnt & CPoles,const TColStd_Array1OfReal & CPoleWeights);
 		%feature("compactdefaultargs") SetPoleRow;
-		%feature("autodoc", "	* Modifies a row of poles. The length of CPoles can be lower but not greater than NbVPoles so you can modify just a part of the row. Raised if UIndex < 1 or UIndex > NbUPoles Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbVPoles
+		%feature("autodoc", "	* Modifies a row of poles. The length of CPoles can be lower but not greater than NbVPoles so you can modify just a part of the row. Raised if UIndex < 1 or UIndex > NbUPoles //! Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbVPoles
 
 	:param UIndex:
 	:type UIndex: int
@@ -7389,7 +6977,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") SetPoleRow;
 		void SetPoleRow (const Standard_Integer UIndex,const TColgp_Array1OfPnt & CPoles);
 		%feature("compactdefaultargs") SetPoleRow;
-		%feature("autodoc", "	* Modifies a row of poles and weights. If the surface was rational it can become non-rational. If the surface was non-rational it can become rational. The length of CPoles can be lower but not greater than NbVPoles so you can modify just a part of the row. Raised if UIndex < 1 or UIndex > NbUPoles Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbVPoles Raised if CPoleWeights and CPoles have not the same bounds. Raised if one of the weight value CPoleWeights (i) is lower or equal to Resolution from gp.
+		%feature("autodoc", "	* Modifies a row of poles and weights. If the surface was rational it can become non-rational. If the surface was non-rational it can become rational. The length of CPoles can be lower but not greater than NbVPoles so you can modify just a part of the row. Raised if UIndex < 1 or UIndex > NbUPoles //! Raised if CPoles.Lower() < 1 or CPoles.Upper() > NbVPoles Raised if CPoleWeights and CPoles have not the same bounds. Raised if one of the weight value CPoleWeights (i) is lower or equal to Resolution from gp.
 
 	:param UIndex:
 	:type UIndex: int
@@ -7401,7 +6989,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") SetPoleRow;
 		void SetPoleRow (const Standard_Integer UIndex,const TColgp_Array1OfPnt & CPoles,const TColStd_Array1OfReal & CPoleWeights);
 		%feature("compactdefaultargs") SetWeight;
-		%feature("autodoc", "	* Modifies the weight of the pole of range UIndex, VIndex. If the surface was non-rational it can become rational. If the surface was rational it can become non-rational. Raised if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles. Raised if Weight <= Resolution from package gp.
+		%feature("autodoc", "	* Modifies the weight of the pole of range UIndex, VIndex. If the surface was non-rational it can become rational. If the surface was rational it can become non-rational. //! Raised if UIndex < 1 or UIndex > NbUPoles or VIndex < 1 or VIndex > NbVPoles. Raised if Weight <= Resolution from package gp.
 
 	:param UIndex:
 	:type UIndex: int
@@ -7413,7 +7001,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") SetWeight;
 		void SetWeight (const Standard_Integer UIndex,const Standard_Integer VIndex,const Standard_Real Weight);
 		%feature("compactdefaultargs") SetWeightCol;
-		%feature("autodoc", "	* Modifies a column of weights. If the surface was rational it can become non-rational. If the surface was non-rational it can become rational. The length of CPoleWeights can be lower but not greater than NbUPoles. Raised if VIndex < 1 or VIndex > NbVPoles Raised if CPoleWeights.Lower() < 1 or CPoleWeights.Upper() > NbUPoles Raised if one of the weight value CPoleWeights (i) is lower or equal to Resolution from package gp.
+		%feature("autodoc", "	* Modifies a column of weights. If the surface was rational it can become non-rational. If the surface was non-rational it can become rational. The length of CPoleWeights can be lower but not greater than NbUPoles. Raised if VIndex < 1 or VIndex > NbVPoles //! Raised if CPoleWeights.Lower() < 1 or CPoleWeights.Upper() > NbUPoles Raised if one of the weight value CPoleWeights (i) is lower or equal to Resolution from package gp.
 
 	:param VIndex:
 	:type VIndex: int
@@ -7423,7 +7011,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") SetWeightCol;
 		void SetWeightCol (const Standard_Integer VIndex,const TColStd_Array1OfReal & CPoleWeights);
 		%feature("compactdefaultargs") SetWeightRow;
-		%feature("autodoc", "	* Modifies a row of weights. If the surface was rational it can become non-rational. If the surface was non-rational it can become rational. The length of CPoleWeights can be lower but not greater than NbVPoles. Raised if UIndex < 1 or UIndex > NbUPoles Raised if CPoleWeights.Lower() < 1 or CPoleWeights.Upper() > NbVPoles Raised if one of the weight value CPoleWeights (i) is lower or equal to Resolution from package gp.
+		%feature("autodoc", "	* Modifies a row of weights. If the surface was rational it can become non-rational. If the surface was non-rational it can become rational. The length of CPoleWeights can be lower but not greater than NbVPoles. Raised if UIndex < 1 or UIndex > NbUPoles //! Raised if CPoleWeights.Lower() < 1 or CPoleWeights.Upper() > NbVPoles Raised if one of the weight value CPoleWeights (i) is lower or equal to Resolution from package gp.
 
 	:param UIndex:
 	:type UIndex: int
@@ -7591,7 +7179,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") Pole;
 		gp_Pnt Pole (const Standard_Integer UIndex,const Standard_Integer VIndex);
 		%feature("compactdefaultargs") Poles;
-		%feature("autodoc", "	* Returns the poles of the Bezier surface. Raised if the length of P in the U an V direction is not equal to NbUPoles and NbVPoles.
+		%feature("autodoc", "	* Returns the poles of the Bezier surface. //! Raised if the length of P in the U an V direction is not equal to NbUPoles and NbVPoles.
 
 	:param P:
 	:type P: TColgp_Array2OfPnt
@@ -7627,7 +7215,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") VIso;
 		Handle_Geom_Curve VIso (const Standard_Real V);
 		%feature("compactdefaultargs") Weight;
-		%feature("autodoc", "	* Returns the weight of range UIndex, VIndex Raised if UIndex < 1 or UIndex > NbUPoles, or  VIndex < 1 or VIndex > NbVPoles.
+		%feature("autodoc", "	* Returns the weight of range UIndex, VIndex //! Raised if UIndex < 1 or UIndex > NbUPoles, or VIndex < 1 or VIndex > NbVPoles.
 
 	:param UIndex:
 	:type UIndex: int
@@ -7637,7 +7225,7 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") Weight;
 		Standard_Real Weight (const Standard_Integer UIndex,const Standard_Integer VIndex);
 		%feature("compactdefaultargs") Weights;
-		%feature("autodoc", "	* Returns the weights of the Bezier surface. Raised if the length of W in the U an V direction is not equal to NbUPoles and NbVPoles.
+		%feature("autodoc", "	* Returns the weights of the Bezier surface. //! Raised if the length of W in the U an V direction is not equal to NbUPoles and NbVPoles.
 
 	:param W:
 	:type W: TColStd_Array2OfReal &
@@ -7685,13 +7273,13 @@ class Geom_BezierSurface : public Geom_BoundedSurface {
 ") IsVPeriodic;
 		Standard_Boolean IsVPeriodic ();
 		%feature("compactdefaultargs") IsURational;
-		%feature("autodoc", "	* Returns False if the weights are identical in the U direction, The tolerance criterion is Resolution from package gp. Example :  |1.0, 1.0, 1.0| if Weights = |0.5, 0.5, 0.5| returns False  |2.0, 2.0, 2.0|
+		%feature("autodoc", "	* Returns False if the weights are identical in the U direction, The tolerance criterion is Resolution from package gp. Example : |1.0, 1.0, 1.0| if Weights = |0.5, 0.5, 0.5| returns False |2.0, 2.0, 2.0|
 
 	:rtype: bool
 ") IsURational;
 		Standard_Boolean IsURational ();
 		%feature("compactdefaultargs") IsVRational;
-		%feature("autodoc", "	* Returns False if the weights are identical in the V direction, The tolerance criterion is Resolution from package gp. Example :  |1.0, 2.0, 0.5| if Weights = |1.0, 2.0, 0.5| returns False  |1.0, 2.0, 0.5|
+		%feature("autodoc", "	* Returns False if the weights are identical in the V direction, The tolerance criterion is Resolution from package gp. Example : |1.0, 2.0, 0.5| if Weights = |1.0, 2.0, 0.5| returns False |1.0, 2.0, 0.5|
 
 	:rtype: bool
 ") IsVRational;
@@ -8007,7 +7595,7 @@ def __del__(self):
 class Geom_ConicalSurface : public Geom_ElementarySurface {
 	public:
 		%feature("compactdefaultargs") Geom_ConicalSurface;
-		%feature("autodoc", "	* A3 defines the local coordinate system of the conical surface. Ang is the conical surface semi-angle ]0, PI/2[. Radius is the radius of the circle Viso in the placement plane of the conical surface defined with 'XAxis' and 'YAxis'. The 'ZDirection' of A3 defines the direction of the surface's axis of symmetry. If the location point of A3 is the apex of the surface Radius = 0 . At the creation the parametrization of the surface is defined such that the normal Vector (N = D1U ^ D1V) is oriented towards the 'outside region' of the surface. Raised if Radius < 0.0 or Ang < Resolution from gp or Ang >= PI/2 - Resolution
+		%feature("autodoc", "	* A3 defines the local coordinate system of the conical surface. Ang is the conical surface semi-angle ]0, PI/2[. Radius is the radius of the circle Viso in the placement plane of the conical surface defined with 'XAxis' and 'YAxis'. The 'ZDirection' of A3 defines the direction of the surface's axis of symmetry. If the location point of A3 is the apex of the surface Radius = 0 . At the creation the parametrization of the surface is defined such that the normal Vector (N = D1U ^ D1V) is oriented towards the 'outside region' of the surface. //! Raised if Radius < 0.0 or Ang < Resolution from gp or Ang >= PI/2 - Resolution
 
 	:param A3:
 	:type A3: gp_Ax3
@@ -8043,7 +7631,7 @@ class Geom_ConicalSurface : public Geom_ElementarySurface {
 ") SetRadius;
 		void SetRadius (const Standard_Real R);
 		%feature("compactdefaultargs") SetSemiAngle;
-		%feature("autodoc", "	* Changes the semi angle of the conical surface. Raised if Ang < Resolution or Ang >= PI/2 - Resolution
+		%feature("autodoc", "	* Changes the semi angle of the conical surface. //! Raised if Ang < Resolution or Ang >= PI/2 - Resolution
 
 	:param Ang:
 	:type Ang: float
@@ -8079,7 +7667,7 @@ class Geom_ConicalSurface : public Geom_ElementarySurface {
 ") VReverse;
 		virtual void VReverse ();
 		%feature("compactdefaultargs") TransformParameters;
-		%feature("autodoc", "	* Computes the parameters on the transformed surface for the transform of the point of parameters U,V on <self>.  me->Transformed(T)->Value(U',V')  is the same point as  me->Value(U,V).Transformed(T)  Where U',V' are the new values of U,V after calling  me->TranformParameters(U,V,T)  This methods multiplies V by T.ScaleFactor()
+		%feature("autodoc", "	* Computes the parameters on the transformed surface for the transform of the point of parameters U,V on <self>. //! me->Transformed(T)->Value(U',V') //! is the same point as //! me->Value(U,V).Transformed(T) //! Where U',V' are the new values of U,V after calling //! me->TranformParameters(U,V,T) //! This methods multiplies V by T.ScaleFactor()
 
 	:param U:
 	:type U: float &
@@ -8091,7 +7679,7 @@ class Geom_ConicalSurface : public Geom_ElementarySurface {
 ") TransformParameters;
 		virtual void TransformParameters (Standard_Real &OutValue,Standard_Real &OutValue,const gp_Trsf & T);
 		%feature("compactdefaultargs") ParametricTransformation;
-		%feature("autodoc", "	* Returns a 2d transformation used to find the new parameters of a point on the transformed surface.  me->Transformed(T)->Value(U',V')  is the same point as  me->Value(U,V).Transformed(T)  Where U',V' are obtained by transforming U,V with th 2d transformation returned by  me->ParametricTransformation(T)  This methods returns a scale centered on the U axis with T.ScaleFactor
+		%feature("autodoc", "	* Returns a 2d transformation used to find the new parameters of a point on the transformed surface. //! me->Transformed(T)->Value(U',V') //! is the same point as //! me->Value(U,V).Transformed(T) //! Where U',V' are obtained by transforming U,V with th 2d transformation returned by //! me->ParametricTransformation(T) //! This methods returns a scale centered on the U axis with T.ScaleFactor
 
 	:param T:
 	:type T: gp_Trsf
@@ -8701,7 +8289,7 @@ class Geom_Ellipse : public Geom_Conic {
 ") Geom_Ellipse;
 		 Geom_Ellipse (const gp_Elips & E);
 		%feature("compactdefaultargs") Geom_Ellipse;
-		%feature("autodoc", "	* Constructs an ellipse //!	defined by its major and minor radii, MajorRadius and MinorRadius, where A2 locates the ellipse and defines its orientation in 3D space such that: - the center of the ellipse is the origin of A2, - the 'X Direction' of A2 defines the major axis of the ellipse, i.e. the major radius MajorRadius is measured along this axis, - the 'Y Direction' of A2 defines the minor axis of the ellipse, i.e. the minor radius MinorRadius is measured along this axis, - A2 is the local coordinate system of the ellipse. Exceptions Standard_ConstructionError if: - MajorRadius is less than MinorRadius, or - MinorRadius is less than 0. Warning The Geom package does not prevent the construction of an ellipse where MajorRadius and MinorRadius are equal.
+		%feature("autodoc", "	* Constructs an ellipse defined by its major and minor radii, MajorRadius and MinorRadius, where A2 locates the ellipse and defines its orientation in 3D space such that: - the center of the ellipse is the origin of A2, - the 'X Direction' of A2 defines the major axis of the ellipse, i.e. the major radius MajorRadius is measured along this axis, - the 'Y Direction' of A2 defines the minor axis of the ellipse, i.e. the minor radius MinorRadius is measured along this axis, - A2 is the local coordinate system of the ellipse. Exceptions Standard_ConstructionError if: - MajorRadius is less than MinorRadius, or - MinorRadius is less than 0. Warning The Geom package does not prevent the construction of an ellipse where MajorRadius and MinorRadius are equal.
 
 	:param A2:
 	:type A2: gp_Ax2
@@ -8757,7 +8345,7 @@ class Geom_Ellipse : public Geom_Conic {
 ") Directrix1;
 		gp_Ax1 Directrix1 ();
 		%feature("compactdefaultargs") Directrix2;
-		%feature("autodoc", "	* This line is obtained by the symmetrical transformation of 'Directrix1' with respect to the 'YAxis' of the ellipse. Raised if Eccentricity = 0.0. (The ellipse degenerates into a circle).
+		%feature("autodoc", "	* This line is obtained by the symmetrical transformation of 'Directrix1' with respect to the 'YAxis' of the ellipse. //! Raised if Eccentricity = 0.0. (The ellipse degenerates into a circle).
 
 	:rtype: gp_Ax1
 ") Directrix2;
@@ -9445,7 +9033,7 @@ class Geom_Parabola : public Geom_Conic {
 ") Transform;
 		void Transform (const gp_Trsf & T);
 		%feature("compactdefaultargs") TransformedParameter;
-		%feature("autodoc", "	* Returns the parameter on the transformed curve for the transform of the point of parameter U on <self>.  me->Transformed(T)->Value(me->TransformedParameter(U,T))  is the same point as  me->Value(U).Transformed(T)  This methods returns <U> * T.ScaleFactor()
+		%feature("autodoc", "	* Returns the parameter on the transformed curve for the transform of the point of parameter U on <self>. //! me->Transformed(T)->Value(me->TransformedParameter(U,T)) //! is the same point as //! me->Value(U).Transformed(T) //! This methods returns <U> * T.ScaleFactor()
 
 	:param U:
 	:type U: float
@@ -9455,7 +9043,7 @@ class Geom_Parabola : public Geom_Conic {
 ") TransformedParameter;
 		Standard_Real TransformedParameter (const Standard_Real U,const gp_Trsf & T);
 		%feature("compactdefaultargs") ParametricTransformation;
-		%feature("autodoc", "	* Returns a coefficient to compute the parameter on the transformed curve for the transform of the point on <self>.  Transformed(T)->Value(U * ParametricTransformation(T))  is the same point as  Value(U).Transformed(T)  This methods returns T.ScaleFactor()
+		%feature("autodoc", "	* Returns a coefficient to compute the parameter on the transformed curve for the transform of the point on <self>. //! Transformed(T)->Value(U * ParametricTransformation(T)) //! is the same point as //! Value(U).Transformed(T) //! This methods returns T.ScaleFactor()
 
 	:param T:
 	:type T: gp_Trsf
@@ -9554,7 +9142,7 @@ class Geom_Plane : public Geom_ElementarySurface {
 ") Geom_Plane;
 		 Geom_Plane (const gp_Pnt & P,const gp_Dir & V);
 		%feature("compactdefaultargs") Geom_Plane;
-		%feature("autodoc", "	* Creates a plane from its cartesian equation : Ax + By + Cz + D = 0.0 Raised if Sqrt (A*A + B*B + C*C) <= Resolution from gp
+		%feature("autodoc", "	* Creates a plane from its cartesian equation : Ax + By + Cz + D = 0.0 //! Raised if Sqrt (A*A + B*B + C*C) <= Resolution from gp
 
 	:param A:
 	:type A: float
@@ -10157,7 +9745,7 @@ class Geom_RectangularTrimmedSurface : public Geom_BoundedSurface {
 ") Transform;
 		void Transform (const gp_Trsf & T);
 		%feature("compactdefaultargs") TransformParameters;
-		%feature("autodoc", "	* Computes the parameters on the transformed surface for the transform of the point of parameters U,V on <self>.  me->Transformed(T)->Value(U',V')  is the same point as  me->Value(U,V).Transformed(T)  Where U',V' are the new values of U,V after calling  me->TranformParameters(U,V,T)  This methods calls the basis surface method.
+		%feature("autodoc", "	* Computes the parameters on the transformed surface for the transform of the point of parameters U,V on <self>. //! me->Transformed(T)->Value(U',V') //! is the same point as //! me->Value(U,V).Transformed(T) //! Where U',V' are the new values of U,V after calling //! me->TranformParameters(U,V,T) //! This methods calls the basis surface method.
 
 	:param U:
 	:type U: float &
@@ -10169,7 +9757,7 @@ class Geom_RectangularTrimmedSurface : public Geom_BoundedSurface {
 ") TransformParameters;
 		virtual void TransformParameters (Standard_Real &OutValue,Standard_Real &OutValue,const gp_Trsf & T);
 		%feature("compactdefaultargs") ParametricTransformation;
-		%feature("autodoc", "	* Returns a 2d transformation used to find the new parameters of a point on the transformed surface.  me->Transformed(T)->Value(U',V')  is the same point as  me->Value(U,V).Transformed(T)  Where U',V' are obtained by transforming U,V with th 2d transformation returned by  me->ParametricTransformation(T)  This methods calls the basis surface method.
+		%feature("autodoc", "	* Returns a 2d transformation used to find the new parameters of a point on the transformed surface. //! me->Transformed(T)->Value(U',V') //! is the same point as //! me->Value(U,V).Transformed(T) //! Where U',V' are obtained by transforming U,V with th 2d transformation returned by //! me->ParametricTransformation(T) //! This methods calls the basis surface method.
 
 	:param T:
 	:type T: gp_Trsf
@@ -10715,7 +10303,7 @@ class Geom_SurfaceOfLinearExtrusion : public Geom_SweptSurface {
 ") D1;
 		void D1 (const Standard_Real U,const Standard_Real V,gp_Pnt & P,gp_Vec & D1U,gp_Vec & D1V);
 		%feature("compactdefaultargs") D2;
-		%feature("autodoc", "	* //!--- Purpose ; Computes the current point, the first and the second derivatives in the directions U and V. Raises UndefinedDerivative if the continuity of the surface is not C2.
+		%feature("autodoc", "	* --- Purpose ; Computes the current point, the first and the second derivatives in the directions U and V. Raises UndefinedDerivative if the continuity of the surface is not C2.
 
 	:param U:
 	:type U: float
@@ -10885,7 +10473,7 @@ class Geom_SurfaceOfLinearExtrusion : public Geom_SweptSurface {
 ") Transform;
 		void Transform (const gp_Trsf & T);
 		%feature("compactdefaultargs") TransformParameters;
-		%feature("autodoc", "	* Computes the parameters on the transformed surface for the transform of the point of parameters U,V on <self>.  me->Transformed(T)->Value(U',V')  is the same point as  me->Value(U,V).Transformed(T)  Where U',V' are the new values of U,V after calling  me->TranformParameters(U,V,T)  This methods multiplies : U by BasisCurve()->ParametricTransformation(T) V by T.ScaleFactor()
+		%feature("autodoc", "	* Computes the parameters on the transformed surface for the transform of the point of parameters U,V on <self>. //! me->Transformed(T)->Value(U',V') //! is the same point as //! me->Value(U,V).Transformed(T) //! Where U',V' are the new values of U,V after calling //! me->TranformParameters(U,V,T) //! This methods multiplies : U by BasisCurve()->ParametricTransformation(T) V by T.ScaleFactor()
 
 	:param U:
 	:type U: float &
@@ -10897,7 +10485,7 @@ class Geom_SurfaceOfLinearExtrusion : public Geom_SweptSurface {
 ") TransformParameters;
 		virtual void TransformParameters (Standard_Real &OutValue,Standard_Real &OutValue,const gp_Trsf & T);
 		%feature("compactdefaultargs") ParametricTransformation;
-		%feature("autodoc", "	* Returns a 2d transformation used to find the new parameters of a point on the transformed surface.  me->Transformed(T)->Value(U',V')  is the same point as  me->Value(U,V).Transformed(T)  Where U',V' are obtained by transforming U,V with th 2d transformation returned by  me->ParametricTransformation(T)  This methods returns a scale U by BasisCurve()->ParametricTransformation(T) V by T.ScaleFactor()
+		%feature("autodoc", "	* Returns a 2d transformation used to find the new parameters of a point on the transformed surface. //! me->Transformed(T)->Value(U',V') //! is the same point as //! me->Value(U,V).Transformed(T) //! Where U',V' are obtained by transforming U,V with th 2d transformation returned by //! me->ParametricTransformation(T) //! This methods returns a scale U by BasisCurve()->ParametricTransformation(T) V by T.ScaleFactor()
 
 	:param T:
 	:type T: gp_Trsf
@@ -11024,7 +10612,7 @@ class Geom_SurfaceOfRevolution : public Geom_SweptSurface {
 ") Location;
 		const gp_Pnt  Location ();
 		%feature("compactdefaultargs") ReferencePlane;
-		%feature("autodoc", "	* Computes the position of the reference plane of the surface defined by the basis curve and the symmetry axis. The location point is the location point of the revolution's axis, the XDirection of the plane is given by the revolution's axis and the orientation of the normal to the plane is given by the sense of revolution. Raised if the revolved curve is not planar or if the revolved curve and the symmetry axis are not in the same plane or if the maximum of distance between the axis and the revolved curve is lower or equal to Resolution from gp.
+		%feature("autodoc", "	* Computes the position of the reference plane of the surface defined by the basis curve and the symmetry axis. The location point is the location point of the revolution's axis, the XDirection of the plane is given by the revolution's axis and the orientation of the normal to the plane is given by the sense of revolution. //! Raised if the revolved curve is not planar or if the revolved curve and the symmetry axis are not in the same plane or if the maximum of distance between the axis and the revolved curve is lower or equal to Resolution from gp.
 
 	:rtype: gp_Ax2
 ") ReferencePlane;
@@ -11058,7 +10646,7 @@ class Geom_SurfaceOfRevolution : public Geom_SweptSurface {
 ") VReversedParameter;
 		Standard_Real VReversedParameter (const Standard_Real V);
 		%feature("compactdefaultargs") TransformParameters;
-		%feature("autodoc", "	* Computes the parameters on the transformed surface for the transform of the point of parameters U,V on <self>.  me->Transformed(T)->Value(U',V')  is the same point as  me->Value(U,V).Transformed(T)  Where U',V' are the new values of U,V after calling  me->TranformParameters(U,V,T)  This methods multiplies V by BasisCurve()->ParametricTransformation(T)
+		%feature("autodoc", "	* Computes the parameters on the transformed surface for the transform of the point of parameters U,V on <self>. //! me->Transformed(T)->Value(U',V') //! is the same point as //! me->Value(U,V).Transformed(T) //! Where U',V' are the new values of U,V after calling //! me->TranformParameters(U,V,T) //! This methods multiplies V by BasisCurve()->ParametricTransformation(T)
 
 	:param U:
 	:type U: float &
@@ -11070,7 +10658,7 @@ class Geom_SurfaceOfRevolution : public Geom_SweptSurface {
 ") TransformParameters;
 		virtual void TransformParameters (Standard_Real &OutValue,Standard_Real &OutValue,const gp_Trsf & T);
 		%feature("compactdefaultargs") ParametricTransformation;
-		%feature("autodoc", "	* Returns a 2d transformation used to find the new parameters of a point on the transformed surface.  me->Transformed(T)->Value(U',V')  is the same point as  me->Value(U,V).Transformed(T)  Where U',V' are obtained by transforming U,V with th 2d transformation returned by  me->ParametricTransformation(T)  This methods returns a scale centered on the U axis with BasisCurve()->ParametricTransformation(T)
+		%feature("autodoc", "	* Returns a 2d transformation used to find the new parameters of a point on the transformed surface. //! me->Transformed(T)->Value(U',V') //! is the same point as //! me->Value(U,V).Transformed(T) //! Where U',V' are obtained by transforming U,V with th 2d transformation returned by //! me->ParametricTransformation(T) //! This methods returns a scale centered on the U axis with BasisCurve()->ParametricTransformation(T)
 
 	:param T:
 	:type T: gp_Trsf
@@ -11228,7 +10816,7 @@ class Geom_SurfaceOfRevolution : public Geom_SweptSurface {
 ") D3;
 		void D3 (const Standard_Real U,const Standard_Real V,gp_Pnt & P,gp_Vec & D1U,gp_Vec & D1V,gp_Vec & D2U,gp_Vec & D2V,gp_Vec & D2UV,gp_Vec & D3U,gp_Vec & D3V,gp_Vec & D3UUV,gp_Vec & D3UVV);
 		%feature("compactdefaultargs") DN;
-		%feature("autodoc", "	* Computes the derivative of order Nu in the direction u and Nv in the direction v. Raised if the continuity of the surface is not CNu in the u direction and CNv in the v direction. Raised if Nu + Nv < 1 or Nu < 0 or Nv < 0. The following functions evaluates the local derivatives on surface. Useful to manage discontinuities on the surface. if Side = 1 -> P = S( U+,V ) if Side = -1 -> P = S( U-,V ) else P is betveen discontinuities can be evaluated using methods of global evaluations P = S( U ,V )
+		%feature("autodoc", "	* Computes the derivative of order Nu in the direction u and Nv in the direction v. //! Raised if the continuity of the surface is not CNu in the u direction and CNv in the v direction. Raised if Nu + Nv < 1 or Nu < 0 or Nv < 0. The following functions evaluates the local derivatives on surface. Useful to manage discontinuities on the surface. if Side = 1 -> P = S( U+,V ) if Side = -1 -> P = S( U-,V ) else P is betveen discontinuities can be evaluated using methods of global evaluations P = S( U ,V )
 
 	:param U:
 	:type U: float
@@ -11409,7 +10997,7 @@ def __del__(self):
 class Geom_ToroidalSurface : public Geom_ElementarySurface {
 	public:
 		%feature("compactdefaultargs") Geom_ToroidalSurface;
-		%feature("autodoc", "	* A3 is the local coordinate system of the surface. The orientation of increasing V parametric value is defined by the rotation around the main axis (ZAxis) in the trigonometric sense. The parametrization of the surface in the U direction is defined such as the normal Vector (N = D1U ^ D1V) is oriented towards the 'outside region' of the surface. Warnings : It is not forbidden to create a toroidal surface with MajorRadius = MinorRadius = 0.0 Raised if MinorRadius < 0.0 or if MajorRadius < 0.0
+		%feature("autodoc", "	* A3 is the local coordinate system of the surface. The orientation of increasing V parametric value is defined by the rotation around the main axis (ZAxis) in the trigonometric sense. The parametrization of the surface in the U direction is defined such as the normal Vector (N = D1U ^ D1V) is oriented towards the 'outside region' of the surface. Warnings : It is not forbidden to create a toroidal surface with MajorRadius = MinorRadius = 0.0 //! Raised if MinorRadius < 0.0 or if MajorRadius < 0.0
 
 	:param A3:
 	:type A3: gp_Ax3
@@ -11545,7 +11133,7 @@ class Geom_ToroidalSurface : public Geom_ElementarySurface {
 ") IsVPeriodic;
 		Standard_Boolean IsVPeriodic ();
 		%feature("compactdefaultargs") UIso;
-		%feature("autodoc", "	* Computes the U isoparametric curve. For a toroidal surface the UIso curve is a circle. The center of the Uiso circle is at the distance MajorRadius from the location point of the toroidal surface. Warnings : The radius of the circle can be zero if for the surface MinorRadius = 0.0
+		%feature("autodoc", "	* Computes the U isoparametric curve. //! For a toroidal surface the UIso curve is a circle. The center of the Uiso circle is at the distance MajorRadius from the location point of the toroidal surface. Warnings : The radius of the circle can be zero if for the surface MinorRadius = 0.0
 
 	:param U:
 	:type U: float
@@ -11553,7 +11141,7 @@ class Geom_ToroidalSurface : public Geom_ElementarySurface {
 ") UIso;
 		Handle_Geom_Curve UIso (const Standard_Real U);
 		%feature("compactdefaultargs") VIso;
-		%feature("autodoc", "	* Computes the V isoparametric curve. For a ToroidalSurface the VIso curve is a circle. The axis of the circle is the main axis (ZAxis) of the toroidal surface. Warnings : The radius of the circle can be zero if for the surface MajorRadius = MinorRadius
+		%feature("autodoc", "	* Computes the V isoparametric curve. //! For a ToroidalSurface the VIso curve is a circle. The axis of the circle is the main axis (ZAxis) of the toroidal surface. Warnings : The radius of the circle can be zero if for the surface MajorRadius = MinorRadius
 
 	:param V:
 	:type V: float
@@ -11830,7 +11418,7 @@ class Geom_TrimmedCurve : public Geom_BoundedCurve {
 ") StartPoint;
 		gp_Pnt StartPoint ();
 		%feature("compactdefaultargs") D0;
-		%feature("autodoc", "	* Returns in P the point of parameter U. If the basis curve is an OffsetCurve sometimes it is not possible to do the evaluation of the curve at the parameter U (see class OffsetCurve).
+		%feature("autodoc", "	* Returns in P the point of parameter U. //! If the basis curve is an OffsetCurve sometimes it is not possible to do the evaluation of the curve at the parameter U (see class OffsetCurve).
 
 	:param U:
 	:type U: float
@@ -11900,7 +11488,7 @@ class Geom_TrimmedCurve : public Geom_BoundedCurve {
 ") Transform;
 		void Transform (const gp_Trsf & T);
 		%feature("compactdefaultargs") TransformedParameter;
-		%feature("autodoc", "	* Returns the parameter on the transformed curve for the transform of the point of parameter U on <self>.  me->Transformed(T)->Value(me->TransformedParameter(U,T))  is the same point as  me->Value(U).Transformed(T)  This methods calls the basis curve method.
+		%feature("autodoc", "	* Returns the parameter on the transformed curve for the transform of the point of parameter U on <self>. //! me->Transformed(T)->Value(me->TransformedParameter(U,T)) //! is the same point as //! me->Value(U).Transformed(T) //! This methods calls the basis curve method.
 
 	:param U:
 	:type U: float
@@ -11910,7 +11498,7 @@ class Geom_TrimmedCurve : public Geom_BoundedCurve {
 ") TransformedParameter;
 		virtual Standard_Real TransformedParameter (const Standard_Real U,const gp_Trsf & T);
 		%feature("compactdefaultargs") ParametricTransformation;
-		%feature("autodoc", "	* Returns a coefficient to compute the parameter on the transformed curve for the transform of the point on <self>.  Transformed(T)->Value(U * ParametricTransformation(T))  is the same point as  Value(U).Transformed(T)  This methods calls the basis curve method.
+		%feature("autodoc", "	* Returns a coefficient to compute the parameter on the transformed curve for the transform of the point on <self>. //! Transformed(T)->Value(U * ParametricTransformation(T)) //! is the same point as //! Value(U).Transformed(T) //! This methods calls the basis curve method.
 
 	:param T:
 	:type T: gp_Trsf

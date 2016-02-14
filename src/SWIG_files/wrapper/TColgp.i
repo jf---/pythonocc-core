@@ -2184,228 +2184,6 @@ def __del__(self):
 		delete $self;
 	}
 };
-%nodefaultctor TColgp_DataMapIteratorOfDataMapOfIntegerCirc2d;
-class TColgp_DataMapIteratorOfDataMapOfIntegerCirc2d : public TCollection_BasicMapIterator {
-	public:
-		%feature("compactdefaultargs") TColgp_DataMapIteratorOfDataMapOfIntegerCirc2d;
-		%feature("autodoc", "	:rtype: None
-") TColgp_DataMapIteratorOfDataMapOfIntegerCirc2d;
-		 TColgp_DataMapIteratorOfDataMapOfIntegerCirc2d ();
-		%feature("compactdefaultargs") TColgp_DataMapIteratorOfDataMapOfIntegerCirc2d;
-		%feature("autodoc", "	:param aMap:
-	:type aMap: TColgp_DataMapOfIntegerCirc2d
-	:rtype: None
-") TColgp_DataMapIteratorOfDataMapOfIntegerCirc2d;
-		 TColgp_DataMapIteratorOfDataMapOfIntegerCirc2d (const TColgp_DataMapOfIntegerCirc2d & aMap);
-		%feature("compactdefaultargs") Initialize;
-		%feature("autodoc", "	:param aMap:
-	:type aMap: TColgp_DataMapOfIntegerCirc2d
-	:rtype: None
-") Initialize;
-		void Initialize (const TColgp_DataMapOfIntegerCirc2d & aMap);
-		%feature("compactdefaultargs") Key;
-		%feature("autodoc", "	:rtype: int
-") Key;
-		const Standard_Integer & Key ();
-		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	:rtype: gp_Circ2d
-") Value;
-		const gp_Circ2d  Value ();
-};
-
-
-%feature("shadow") TColgp_DataMapIteratorOfDataMapOfIntegerCirc2d::~TColgp_DataMapIteratorOfDataMapOfIntegerCirc2d %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend TColgp_DataMapIteratorOfDataMapOfIntegerCirc2d {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%nodefaultctor TColgp_DataMapNodeOfDataMapOfIntegerCirc2d;
-class TColgp_DataMapNodeOfDataMapOfIntegerCirc2d : public TCollection_MapNode {
-	public:
-		%feature("compactdefaultargs") TColgp_DataMapNodeOfDataMapOfIntegerCirc2d;
-		%feature("autodoc", "	:param K:
-	:type K: int &
-	:param I:
-	:type I: gp_Circ2d
-	:param n:
-	:type n: TCollection_MapNodePtr &
-	:rtype: None
-") TColgp_DataMapNodeOfDataMapOfIntegerCirc2d;
-		 TColgp_DataMapNodeOfDataMapOfIntegerCirc2d (const Standard_Integer & K,const gp_Circ2d & I,const TCollection_MapNodePtr & n);
-
-            %feature("autodoc","1");
-            %extend {
-                Standard_Integer GetKey() {
-                return (Standard_Integer) $self->Key();
-                }
-            };
-            %feature("autodoc","1");
-            %extend {
-                void SetKey(Standard_Integer value ) {
-                $self->Key()=value;
-                }
-            };
-            		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	:rtype: gp_Circ2d
-") Value;
-		gp_Circ2d  Value ();
-};
-
-
-%feature("shadow") TColgp_DataMapNodeOfDataMapOfIntegerCirc2d::~TColgp_DataMapNodeOfDataMapOfIntegerCirc2d %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend TColgp_DataMapNodeOfDataMapOfIntegerCirc2d {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
-%extend TColgp_DataMapNodeOfDataMapOfIntegerCirc2d {
-	Handle_TColgp_DataMapNodeOfDataMapOfIntegerCirc2d GetHandle() {
-	return *(Handle_TColgp_DataMapNodeOfDataMapOfIntegerCirc2d*) &$self;
-	}
-};
-
-%nodefaultctor Handle_TColgp_DataMapNodeOfDataMapOfIntegerCirc2d;
-class Handle_TColgp_DataMapNodeOfDataMapOfIntegerCirc2d : public Handle_TCollection_MapNode {
-
-    public:
-        // constructors
-        Handle_TColgp_DataMapNodeOfDataMapOfIntegerCirc2d();
-        Handle_TColgp_DataMapNodeOfDataMapOfIntegerCirc2d(const Handle_TColgp_DataMapNodeOfDataMapOfIntegerCirc2d &aHandle);
-        Handle_TColgp_DataMapNodeOfDataMapOfIntegerCirc2d(const TColgp_DataMapNodeOfDataMapOfIntegerCirc2d *anItem);
-        void Nullify();
-        Standard_Boolean IsNull() const;
-        static const Handle_TColgp_DataMapNodeOfDataMapOfIntegerCirc2d DownCast(const Handle_Standard_Transient &AnObject);
-
-};
-%extend Handle_TColgp_DataMapNodeOfDataMapOfIntegerCirc2d {
-    TColgp_DataMapNodeOfDataMapOfIntegerCirc2d* GetObject() {
-    return (TColgp_DataMapNodeOfDataMapOfIntegerCirc2d*)$self->Access();
-    }
-};
-%feature("shadow") Handle_TColgp_DataMapNodeOfDataMapOfIntegerCirc2d::~Handle_TColgp_DataMapNodeOfDataMapOfIntegerCirc2d %{
-def __del__(self):
-    try:
-        self.thisown = False
-        OCC.GarbageCollector.garbage.collect_object(self)
-    except:
-        pass
-%}
-
-%extend Handle_TColgp_DataMapNodeOfDataMapOfIntegerCirc2d {
-    void _kill_pointed() {
-        delete $self;
-    }
-};
-
-%nodefaultctor TColgp_DataMapOfIntegerCirc2d;
-class TColgp_DataMapOfIntegerCirc2d : public TCollection_BasicMap {
-	public:
-		%feature("compactdefaultargs") TColgp_DataMapOfIntegerCirc2d;
-		%feature("autodoc", "	:param NbBuckets: default value is 1
-	:type NbBuckets: int
-	:rtype: None
-") TColgp_DataMapOfIntegerCirc2d;
-		 TColgp_DataMapOfIntegerCirc2d (const Standard_Integer NbBuckets = 1);
-		%feature("compactdefaultargs") Assign;
-		%feature("autodoc", "	:param Other:
-	:type Other: TColgp_DataMapOfIntegerCirc2d
-	:rtype: TColgp_DataMapOfIntegerCirc2d
-") Assign;
-		TColgp_DataMapOfIntegerCirc2d & Assign (const TColgp_DataMapOfIntegerCirc2d & Other);
-		%feature("compactdefaultargs") operator =;
-		%feature("autodoc", "	:param Other:
-	:type Other: TColgp_DataMapOfIntegerCirc2d
-	:rtype: TColgp_DataMapOfIntegerCirc2d
-") operator=;
-		TColgp_DataMapOfIntegerCirc2d & operator = (const TColgp_DataMapOfIntegerCirc2d & Other);
-		%feature("compactdefaultargs") ReSize;
-		%feature("autodoc", "	:param NbBuckets:
-	:type NbBuckets: int
-	:rtype: None
-") ReSize;
-		void ReSize (const Standard_Integer NbBuckets);
-		%feature("compactdefaultargs") Clear;
-		%feature("autodoc", "	:rtype: None
-") Clear;
-		void Clear ();
-		%feature("compactdefaultargs") Bind;
-		%feature("autodoc", "	:param K:
-	:type K: int &
-	:param I:
-	:type I: gp_Circ2d
-	:rtype: bool
-") Bind;
-		Standard_Boolean Bind (const Standard_Integer & K,const gp_Circ2d & I);
-		%feature("compactdefaultargs") IsBound;
-		%feature("autodoc", "	:param K:
-	:type K: int &
-	:rtype: bool
-") IsBound;
-		Standard_Boolean IsBound (const Standard_Integer & K);
-		%feature("compactdefaultargs") UnBind;
-		%feature("autodoc", "	:param K:
-	:type K: int &
-	:rtype: bool
-") UnBind;
-		Standard_Boolean UnBind (const Standard_Integer & K);
-		%feature("compactdefaultargs") Find;
-		%feature("autodoc", "	:param K:
-	:type K: int &
-	:rtype: gp_Circ2d
-") Find;
-		const gp_Circ2d  Find (const Standard_Integer & K);
-		%feature("compactdefaultargs") ChangeFind;
-		%feature("autodoc", "	:param K:
-	:type K: int &
-	:rtype: gp_Circ2d
-") ChangeFind;
-		gp_Circ2d  ChangeFind (const Standard_Integer & K);
-		%feature("compactdefaultargs") Find1;
-		%feature("autodoc", "	:param K:
-	:type K: int &
-	:rtype: Standard_Address
-") Find1;
-		Standard_Address Find1 (const Standard_Integer & K);
-		%feature("compactdefaultargs") ChangeFind1;
-		%feature("autodoc", "	:param K:
-	:type K: int &
-	:rtype: Standard_Address
-") ChangeFind1;
-		Standard_Address ChangeFind1 (const Standard_Integer & K);
-};
-
-
-%feature("shadow") TColgp_DataMapOfIntegerCirc2d::~TColgp_DataMapOfIntegerCirc2d %{
-def __del__(self):
-	try:
-		self.thisown = False
-		OCC.GarbageCollector.garbage.collect_object(self)
-	except:
-		pass
-%}
-
-%extend TColgp_DataMapOfIntegerCirc2d {
-	void _kill_pointed() {
-		delete $self;
-	}
-};
 %nodefaultctor TColgp_HArray1OfCirc2d;
 class TColgp_HArray1OfCirc2d : public MMgt_TShared {
 	public:
@@ -5261,10 +5039,6 @@ class TColgp_HSequenceOfDir : public MMgt_TShared {
 		%feature("autodoc", "	:rtype: TColgp_SequenceOfDir
 ") ChangeSequence;
 		TColgp_SequenceOfDir & ChangeSequence ();
-		%feature("compactdefaultargs") ShallowCopy;
-		%feature("autodoc", "	:rtype: Handle_TColgp_HSequenceOfDir
-") ShallowCopy;
-		Handle_TColgp_HSequenceOfDir ShallowCopy ();
 };
 
 
@@ -5456,10 +5230,6 @@ class TColgp_HSequenceOfDir2d : public MMgt_TShared {
 		%feature("autodoc", "	:rtype: TColgp_SequenceOfDir2d
 ") ChangeSequence;
 		TColgp_SequenceOfDir2d & ChangeSequence ();
-		%feature("compactdefaultargs") ShallowCopy;
-		%feature("autodoc", "	:rtype: Handle_TColgp_HSequenceOfDir2d
-") ShallowCopy;
-		Handle_TColgp_HSequenceOfDir2d ShallowCopy ();
 };
 
 
@@ -5651,10 +5421,6 @@ class TColgp_HSequenceOfPnt : public MMgt_TShared {
 		%feature("autodoc", "	:rtype: TColgp_SequenceOfPnt
 ") ChangeSequence;
 		TColgp_SequenceOfPnt & ChangeSequence ();
-		%feature("compactdefaultargs") ShallowCopy;
-		%feature("autodoc", "	:rtype: Handle_TColgp_HSequenceOfPnt
-") ShallowCopy;
-		Handle_TColgp_HSequenceOfPnt ShallowCopy ();
 };
 
 
@@ -5846,10 +5612,6 @@ class TColgp_HSequenceOfPnt2d : public MMgt_TShared {
 		%feature("autodoc", "	:rtype: TColgp_SequenceOfPnt2d
 ") ChangeSequence;
 		TColgp_SequenceOfPnt2d & ChangeSequence ();
-		%feature("compactdefaultargs") ShallowCopy;
-		%feature("autodoc", "	:rtype: Handle_TColgp_HSequenceOfPnt2d
-") ShallowCopy;
-		Handle_TColgp_HSequenceOfPnt2d ShallowCopy ();
 };
 
 
@@ -6041,10 +5803,6 @@ class TColgp_HSequenceOfVec : public MMgt_TShared {
 		%feature("autodoc", "	:rtype: TColgp_SequenceOfVec
 ") ChangeSequence;
 		TColgp_SequenceOfVec & ChangeSequence ();
-		%feature("compactdefaultargs") ShallowCopy;
-		%feature("autodoc", "	:rtype: Handle_TColgp_HSequenceOfVec
-") ShallowCopy;
-		Handle_TColgp_HSequenceOfVec ShallowCopy ();
 };
 
 
@@ -6236,10 +5994,6 @@ class TColgp_HSequenceOfVec2d : public MMgt_TShared {
 		%feature("autodoc", "	:rtype: TColgp_SequenceOfVec2d
 ") ChangeSequence;
 		TColgp_SequenceOfVec2d & ChangeSequence ();
-		%feature("compactdefaultargs") ShallowCopy;
-		%feature("autodoc", "	:rtype: Handle_TColgp_HSequenceOfVec2d
-") ShallowCopy;
-		Handle_TColgp_HSequenceOfVec2d ShallowCopy ();
 };
 
 
@@ -6431,10 +6185,6 @@ class TColgp_HSequenceOfXY : public MMgt_TShared {
 		%feature("autodoc", "	:rtype: TColgp_SequenceOfXY
 ") ChangeSequence;
 		TColgp_SequenceOfXY & ChangeSequence ();
-		%feature("compactdefaultargs") ShallowCopy;
-		%feature("autodoc", "	:rtype: Handle_TColgp_HSequenceOfXY
-") ShallowCopy;
-		Handle_TColgp_HSequenceOfXY ShallowCopy ();
 };
 
 
@@ -6626,10 +6376,6 @@ class TColgp_HSequenceOfXYZ : public MMgt_TShared {
 		%feature("autodoc", "	:rtype: TColgp_SequenceOfXYZ
 ") ChangeSequence;
 		TColgp_SequenceOfXYZ & ChangeSequence ();
-		%feature("compactdefaultargs") ShallowCopy;
-		%feature("autodoc", "	:rtype: Handle_TColgp_HSequenceOfXYZ
-") ShallowCopy;
-		Handle_TColgp_HSequenceOfXYZ ShallowCopy ();
 };
 
 
@@ -7350,6 +7096,12 @@ class TColgp_SequenceOfArray1OfPnt2d : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") TColgp_SequenceOfArray1OfPnt2d;
 		 TColgp_SequenceOfArray1OfPnt2d ();
+		%feature("compactdefaultargs") TColgp_SequenceOfArray1OfPnt2d;
+		%feature("autodoc", "	:param Other:
+	:type Other: TColgp_SequenceOfArray1OfPnt2d
+	:rtype: None
+") TColgp_SequenceOfArray1OfPnt2d;
+		 TColgp_SequenceOfArray1OfPnt2d (const TColgp_SequenceOfArray1OfPnt2d & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;
@@ -7496,6 +7248,12 @@ class TColgp_SequenceOfDir : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") TColgp_SequenceOfDir;
 		 TColgp_SequenceOfDir ();
+		%feature("compactdefaultargs") TColgp_SequenceOfDir;
+		%feature("autodoc", "	:param Other:
+	:type Other: TColgp_SequenceOfDir
+	:rtype: None
+") TColgp_SequenceOfDir;
+		 TColgp_SequenceOfDir (const TColgp_SequenceOfDir & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;
@@ -7642,6 +7400,12 @@ class TColgp_SequenceOfDir2d : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") TColgp_SequenceOfDir2d;
 		 TColgp_SequenceOfDir2d ();
+		%feature("compactdefaultargs") TColgp_SequenceOfDir2d;
+		%feature("autodoc", "	:param Other:
+	:type Other: TColgp_SequenceOfDir2d
+	:rtype: None
+") TColgp_SequenceOfDir2d;
+		 TColgp_SequenceOfDir2d (const TColgp_SequenceOfDir2d & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;
@@ -7788,6 +7552,12 @@ class TColgp_SequenceOfPnt : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") TColgp_SequenceOfPnt;
 		 TColgp_SequenceOfPnt ();
+		%feature("compactdefaultargs") TColgp_SequenceOfPnt;
+		%feature("autodoc", "	:param Other:
+	:type Other: TColgp_SequenceOfPnt
+	:rtype: None
+") TColgp_SequenceOfPnt;
+		 TColgp_SequenceOfPnt (const TColgp_SequenceOfPnt & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;
@@ -7934,6 +7704,12 @@ class TColgp_SequenceOfPnt2d : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") TColgp_SequenceOfPnt2d;
 		 TColgp_SequenceOfPnt2d ();
+		%feature("compactdefaultargs") TColgp_SequenceOfPnt2d;
+		%feature("autodoc", "	:param Other:
+	:type Other: TColgp_SequenceOfPnt2d
+	:rtype: None
+") TColgp_SequenceOfPnt2d;
+		 TColgp_SequenceOfPnt2d (const TColgp_SequenceOfPnt2d & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;
@@ -8080,6 +7856,12 @@ class TColgp_SequenceOfVec : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") TColgp_SequenceOfVec;
 		 TColgp_SequenceOfVec ();
+		%feature("compactdefaultargs") TColgp_SequenceOfVec;
+		%feature("autodoc", "	:param Other:
+	:type Other: TColgp_SequenceOfVec
+	:rtype: None
+") TColgp_SequenceOfVec;
+		 TColgp_SequenceOfVec (const TColgp_SequenceOfVec & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;
@@ -8226,6 +8008,12 @@ class TColgp_SequenceOfVec2d : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") TColgp_SequenceOfVec2d;
 		 TColgp_SequenceOfVec2d ();
+		%feature("compactdefaultargs") TColgp_SequenceOfVec2d;
+		%feature("autodoc", "	:param Other:
+	:type Other: TColgp_SequenceOfVec2d
+	:rtype: None
+") TColgp_SequenceOfVec2d;
+		 TColgp_SequenceOfVec2d (const TColgp_SequenceOfVec2d & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;
@@ -8372,6 +8160,12 @@ class TColgp_SequenceOfXY : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") TColgp_SequenceOfXY;
 		 TColgp_SequenceOfXY ();
+		%feature("compactdefaultargs") TColgp_SequenceOfXY;
+		%feature("autodoc", "	:param Other:
+	:type Other: TColgp_SequenceOfXY
+	:rtype: None
+") TColgp_SequenceOfXY;
+		 TColgp_SequenceOfXY (const TColgp_SequenceOfXY & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;
@@ -8518,6 +8312,12 @@ class TColgp_SequenceOfXYZ : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") TColgp_SequenceOfXYZ;
 		 TColgp_SequenceOfXYZ ();
+		%feature("compactdefaultargs") TColgp_SequenceOfXYZ;
+		%feature("autodoc", "	:param Other:
+	:type Other: TColgp_SequenceOfXYZ
+	:rtype: None
+") TColgp_SequenceOfXYZ;
+		 TColgp_SequenceOfXYZ (const TColgp_SequenceOfXYZ & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;

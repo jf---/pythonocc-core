@@ -48,7 +48,7 @@ import OCC.GarbageCollector
 class IntCurvesFace_Intersector {
 	public:
 		%feature("compactdefaultargs") IntCurvesFace_Intersector;
-		%feature("autodoc", "	* Load a Face.  The Tolerance <Tol> is used to determine if the first point of the segment is near the face. In that case, the parameter of the intersection point on the line can be a negative value (greater than -Tol).
+		%feature("autodoc", "	* Load a Face. //! The Tolerance <Tol> is used to determine if the first point of the segment is near the face. In that case, the parameter of the intersection point on the line can be a negative value (greater than -Tol).
 
 	:param F:
 	:type F: TopoDS_Face &
@@ -58,7 +58,7 @@ class IntCurvesFace_Intersector {
 ") IntCurvesFace_Intersector;
 		 IntCurvesFace_Intersector (const TopoDS_Face & F,const Standard_Real aTol);
 		%feature("compactdefaultargs") Perform;
-		%feature("autodoc", "	* Perform the intersection between the segment L and the loaded face.  PInf is the smallest parameter on the line PSup is the highest parmaeter on the line  For an infinite line PInf and PSup can be +/- RealLast.
+		%feature("autodoc", "	* Perform the intersection between the segment L and the loaded face. //! PInf is the smallest parameter on the line PSup is the highest parmaeter on the line //! For an infinite line PInf and PSup can be +/- RealLast.
 
 	:param L:
 	:type L: gp_Lin
@@ -198,7 +198,7 @@ class IntCurvesFace_ShapeIntersector {
 ") Load;
 		void Load (const TopoDS_Shape & Sh,const Standard_Real Tol);
 		%feature("compactdefaultargs") Perform;
-		%feature("autodoc", "	* Perform the intersection between the segment L and the loaded shape.  PInf is the smallest parameter on the line PSup is the highest parammter on the line  For an infinite line PInf and PSup can be +/- RealLast.
+		%feature("autodoc", "	* Perform the intersection between the segment L and the loaded shape. //! PInf is the smallest parameter on the line PSup is the highest parammter on the line //! For an infinite line PInf and PSup can be +/- RealLast.
 
 	:param L:
 	:type L: gp_Lin
@@ -210,7 +210,7 @@ class IntCurvesFace_ShapeIntersector {
 ") Perform;
 		void Perform (const gp_Lin & L,const Standard_Real PInf,const Standard_Real PSup);
 		%feature("compactdefaultargs") PerformNearest;
-		%feature("autodoc", "	* Perform the intersection between the segment L and the loaded shape.  PInf is the smallest parameter on the line PSup is the highest parammter on the line  For an infinite line PInf and PSup can be +/- RealLast.
+		%feature("autodoc", "	* Perform the intersection between the segment L and the loaded shape. //! PInf is the smallest parameter on the line PSup is the highest parammter on the line //! For an infinite line PInf and PSup can be +/- RealLast.
 
 	:param L:
 	:type L: gp_Lin

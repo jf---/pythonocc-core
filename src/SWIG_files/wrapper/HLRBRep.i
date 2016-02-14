@@ -472,7 +472,7 @@ class HLRBRep_BCurveTool {
 ") NbIntervals;
 		static Standard_Integer NbIntervals (BRepAdaptor_Curve & C,const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param C:
 	:type C: BRepAdaptor_Curve &
@@ -584,7 +584,7 @@ class HLRBRep_BCurveTool {
 ") DN;
 		static gp_Vec DN (const BRepAdaptor_Curve & C,const Standard_Real U,const Standard_Integer N);
 		%feature("compactdefaultargs") Resolution;
-		%feature("autodoc", "	* Returns the parametric resolution corresponding  to the real space resolution <R3d>.
+		%feature("autodoc", "	* Returns the parametric resolution corresponding to the real space resolution <R3d>.
 
 	:param C:
 	:type C: BRepAdaptor_Curve &
@@ -1461,7 +1461,7 @@ class HLRBRep_Curve {
 ") NbIntervals;
 		Standard_Integer NbIntervals (const GeomAbs_Shape S);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param T:
 	:type T: TColStd_Array1OfReal &
@@ -1553,7 +1553,7 @@ class HLRBRep_Curve {
 ") DN;
 		gp_Vec2d DN (const Standard_Real U,const Standard_Integer N);
 		%feature("compactdefaultargs") Resolution;
-		%feature("autodoc", "	* Returns the parametric resolution corresponding  to the real space resolution <R3d>.
+		%feature("autodoc", "	* Returns the parametric resolution corresponding to the real space resolution <R3d>.
 
 	:param R3d:
 	:type R3d: float
@@ -1692,7 +1692,7 @@ class HLRBRep_CurveTool {
 ") NbIntervals;
 		static Standard_Integer NbIntervals (const Standard_Address C);
 		%feature("compactdefaultargs") Intervals;
-		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>.  The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
+		%feature("autodoc", "	* Stores in <T> the parameters bounding the intervals of continuity <S>. //! The array must provide enough room to accomodate for the parameters. i.e. T.Length() > NbIntervals()
 
 	:param C:
 	:type C: Standard_Address
@@ -1818,7 +1818,7 @@ class HLRBRep_CurveTool {
 ") DN;
 		static gp_Vec2d DN (const Standard_Address C,const Standard_Real U,const Standard_Integer N);
 		%feature("compactdefaultargs") Resolution;
-		%feature("autodoc", "	* Returns the parametric resolution corresponding  to the real space resolution <R3d>.
+		%feature("autodoc", "	* Returns the parametric resolution corresponding to the real space resolution <R3d>.
 
 	:param C:
 	:type C: Standard_Address
@@ -4229,7 +4229,7 @@ class HLRBRep_LineTool {
 ") DN;
 		static gp_Vec DN (const gp_Lin & C,const Standard_Real U,const Standard_Integer N);
 		%feature("compactdefaultargs") Resolution;
-		%feature("autodoc", "	* Returns the parametric resolution corresponding  to the real space resolution <R3d>.
+		%feature("autodoc", "	* Returns the parametric resolution corresponding to the real space resolution <R3d>.
 
 	:param C:
 	:type C: gp_Lin
@@ -4628,6 +4628,12 @@ class HLRBRep_ListOfBPnt2D {
 		%feature("autodoc", "	:rtype: None
 ") HLRBRep_ListOfBPnt2D;
 		 HLRBRep_ListOfBPnt2D ();
+		%feature("compactdefaultargs") HLRBRep_ListOfBPnt2D;
+		%feature("autodoc", "	:param Other:
+	:type Other: HLRBRep_ListOfBPnt2D &
+	:rtype: None
+") HLRBRep_ListOfBPnt2D;
+		 HLRBRep_ListOfBPnt2D (const HLRBRep_ListOfBPnt2D & Other);
 		%feature("compactdefaultargs") Assign;
 		%feature("autodoc", "	:param Other:
 	:type Other: HLRBRep_ListOfBPnt2D &
@@ -4766,6 +4772,12 @@ class HLRBRep_ListOfBPoint {
 		%feature("autodoc", "	:rtype: None
 ") HLRBRep_ListOfBPoint;
 		 HLRBRep_ListOfBPoint ();
+		%feature("compactdefaultargs") HLRBRep_ListOfBPoint;
+		%feature("autodoc", "	:param Other:
+	:type Other: HLRBRep_ListOfBPoint &
+	:rtype: None
+") HLRBRep_ListOfBPoint;
+		 HLRBRep_ListOfBPoint (const HLRBRep_ListOfBPoint & Other);
 		%feature("compactdefaultargs") Assign;
 		%feature("autodoc", "	:param Other:
 	:type Other: HLRBRep_ListOfBPoint &
@@ -5700,6 +5712,12 @@ class HLRBRep_SeqOfShapeBounds : public TCollection_BaseSequence {
 		%feature("autodoc", "	:rtype: None
 ") HLRBRep_SeqOfShapeBounds;
 		 HLRBRep_SeqOfShapeBounds ();
+		%feature("compactdefaultargs") HLRBRep_SeqOfShapeBounds;
+		%feature("autodoc", "	:param Other:
+	:type Other: HLRBRep_SeqOfShapeBounds &
+	:rtype: None
+") HLRBRep_SeqOfShapeBounds;
+		 HLRBRep_SeqOfShapeBounds (const HLRBRep_SeqOfShapeBounds & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;
@@ -5846,6 +5864,12 @@ class HLRBRep_SeqPCOfPCLocFOfTheLocateExtPCOfTheProjPCurOfCInter : public TColle
 		%feature("autodoc", "	:rtype: None
 ") HLRBRep_SeqPCOfPCLocFOfTheLocateExtPCOfTheProjPCurOfCInter;
 		 HLRBRep_SeqPCOfPCLocFOfTheLocateExtPCOfTheProjPCurOfCInter ();
+		%feature("compactdefaultargs") HLRBRep_SeqPCOfPCLocFOfTheLocateExtPCOfTheProjPCurOfCInter;
+		%feature("autodoc", "	:param Other:
+	:type Other: HLRBRep_SeqPCOfPCLocFOfTheLocateExtPCOfTheProjPCurOfCInter &
+	:rtype: None
+") HLRBRep_SeqPCOfPCLocFOfTheLocateExtPCOfTheProjPCurOfCInter;
+		 HLRBRep_SeqPCOfPCLocFOfTheLocateExtPCOfTheProjPCurOfCInter (const HLRBRep_SeqPCOfPCLocFOfTheLocateExtPCOfTheProjPCurOfCInter & Other);
 		%feature("compactdefaultargs") Clear;
 		%feature("autodoc", "	:rtype: None
 ") Clear;

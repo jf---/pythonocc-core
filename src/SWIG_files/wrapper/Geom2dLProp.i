@@ -307,19 +307,21 @@ def __del__(self):
 		delete $self;
 	}
 };
-%nodefaultctor Geom2dLProp_FCurExtOfNumericCurInf2d;
-class Geom2dLProp_FCurExtOfNumericCurInf2d : public math_FunctionWithDerivative {
+%nodefaultctor Geom2dLProp_FuncCurExt;
+class Geom2dLProp_FuncCurExt : public math_FunctionWithDerivative {
 	public:
-		%feature("compactdefaultargs") Geom2dLProp_FCurExtOfNumericCurInf2d;
+		%feature("compactdefaultargs") Geom2dLProp_FuncCurExt;
 		%feature("autodoc", "	:param C:
 	:type C: Handle_Geom2d_Curve &
 	:param Tol:
 	:type Tol: float
 	:rtype: None
-") Geom2dLProp_FCurExtOfNumericCurInf2d;
-		 Geom2dLProp_FCurExtOfNumericCurInf2d (const Handle_Geom2d_Curve & C,const Standard_Real Tol);
+") Geom2dLProp_FuncCurExt;
+		 Geom2dLProp_FuncCurExt (const Handle_Geom2d_Curve & C,const Standard_Real Tol);
 		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	:param X:
+		%feature("autodoc", "	* Returns the value for the variable <X>.
+
+	:param X:
 	:type X: float
 	:param F:
 	:type F: float &
@@ -327,7 +329,9 @@ class Geom2dLProp_FCurExtOfNumericCurInf2d : public math_FunctionWithDerivative 
 ") Value;
 		Standard_Boolean Value (const Standard_Real X,Standard_Real &OutValue);
 		%feature("compactdefaultargs") Derivative;
-		%feature("autodoc", "	:param X:
+		%feature("autodoc", "	* Returns the derivative for the variable <X>.
+
+	:param X:
 	:type X: float
 	:param D:
 	:type D: float &
@@ -335,7 +339,9 @@ class Geom2dLProp_FCurExtOfNumericCurInf2d : public math_FunctionWithDerivative 
 ") Derivative;
 		Standard_Boolean Derivative (const Standard_Real X,Standard_Real &OutValue);
 		%feature("compactdefaultargs") Values;
-		%feature("autodoc", "	:param X:
+		%feature("autodoc", "	* Returns the value of the function and the derivative for the variable <X>.
+
+	:param X:
 	:type X: float
 	:param F:
 	:type F: float &
@@ -345,7 +351,9 @@ class Geom2dLProp_FCurExtOfNumericCurInf2d : public math_FunctionWithDerivative 
 ") Values;
 		Standard_Boolean Values (const Standard_Real X,Standard_Real &OutValue,Standard_Real &OutValue);
 		%feature("compactdefaultargs") IsMinKC;
-		%feature("autodoc", "	:param Param:
+		%feature("autodoc", "	* True if Param corresponds to a minus of the radius of curvature.
+
+	:param Param:
 	:type Param: float
 	:rtype: bool
 ") IsMinKC;
@@ -353,7 +361,7 @@ class Geom2dLProp_FCurExtOfNumericCurInf2d : public math_FunctionWithDerivative 
 };
 
 
-%feature("shadow") Geom2dLProp_FCurExtOfNumericCurInf2d::~Geom2dLProp_FCurExtOfNumericCurInf2d %{
+%feature("shadow") Geom2dLProp_FuncCurExt::~Geom2dLProp_FuncCurExt %{
 def __del__(self):
 	try:
 		self.thisown = False
@@ -362,22 +370,24 @@ def __del__(self):
 		pass
 %}
 
-%extend Geom2dLProp_FCurExtOfNumericCurInf2d {
+%extend Geom2dLProp_FuncCurExt {
 	void _kill_pointed() {
 		delete $self;
 	}
 };
-%nodefaultctor Geom2dLProp_FCurNulOfNumericCurInf2d;
-class Geom2dLProp_FCurNulOfNumericCurInf2d : public math_FunctionWithDerivative {
+%nodefaultctor Geom2dLProp_FuncCurNul;
+class Geom2dLProp_FuncCurNul : public math_FunctionWithDerivative {
 	public:
-		%feature("compactdefaultargs") Geom2dLProp_FCurNulOfNumericCurInf2d;
+		%feature("compactdefaultargs") Geom2dLProp_FuncCurNul;
 		%feature("autodoc", "	:param C:
 	:type C: Handle_Geom2d_Curve &
 	:rtype: None
-") Geom2dLProp_FCurNulOfNumericCurInf2d;
-		 Geom2dLProp_FCurNulOfNumericCurInf2d (const Handle_Geom2d_Curve & C);
+") Geom2dLProp_FuncCurNul;
+		 Geom2dLProp_FuncCurNul (const Handle_Geom2d_Curve & C);
 		%feature("compactdefaultargs") Value;
-		%feature("autodoc", "	:param X:
+		%feature("autodoc", "	* Returns the value for the variable <X>.
+
+	:param X:
 	:type X: float
 	:param F:
 	:type F: float &
@@ -385,7 +395,9 @@ class Geom2dLProp_FCurNulOfNumericCurInf2d : public math_FunctionWithDerivative 
 ") Value;
 		Standard_Boolean Value (const Standard_Real X,Standard_Real &OutValue);
 		%feature("compactdefaultargs") Derivative;
-		%feature("autodoc", "	:param X:
+		%feature("autodoc", "	* Returns the derivative for the variable <X>
+
+	:param X:
 	:type X: float
 	:param D:
 	:type D: float &
@@ -393,7 +405,9 @@ class Geom2dLProp_FCurNulOfNumericCurInf2d : public math_FunctionWithDerivative 
 ") Derivative;
 		Standard_Boolean Derivative (const Standard_Real X,Standard_Real &OutValue);
 		%feature("compactdefaultargs") Values;
-		%feature("autodoc", "	:param X:
+		%feature("autodoc", "	* Returns the value of the function and the derivative for the variable <X>.
+
+	:param X:
 	:type X: float
 	:param F:
 	:type F: float &
@@ -405,7 +419,7 @@ class Geom2dLProp_FCurNulOfNumericCurInf2d : public math_FunctionWithDerivative 
 };
 
 
-%feature("shadow") Geom2dLProp_FCurNulOfNumericCurInf2d::~Geom2dLProp_FCurNulOfNumericCurInf2d %{
+%feature("shadow") Geom2dLProp_FuncCurNul::~Geom2dLProp_FuncCurNul %{
 def __del__(self):
 	try:
 		self.thisown = False
@@ -414,7 +428,7 @@ def __del__(self):
 		pass
 %}
 
-%extend Geom2dLProp_FCurNulOfNumericCurInf2d {
+%extend Geom2dLProp_FuncCurNul {
 	void _kill_pointed() {
 		delete $self;
 	}
@@ -427,7 +441,9 @@ class Geom2dLProp_NumericCurInf2d {
 ") Geom2dLProp_NumericCurInf2d;
 		 Geom2dLProp_NumericCurInf2d ();
 		%feature("compactdefaultargs") PerformCurExt;
-		%feature("autodoc", "	:param C:
+		%feature("autodoc", "	* Computes the locals extremas of curvature.
+
+	:param C:
 	:type C: Handle_Geom2d_Curve &
 	:param Result:
 	:type Result: LProp_CurAndInf &
@@ -435,7 +451,9 @@ class Geom2dLProp_NumericCurInf2d {
 ") PerformCurExt;
 		void PerformCurExt (const Handle_Geom2d_Curve & C,LProp_CurAndInf & Result);
 		%feature("compactdefaultargs") PerformInf;
-		%feature("autodoc", "	:param C:
+		%feature("autodoc", "	* Computes the inflections.
+
+	:param C:
 	:type C: Handle_Geom2d_Curve &
 	:param Result:
 	:type Result: LProp_CurAndInf &
@@ -443,7 +461,9 @@ class Geom2dLProp_NumericCurInf2d {
 ") PerformInf;
 		void PerformInf (const Handle_Geom2d_Curve & C,LProp_CurAndInf & Result);
 		%feature("compactdefaultargs") PerformCurExt;
-		%feature("autodoc", "	:param C:
+		%feature("autodoc", "	* Computes the locals extremas of curvature. in the interval of parmeters [UMin,UMax].
+
+	:param C:
 	:type C: Handle_Geom2d_Curve &
 	:param UMin:
 	:type UMin: float
@@ -455,7 +475,9 @@ class Geom2dLProp_NumericCurInf2d {
 ") PerformCurExt;
 		void PerformCurExt (const Handle_Geom2d_Curve & C,const Standard_Real UMin,const Standard_Real UMax,LProp_CurAndInf & Result);
 		%feature("compactdefaultargs") PerformInf;
-		%feature("autodoc", "	:param C:
+		%feature("autodoc", "	* Computes the inflections in the interval of parmeters [UMin,UMax].
+
+	:param C:
 	:type C: Handle_Geom2d_Curve &
 	:param UMin:
 	:type UMin: float
@@ -467,7 +489,9 @@ class Geom2dLProp_NumericCurInf2d {
 ") PerformInf;
 		void PerformInf (const Handle_Geom2d_Curve & C,const Standard_Real UMin,const Standard_Real UMax,LProp_CurAndInf & Result);
 		%feature("compactdefaultargs") IsDone;
-		%feature("autodoc", "	:rtype: bool
+		%feature("autodoc", "	* True if the solutions are found.
+
+	:rtype: bool
 ") IsDone;
 		Standard_Boolean IsDone ();
 };

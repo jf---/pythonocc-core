@@ -194,7 +194,7 @@ class UnitsAPI {
 ") AnyToAny;
 		static Standard_Real AnyToAny (const Standard_Real aData,const char * aUnit1,const char * aUnit2);
 		%feature("compactdefaultargs") LSToSI;
-		%feature("autodoc", "	* Converts the local system units value to the SI system unit value. Example: LSToSI(1.,'LENGTH') returns 0.001 if the local system //!		length unit is millimeter.
+		%feature("autodoc", "	* Converts the local system units value to the SI system unit value. Example: LSToSI(1.,'LENGTH') returns 0.001 if the local system length unit is millimeter.
 
 	:param aData:
 	:type aData: float
@@ -204,7 +204,7 @@ class UnitsAPI {
 ") LSToSI;
 		static Standard_Real LSToSI (const Standard_Real aData,const char * aQuantity);
 		%feature("compactdefaultargs") SIToLS;
-		%feature("autodoc", "	* Converts the SI system unit value to the local system units value. Example: SIToLS(1.,'LENGTH') returns 1000. if the local system //!		length unit is millimeter.
+		%feature("autodoc", "	* Converts the SI system unit value to the local system units value. Example: SIToLS(1.,'LENGTH') returns 1000. if the local system length unit is millimeter.
 
 	:param aData:
 	:type aData: float
@@ -306,7 +306,7 @@ class UnitsAPI {
 ") DimensionSolidAngle;
 		static Handle_Units_Dimensions DimensionSolidAngle ();
 		%feature("compactdefaultargs") Check;
-		%feature("autodoc", "	* Checks the coherence between the quantity <aQuantity> 	and the unit <aUnits> in the current system and //!		returns False when it's WRONG.
+		%feature("autodoc", "	* Checks the coherence between the quantity <aQuantity> and the unit <aUnits> in the current system and returns False when it's WRONG.
 
 	:param aQuantity:
 	:type aQuantity: char *

@@ -58,9 +58,13 @@ class ShapeCustom {
 	:type context: TopTools_DataMapOfShapeShape &
 	:param MD:
 	:type MD: BRepTools_Modifier &
+	:param aProgress: default value is NULL
+	:type aProgress: Handle_Message_ProgressIndicator &
+	:param aReShape: default value is NULL
+	:type aReShape: Handle_ShapeBuild_ReShape &
 	:rtype: TopoDS_Shape
 ") ApplyModifier;
-		static TopoDS_Shape ApplyModifier (const TopoDS_Shape & S,const Handle_BRepTools_Modification & M,TopTools_DataMapOfShapeShape & context,BRepTools_Modifier & MD);
+		static TopoDS_Shape ApplyModifier (const TopoDS_Shape & S,const Handle_BRepTools_Modification & M,TopTools_DataMapOfShapeShape & context,BRepTools_Modifier & MD,const Handle_Message_ProgressIndicator & aProgress = NULL,const Handle_ShapeBuild_ReShape & aReShape = NULL);
 		%feature("compactdefaultargs") DirectFaces;
 		%feature("autodoc", "	* Returns a new shape without indirect surfaces.
 
@@ -238,7 +242,7 @@ class ShapeCustom_ConvertToBSpline : public BRepTools_Modification {
 ") NewPoint;
 		Standard_Boolean NewPoint (const TopoDS_Vertex & V,gp_Pnt & P,Standard_Real &OutValue);
 		%feature("compactdefaultargs") NewCurve2d;
-		%feature("autodoc", "	* Returns Standard_True if the edge <E> has a new curve on surface on the face <F>.In this case, <C> is the new geometric support of the edge, <L> the new location, <Tol> the new tolerance.  Otherwise, returns Standard_False, and <C>, <L>, <Tol> are not significant.  <NewE> is the new edge created from <E>. <NewF> is the new face created from <F>. They may be usefull.
+		%feature("autodoc", "	* Returns Standard_True if the edge <E> has a new curve on surface on the face <F>.In this case, <C> is the new geometric support of the edge, <L> the new location, <Tol> the new tolerance. //! Otherwise, returns Standard_False, and <C>, <L>, <Tol> are not significant. //! <NewE> is the new edge created from <E>. <NewF> is the new face created from <F>. They may be usefull.
 
 	:param E:
 	:type E: TopoDS_Edge &
@@ -270,7 +274,7 @@ class ShapeCustom_ConvertToBSpline : public BRepTools_Modification {
 ") NewParameter;
 		Standard_Boolean NewParameter (const TopoDS_Vertex & V,const TopoDS_Edge & E,Standard_Real &OutValue,Standard_Real &OutValue);
 		%feature("compactdefaultargs") Continuity;
-		%feature("autodoc", "	* Returns the continuity of <NewE> between <NewF1> and <NewF2>.  <NewE> is the new edge created from <E>. <NewF1> (resp. <NewF2>) is the new face created from <F1> (resp. <F2>).
+		%feature("autodoc", "	* Returns the continuity of <NewE> between <NewF1> and <NewF2>. //! <NewE> is the new edge created from <E>. <NewF1> (resp. <NewF2>) is the new face created from <F1> (resp. <F2>).
 
 	:param E:
 	:type E: TopoDS_Edge &
@@ -502,7 +506,7 @@ class ShapeCustom_DirectModification : public BRepTools_Modification {
 ") NewPoint;
 		Standard_Boolean NewPoint (const TopoDS_Vertex & V,gp_Pnt & P,Standard_Real &OutValue);
 		%feature("compactdefaultargs") NewCurve2d;
-		%feature("autodoc", "	* Returns Standard_True if the edge <E> has a new curve on surface on the face <F>.In this case, <C> is the new geometric support of the edge, <L> the new location, <Tol> the new tolerance.  Otherwise, returns Standard_False, and <C>, <L>, <Tol> are not significant.  <NewE> is the new edge created from <E>. <NewF> is the new face created from <F>. They may be usefull.
+		%feature("autodoc", "	* Returns Standard_True if the edge <E> has a new curve on surface on the face <F>.In this case, <C> is the new geometric support of the edge, <L> the new location, <Tol> the new tolerance. //! Otherwise, returns Standard_False, and <C>, <L>, <Tol> are not significant. //! <NewE> is the new edge created from <E>. <NewF> is the new face created from <F>. They may be usefull.
 
 	:param E:
 	:type E: TopoDS_Edge &
@@ -534,7 +538,7 @@ class ShapeCustom_DirectModification : public BRepTools_Modification {
 ") NewParameter;
 		Standard_Boolean NewParameter (const TopoDS_Vertex & V,const TopoDS_Edge & E,Standard_Real &OutValue,Standard_Real &OutValue);
 		%feature("compactdefaultargs") Continuity;
-		%feature("autodoc", "	* Returns the continuity of <NewE> between <NewF1> and <NewF2>.  <NewE> is the new edge created from <E>. <NewF1> (resp. <NewF2>) is the new face created from <F1> (resp. <F2>).
+		%feature("autodoc", "	* Returns the continuity of <NewE> between <NewF1> and <NewF2>. //! <NewE> is the new edge created from <E>. <NewF1> (resp. <NewF2>) is the new face created from <F1> (resp. <F2>).
 
 	:param E:
 	:type E: TopoDS_Edge &
@@ -906,7 +910,7 @@ class ShapeCustom_Surface {
 ") Gap;
 		Standard_Real Gap ();
 		%feature("compactdefaultargs") ConvertToAnalytical;
-		%feature("autodoc", "	* Tries to convert the Surface to an Analytic form Returns the result Works only if the Surface is BSpline or Bezier. Else, or in case of failure, returns a Null Handle  If <substitute> is True, the new surface replaces the actual one in <self>  It works by analysing the case which can apply, creating the corresponding analytic surface, then checking coincidence Warning: Parameter laws are not kept, hence PCurves should be redone
+		%feature("autodoc", "	* Tries to convert the Surface to an Analytic form Returns the result Works only if the Surface is BSpline or Bezier. Else, or in case of failure, returns a Null Handle //! If <substitute> is True, the new surface replaces the actual one in <self> //! It works by analysing the case which can apply, creating the corresponding analytic surface, then checking coincidence Warning: Parameter laws are not kept, hence PCurves should be redone
 
 	:param tol:
 	:type tol: float

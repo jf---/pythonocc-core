@@ -1880,7 +1880,7 @@ class STEPCAFControl_Reader {
 ") STEPCAFControl_Reader;
 		 STEPCAFControl_Reader ();
 		%feature("compactdefaultargs") STEPCAFControl_Reader;
-		%feature("autodoc", "	* Creates a reader tool and attaches it to an already existing Session 	 Clears the session if it was not yet set for STEP
+		%feature("autodoc", "	* Creates a reader tool and attaches it to an already existing Session Clears the session if it was not yet set for STEP
 
 	:param WS:
 	:type WS: Handle_XSControl_WorkSession &
