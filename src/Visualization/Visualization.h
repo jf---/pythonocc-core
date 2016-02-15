@@ -25,7 +25,12 @@
 #include <V3d_Viewer.hxx>
 #include <V3d_View.hxx>
 #include <AIS_Shape.hxx>
-#include <Graphic3d.hxx>
+
+#include <Handle_V3d_Viewer.hxx>
+#include <Handle_V3d_View.hxx>
+#include <Handle_Graphic3d_GraphicDriver.hxx>
+#include <OpenGl_GraphicDriver.hxx>
+
 #include <Aspect_DisplayConnection.hxx>
 
 #include <cstdlib>

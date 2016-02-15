@@ -43,7 +43,7 @@ void Display3d::Init(long window_handle)
   printf("Aspect_DisplayConnection created.\n");
   if (GetGraphicDriver().IsNull())
   {
-  GetGraphicDriver() = Graphic3d::InitGraphicDriver (aDisplayConnection);
+  GetGraphicDriver() = new OpenGl_GraphicDriver (Handle(Aspect_DisplayConnection)());
   }
   printf("Graphic_Driver created.\n");
   // Create Graphic Device and Window
