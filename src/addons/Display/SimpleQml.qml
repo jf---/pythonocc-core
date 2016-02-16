@@ -45,10 +45,30 @@ Item {
     width: 600; height: 900
 
     OCCView {
-        id: occ_view
+        id: occView
         anchors.centerIn: parent
         width: parent.width
         height: parent.height
+
+
+        MouseArea {
+            id: occMouseArea
+            anchors.fill: parent
+            hoverEnabled: true
+
+            onClicked: {
+                console.log("click!!")
+             }
+
+
+            onEntered: {
+                console.log("entering red zone" )
+             }
+
+            onExited: {
+                console.log("leaving red zone" )
+             }
+        }
 
         Component.onCompleted : {
             console.log("completed OCCView")
