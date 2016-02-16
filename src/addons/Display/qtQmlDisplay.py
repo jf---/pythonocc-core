@@ -179,12 +179,19 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         if self._inited:
             self._display.Repaint()
 
+    @pyqtSlot(QPainter)
     def paint(self, painter):
 
         print ("sender painter: ", self.sender())
 
+
         if self._inited:
+            print("repainting....")
             self._display.Context.UpdateCurrentViewer()
+
+        if painter is None:
+            print("fuck painter is none...")
+            return
 
         if self._drawbox:
             self.makeCurrent()
@@ -309,6 +316,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
             self._renderer_bound = True
 
         if self._inited:
+            print("resizing")
             self._display.OnResize()
 
     @pyqtSlot()
@@ -316,7 +324,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         print ("OMG, cleanup, do something....")
         pass
 
-    #@pyqtSlot(QQuickWindow)
+    # @pyqtSlot(QQuickWindow)
     def handleWindowChanged(self, win):
         """
 

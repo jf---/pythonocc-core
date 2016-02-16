@@ -60,7 +60,6 @@ Item {
                 console.log("click!!")
              }
 
-
             onEntered: {
                 console.log("entering red zone" )
              }
@@ -72,7 +71,7 @@ Item {
 
         Component.onCompleted : {
             console.log("completed OCCView")
-            occ_view.InitDriver()
+            occView.InitDriver()
         }
 
     }
