@@ -34,8 +34,7 @@ from OCC.Display import OCCViewer
 from PyQt5.QtCore import Qt, pyqtProperty, QRectF, QUrl, QRect, pyqtSlot
 from PyQt5.QtGui import QColor, QGuiApplication, QPainter, QPen
 from PyQt5.QtQml import qmlRegisterType, QQmlListProperty
-from PyQt5.QtQuick import QQuickItem, QQuickPaintedItem, QQuickView
-
+from PyQt5.QtQuick import QQuickItem, QQuickPaintedItem, QQuickView, QQuickWindow
 
 class point(object):
     def __init__(self, obj=None):
@@ -55,8 +54,12 @@ class qtQmlBaseViewer(QQuickPaintedItem):
 
     def __init__(self, parent=None):
         QQuickPaintedItem.__init__(self, parent)
+        self.windowChanged.connect(self.handleWindowChanged)
+
         self._display = None
         self._inited = False
+
+        self._renderer_bound = False
 
         # enable Mouse Tracking
         # self.setMouseTracking(True)
@@ -110,6 +113,7 @@ class qtQmlBaseViewer(QQuickPaintedItem):
                 win_id = int(win_id)
         return win_id
 
+    # TODO: remove
     def resizeEvent(self, event):
         if self._inited:
             self._display.OnResize()
@@ -175,27 +179,20 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         if self._inited:
             self._display.Repaint()
 
-    # def paintEvent(self, painter):
     def paint(self, painter):
+
+        print ("sender painter: ", self.sender())
+
         if self._inited:
             self._display.Context.UpdateCurrentViewer()
-            # important to allow overpainting of the OCC OpenGL context in Qt
-            self.swapBuffers()
-
-        else:
-            print ("not inited...")
 
         if self._drawbox:
             self.makeCurrent()
-            # painter = QPainter(self)
             painter.setPen(QPen(QColor(0, 0, 0), 1))
             rect = QRect(*self._drawbox)
             painter.drawRect(rect)
             painter.end()
             self.doneCurrent()
-
-    def resizeGL(self, width, height):
-        self.setupViewport(width, height)
 
     def ZoomAll(self, evt):
         self._display.FitAll()
@@ -222,6 +219,9 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         self._display.StartRotation(self.dragStartPos.x, self.dragStartPos.y)
 
     def mouseReleaseEvent(self, event):
+
+        print ("mouse release event")
+
         pt = point(event.pos())
         modifiers = event.modifiers()
 
@@ -297,6 +297,40 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         else:
             self._drawbox = False
             self._display.MoveTo(pt.x, pt.y)
+
+
+    @pyqtSlot()
+    def sync(self):
+        print ("OMG, sync, do something....")
+        if not self._renderer_bound:
+            win  = self.window()
+            painter = QPainter()
+            win.beforeSynchronizing.connect(lambda: self.paint(painter), Qt.DirectConnection)
+            self._renderer_bound = True
+
+        if self._inited:
+            self._display.OnResize()
+
+    @pyqtSlot()
+    def cleanup(self):
+        print ("OMG, cleanup, do something....")
+        pass
+
+    #@pyqtSlot(QQuickWindow)
+    def handleWindowChanged(self, win):
+        """
+
+        Parameters
+        ----------
+        win : QQuickWindow
+        """
+        if win:
+            win.beforeSynchronizing.connect(self.sync, Qt.DirectConnection)
+            #win.sceneGraphInvalidated.connect(self.cleanup, Qt.DirectConnection)
+            win.setClearBeforeRendering(False)
+
+            # win.mouseReleaseEvent.connect(self.mouseReleaseEvent)
+
 
 
 if __name__ == '__main__':
