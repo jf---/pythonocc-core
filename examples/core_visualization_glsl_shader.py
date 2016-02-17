@@ -22,6 +22,8 @@
 #-------------------------------------------------------------------------------
 
 import os, glob
+
+from OCC.Display.OCCViewer import to_string
 from OCC.Display.SimpleGui import init_display
 from OCC.BRepPrimAPI import BRepPrimAPI_MakeSphere
 from OCC.Graphic3d import (Graphic3d_ShaderProgram, Graphic3d_TOS_VERTEX, Graphic3d_TOS_FRAGMENT,
@@ -35,9 +37,10 @@ my_box = BRepPrimAPI_MakeSphere(20.).Shape()
 anIO = display.DisplayShape(my_box, update=True)
 
 # returns the directory where OCE stores the GLSL shaders
-_shader_dir = Graphic3d_ShaderProgram.ShadersFolder()
+# _shader_dir = #Graphic3d_ShaderProgram.ShadersFolder()
 # convert the returned TCollection_AsciiString to a python string
-shader_dir = "".join([_shader_dir.Value(x+1) for x in range(_shader_dir.Length())])
+# shader_dir = "".join([_shader_dir.Value(x+1) for x in range(_shader_dir.Length())])
+shader_dir = "/Users/jelleferinga/miniconda/envs/_test/share/oce-0.18-dev/src/Shaders"
 
 # look for the shaders stored in the shader folder...
 # only a single vertex (vs) and fragment (fs) shader for the moment
@@ -67,12 +70,31 @@ global_shader = sm.GetObject().FillArea3dAspect().GetObject().ShaderProgram()
 aProgram.This()
 
 # attach to a single shape
-aspect.SetShaderProgram(aProgram.This())
+# aspect.SetShaderProgram(aProgram.GetHandle())
+#
+# aspect.SetShaderProgram(global_shader)
+#
+# from OCC.Graphic3d import Graphic3d_ShaderObject_CreateFromFile
+from OCC.Graphic3d import Graphic3d_ShaderObject_CreateFromSource
+
+vs = TCollection_AsciiString("/Users/jelleferinga/miniconda/envs/_test/share/oce-0.18-dev/src/Shaders/PhongShading.vs")
+# eee = Graphic3d_ShaderObject_CreateFromSource(Graphic3d_TOS_VERTEX, vs)
+
+from PyQt5.QtCore import pyqtRemoveInputHook
+pyqtRemoveInputHook()
+import ipdb; ipdb.set_trace()
+
+
+aspect.SetShaderProgram(aProgram)
+
+# aProgram.AttachShader(eee)
 
 # update the rendering attributes such that the sphere is rendered with the GLSL shader
 display.Context.Redisplay(anIO)
 # type(aspect.ShaderProgram())
 # Out[76]: SwigPyObject
+
+
 
 # start the GUI event loop
 start_display()
