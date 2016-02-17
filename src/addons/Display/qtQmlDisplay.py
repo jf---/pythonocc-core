@@ -22,6 +22,8 @@ from __future__ import print_function
 import logging
 import sys
 
+from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox
+
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
@@ -31,10 +33,12 @@ from OCC.Display import OCCViewer
 # QtCore, QtGui, QtWidgets, QtOpenGL = get_qt_modules()
 
 
-from PyQt5.QtCore import Qt, pyqtProperty, QRectF, QUrl, QRect, pyqtSlot
+from PyQt5.QtCore import Qt, pyqtProperty, QRectF, QUrl, QRect, pyqtSlot, QObject
 from PyQt5.QtGui import QColor, QGuiApplication, QPainter, QPen
 from PyQt5.QtQml import qmlRegisterType, QQmlListProperty
 from PyQt5.QtQuick import QQuickItem, QQuickPaintedItem, QQuickView, QQuickWindow
+
+
 
 class point(object):
     def __init__(self, obj=None):
@@ -48,7 +52,7 @@ class point(object):
         self.y = obj.y()
 
 
-class qtQmlBaseViewer(QQuickPaintedItem):
+class qtQmlBaseViewer(QQuickItem):
     ''' The base Qt Widget for an OCC viewer
     '''
 
@@ -88,36 +92,9 @@ class qtQmlBaseViewer(QQuickPaintedItem):
         It must be an integer
         '''
         win_id = self._winId
-
-        if not self._have_backend:
-            raise ValueError("no backend has been loaded yet... use "
-                             "``get_backend`` first")
-
-        if self._have_pyside:
-            ### with PySide, self.winId() does not return an integer
-            if sys.platform == "win32":
-                ## Be careful, this hack is py27 specific
-                ## does not work with python31 or higher
-                ## since the PyCObject api was changed
-                import ctypes
-                ctypes.pythonapi.PyCObject_AsVoidPtr.restype = ctypes.c_void_p
-                ctypes.pythonapi.PyCObject_AsVoidPtr.argtypes = [
-                    ctypes.py_object]
-                win_id = ctypes.pythonapi.PyCObject_AsVoidPtr(win_id)
-
-        elif self._have_pyqt4 or self._have_pyqt5:
-            ## below integer cast may be required because self.winId() can
-            ## returns a sip.voitptr according to the PyQt version used
-            ## as well as the python version
-            if type(win_id) is not int:  # cast to int using the int() funtion
-                win_id = int(win_id)
+        if type(win_id) is not int:  # cast to int using the int() funtion
+            win_id = int(win_id)
         return win_id
-
-    # TODO: remove
-    def resizeEvent(self, event):
-        if self._inited:
-            self._display.OnResize()
-
 
 class qtQmlViewer3d(qtQmlBaseViewer):
     def __init__(self, *kargs):
@@ -131,6 +108,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         self._rightisdown = False
         self._selection = None
         self._drawtext = True
+        self.dragStartPos = point()
 
     @pyqtSlot()
     def InitDriver(self):
@@ -145,6 +123,10 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         self._inited = True
         # dict mapping keys to functions
         self._SetupKeyMap()
+
+        box = BRepPrimAPI_MakeBox(1,1,1).Shape()
+        self._display.DisplayShape(box)
+        self._display.FitAll()
 
     def _SetupKeyMap(self):
         def set_shade_mode():
@@ -167,10 +149,6 @@ class qtQmlViewer3d(qtQmlBaseViewer):
             msg = "key: {0}\nnot mapped to any function".format(code)
             log.info(msg)
 
-    def Test(self):
-        if self._inited:
-            self._display.Test()
-
     def focusInEvent(self, event):
         if self._inited:
             self._display.Repaint()
@@ -179,32 +157,20 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         if self._inited:
             self._display.Repaint()
 
-    @pyqtSlot(QPainter)
-    def paint(self, painter):
+    def paint(self):
 
-        print ("sender painter: ", self.sender())
-
+        sender = self.sender()
+        print ("sender painter: ", sender)
 
         if self._inited:
             print("repainting....")
             self._display.Context.UpdateCurrentViewer()
 
-        if painter is None:
-            print("fuck painter is none...")
-            return
-
-        if self._drawbox:
-            self.makeCurrent()
-            painter.setPen(QPen(QColor(0, 0, 0), 1))
-            rect = QRect(*self._drawbox)
-            painter.drawRect(rect)
-            painter.end()
-            self.doneCurrent()
-
     def ZoomAll(self, evt):
         self._display.FitAll()
 
     def wheelEvent(self, event):
+        print("wheel sender: ", self.sender())
         if self._have_pyqt5:
             delta = event.angleDelta().y()
         else:
@@ -217,39 +183,50 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         self._display.Repaint()
         self._display.ZoomFactor(zoom_factor)
 
-    def dragMoveEvent(self, event):
-        pass
-
     def mousePressEvent(self, event):
+        print ("mouse press")
         self.setFocus()
         self.dragStartPos = point(event.pos())
         self._display.StartRotation(self.dragStartPos.x, self.dragStartPos.y)
 
-    def mouseReleaseEvent(self, event):
+        self.window().update()
+
+    # @pyqtSlot(int, int)
+    # def mousePressEvent(self, x, y):
+    #     # self.setFocus()
+    #     self.dragStartPos.x = x
+    #     self.dragStartPos.y = y
+    #     self._display.StartRotation(self.dragStartPos.x, self.dragStartPos.y)
+
+    @pyqtSlot(int, int, int)
+    def mouseReleaseEvent(self, mouse_button, x, y):
 
         print ("mouse release event")
 
-        pt = point(event.pos())
-        modifiers = event.modifiers()
+        if mouse_button == Qt.LeftButton:
+            pt = point()
+            pt.x = x
+            pt.y = y
 
-        if event.button() == Qt.LeftButton:
-            pt = point(event.pos())
             if self._select_area:
                 [Xmin, Ymin, dx, dy] = self._drawbox
                 self._display.SelectArea(Xmin, Ymin, Xmin + dx, Ymin + dy)
                 self._select_area = False
-            else:
-                # multiple select if shift is pressed
-                if modifiers == Qt.ShiftModifier:
-                    self._display.ShiftSelect(pt.x, pt.y)
-                else:
-                    # single select otherwise
-                    self._display.Select(pt.x, pt.y)
-        elif event.button() == Qt.RightButton:
+            # else:
+            #     # multiple select if shift is pressed
+            #     if modifiers == Qt.ShiftModifier:
+            #         self._display.ShiftSelect(pt.x, pt.y)
+            #     else:
+            #         # single select otherwise
+            #         self._display.Select(pt.x, pt.y)
+        elif mouse_button == Qt.RightButton:
             if self._zoom_area:
                 [Xmin, Ymin, dx, dy] = self._drawbox
                 self._display.ZoomArea(Xmin, Ymin, Xmin + dx, Ymin + dy)
                 self._zoom_area = False
+
+        self.window().update()
+
 
     def DrawBox(self, event):
         tolerance = 2
@@ -259,22 +236,23 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         if abs(dx) <= tolerance and abs(dy) <= tolerance:
             return
         self._drawbox = [self.dragStartPos.x, self.dragStartPos.y, dx, dy]
-        self.update()
+        self.window().update()
 
-    def mouseMoveEvent(self, evt):
-        pt = point(evt.pos())
-        buttons = int(evt.buttons())
-        modifiers = evt.modifiers()
+    @pyqtSlot(int, int, int)
+    def mouseMoveEvent(self, mouse_button, x, y):
+        pt = point()
+        pt.x = x
+        pt.y = y
         # ROTATE
-        if (buttons == Qt.LeftButton and
-                not modifiers == Qt.ShiftModifier):
+        if mouse_button == Qt.LeftButton:
+            # and not modifiers == Qt.ShiftModifier):
             dx = pt.x - self.dragStartPos.x
             dy = pt.y - self.dragStartPos.y
             self._display.Rotation(pt.x, pt.y)
             self._drawbox = False
         # DYNAMIC ZOOM
-        elif (buttons == Qt.RightButton and
-              not modifiers == Qt.ShiftModifier):
+        elif mouse_button == Qt.RightButton:
+            # and not modifiers == Qt.ShiftModifier):
             self._display.Repaint()
             self._display.DynamicZoom(abs(self.dragStartPos.x),
                                       abs(self.dragStartPos.y), abs(pt.x),
@@ -283,7 +261,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
             self.dragStartPos.y = pt.y
             self._drawbox = False
         # PAN
-        elif buttons == Qt.MidButton:
+        elif mouse_button == Qt.MidButton:
             dx = pt.x - self.dragStartPos.x
             dy = pt.y - self.dragStartPos.y
             self.dragStartPos.x = pt.x
@@ -292,31 +270,32 @@ class qtQmlViewer3d(qtQmlBaseViewer):
             self._drawbox = False
         # DRAW BOX
         # ZOOM WINDOW
-        elif (buttons == Qt.RightButton and
-              modifiers == Qt.ShiftModifier):
+        elif mouse_button == Qt.RightButton:
+            # and modifiers == Qt.ShiftModifier):
             self._zoom_area = True
-            self.DrawBox(evt)
+            # self.DrawBox(evt)
         # SELECT AREA
-        elif (buttons == Qt.LeftButton and
-              modifiers == Qt.ShiftModifier):
+        elif mouse_button == Qt.LeftButton:
+            # and modifiers == Qt.ShiftModifier):
             self._select_area = True
-            self.DrawBox(evt)
+            # self.DrawBox(evt)
         else:
             self._drawbox = False
             self._display.MoveTo(pt.x, pt.y)
 
+        self.window().update()
 
-    @pyqtSlot()
+
+    # @pyqtSlot()
     def sync(self):
         print ("OMG, sync, do something....")
         if not self._renderer_bound:
             win  = self.window()
-            painter = QPainter()
-            win.beforeSynchronizing.connect(lambda: self.paint(painter), Qt.DirectConnection)
+            win.beforeSynchronizing.connect(self.paint, Qt.DirectConnection)
             self._renderer_bound = True
 
         if self._inited:
-            print("resizing")
+            # print("resizing")
             self._display.OnResize()
 
     @pyqtSlot()
@@ -334,10 +313,9 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         """
         if win:
             win.beforeSynchronizing.connect(self.sync, Qt.DirectConnection)
-            #win.sceneGraphInvalidated.connect(self.cleanup, Qt.DirectConnection)
+            # win.mousePressEvent.connect(self.mousePressEvent)
             win.setClearBeforeRendering(False)
 
-            # win.mouseReleaseEvent.connect(self.mouseReleaseEvent)
 
 
 
