@@ -38,10 +38,22 @@
 **
 ****************************************************************************/
 
+import QtQuick 2.2
 import OCC 1.0
-import QtQuick 2.0
+
+
+//import QtQuick.Window 2.1
+
+import QtQuick.Dialogs 1.2
+
+//import QtQuick.Controls 1.2
+//import QtQuick.Controls.Styles 1.2
+
+
+
 
 Item {
+    id: omg
     width: 600; height: 900
 
     OCCView {
@@ -55,10 +67,21 @@ Item {
             id: occMouseArea
             anchors.fill: parent
             hoverEnabled: true
+            acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MidButton
 
-            onClicked: {
-                console.log("click!!")
-             }
+//            onClicked: {
+//                occView.mousePressEvent(pressedButtons, mouseX, mouseY)
+//             }
+
+            onPositionChanged: {
+                if (occMouseArea.pressed === true) {
+                occView.mouseMoveEvent(pressedButtons, mouseX, mouseY)
+                }
+            }
+
+            onReleased: {
+                occView.mouseReleaseEvent(pressedButtons, mouseX, mouseY)
+            }
 
             onEntered: {
                 console.log("entering red zone" )
@@ -75,4 +98,44 @@ Item {
         }
 
     }
+
+
+    // open button
+    Rectangle {
+      id: open_button
+
+      // align
+      anchors.top: parent.top
+      anchors.left: parent.left
+
+      opacity: 0.5
+
+      // size
+      width:  200
+      height: 200
+
+      color: "white"
+
+      // image
+      Image {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+
+        source: "qrc:///icons/res/icons/ic_action_collection.png"
+      }
+
+      MouseArea {
+        anchors.fill: parent
+        onClicked: file_dialog.open()
+      }
+    }
+
+  FileDialog {
+    id: file_dialog
+    title: "Please choose a file"
+    selectMultiple: false
+    nameFilters: [ "BRep files (*.brep)", "All files (*)" ]
+    //onAccepted: viewer.ReadShapeFromFile(file_dialog.fileUrl)
+  }
+
 }
