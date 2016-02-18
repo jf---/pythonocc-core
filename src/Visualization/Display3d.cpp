@@ -43,7 +43,7 @@ void Display3d::Init(long window_handle)
   printf("Aspect_DisplayConnection created.\n");
   if (GetGraphicDriver().IsNull())
   {
-  GetGraphicDriver() = new OpenGl_GraphicDriver (Handle(Aspect_DisplayConnection)());
+    GetGraphicDriver() = new OpenGl_GraphicDriver (Handle(Aspect_DisplayConnection)());
   }
   printf("Graphic_Driver created.\n");
   // Create Graphic Device and Window
@@ -57,8 +57,19 @@ void Display3d::Init(long window_handle)
       myWindow =new Xw_Window(aDisplayConnection, (Window) window_handle);
       printf("Xw_Window created.\n");
   #endif
+
   // Create V3dViewer and V3d_View
   myV3dViewer = new V3d_Viewer(GetGraphicDriver(), (short* const)"viewer");
+  Handle(OpenGl_GraphicDriver) aDriver = Handle(OpenGl_GraphicDriver)::DownCast (myV3dViewer->Driver());
+  // Enables FFP (fixed-function pipeline), do not use built-in GLSL programs
+  // (ON by default on desktop OpenGL and OFF on OpenGL ES)
+  aDriver->ChangeOptions().ffpEnable = Standard_False;
+  // Specify that driver should not swap back/front buffers at the end of frame
+  // Useful when OCCT Viewer is integrated into existing OpenGL rendering pipeline as part
+  // thus swapping part is performed outside ( eg, let Qt handle this )
+  // OFF by default.
+  aDriver->ChangeOptions().buffersNoSwap = Standard_True;
+
   printf("V3d_Viewer created.\n");
   myV3dView = myV3dViewer->CreateView();	
   printf("V3d_View created\n");
