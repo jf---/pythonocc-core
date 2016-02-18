@@ -70,11 +70,11 @@ class Mutex(QMutex):
         QMutex.__init__(self)
 
     def __enter__(self):
-        print("lock")
+        # print("lock")
         self.lock()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        print("unlock")
+        # print("unlock")
         self.unlock()
 
 
@@ -356,7 +356,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
     def update(self):
         window = self.window()
         if window:
-            print ("update")
+            # print ("update")
             self.window().update()
 
     # def paint(self):
@@ -384,13 +384,15 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         mouseMoveEvent method
 
         """
+        #print("sender: ", self.sender())
+
         if self._inited:
-            # with self.mutex:
-            print("paint")
-            action = self._dispatch_camera_command_actions()
-            if not action:
-                # print ("extra redraw???")
-                self._display.View.Redraw()
+            with self.mutex:
+                # print("paint")
+                action = self._dispatch_camera_command_actions()
+                if not action:
+                    # print ("extra redraw???")
+                    self._display.View.Redraw()
 
     def wheelEvent(self, event):
         delta = event.angleDelta().y()
@@ -493,7 +495,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         self.update()
 
     def sync(self):
-        print ("sync")
+        # print ("sync")
         # view_size = self.window().size() * self.window().devicePixelRatio()
 
         # with self.mutex:
