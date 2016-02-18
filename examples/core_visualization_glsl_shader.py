@@ -39,9 +39,10 @@ display, start_display, add_menu, add_function_to_menu = init_display()
 def step():
     tA = time.time()
     step_reader = STEPControl_Reader()
+    # status = step_reader.ReadFile("""/Users/jelleferinga/Dropbox (Odico)/Odico 05 RD/01 Hardware/01 Documentation/Drawings From Per's computer/Portal Robot irb6620/Tool/Full/baumer_wiresaw_full.stp""")
     status = step_reader.ReadFile(
-        """/Users/jelleferinga/Dropbox (Odico)/Odico 05 RD/01 Hardware/01 Documentation/Drawings From Per's computer/Portal Robot irb6620/Tool/Full/baumer_wiresaw_full.stp""")
-    # status = step_reader.ReadFile("""/Users/jelleferinga/Dropbox (Odico)/Odico 02 xPro-Archive/C 064 Playscape/003 Picnicsten/01 Recieved drawings/25669_2014-06-10_Playscapes_07.stp""")
+        """/Users/jelleferinga/Dropbox (Odico)/Odico 02 xPro-Archive/C 064 Playscape/003 Picnicsten/01 Recieved drawings/25669_2014-06-10_Playscapes_07.stp"""
+    )
 
     if status == IFSelect_RetDone:  # check status
         failsonly = False
