@@ -69,6 +69,9 @@ void Display3d::Init(long window_handle)
   // thus swapping part is performed outside ( eg, let Qt handle this )
   // OFF by default.
   aDriver->ChangeOptions().buffersNoSwap = Standard_True;
+  // Print GLSL program compilation/linkage warnings, if any
+  aDriver->ChangeOptions().glslWarnings = Standard_True;
+//  aDriver->ChangeOptions().swapInterval = 0;
 
   printf("V3d_Viewer created.\n");
   myV3dView = myV3dViewer->CreateView();	
