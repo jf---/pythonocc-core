@@ -29,7 +29,7 @@ log = logging.getLogger(__name__)
 
 from OCC.Display import OCCViewer
 
-from PyQt5.QtCore import Qt, QUrl, pyqtSlot, QObject
+from PyQt5.QtCore import Qt, QUrl, pyqtSlot, QObject, QMutex
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import qmlRegisterType, QQmlApplicationEngine
 from PyQt5.QtQuick import QQuickItem, QQuickView, QQuickWindow
@@ -65,6 +65,18 @@ class point(object):
         self.y = obj.y()
 
 
+class Mutex(QMutex):
+    def __init__(self):
+        QMutex.__init__(self)
+
+    def __enter__(self):
+        print("lock")
+        self.lock()
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print("unlock")
+        self.unlock()
+
 class qtQmlBaseViewer(QQuickItem):
     ''' The base Qt Widget for an OCC viewer
     '''
@@ -77,6 +89,9 @@ class qtQmlBaseViewer(QQuickItem):
         self.setFlag(self.ItemAcceptsDrops, True)
 
         self._display = None
+
+        # for interconnection with rendering thread
+        self.mutex = Mutex()
 
         # -----
         # STATE 
@@ -237,7 +252,6 @@ class qtQmlViewer3d(qtQmlBaseViewer):
 
         """
         self._display.StartRotation(*self.point_on_mouse_press)
-        print("self.point_on_mouse_move", self.point_on_mouse_move)
         self._display.Rotation(*self.point_on_mouse_move)
         self.point_on_mouse_press = self._point_on_mouse_move
 
@@ -371,25 +385,12 @@ class qtQmlViewer3d(qtQmlBaseViewer):
 
 
         if self._inited:
-            action = self._dispatch_camera_command_actions()
-            if not action:
-                # print ("extra redraw???")
-                self._display.View.Redraw()
+            with self.mutex:
+                action = self._dispatch_camera_command_actions()
+                # if not action:
+                #     # print ("extra redraw???")
+                #     self._display.View.Redraw()
 
-                # if self.context().isValid():
-                #     # acquire the OpenGL context
-                #     self.makeCurrent()
-                #     painter = QPainter(self)
-                #     painter.setRenderHint(QPainter.Antialiasing, True)
-                #     # swap the buffer before overpainting it
-                #     self.swapBuffers()
-                #     # perform overpainting
-                #     # self._overpaint(event, painter)
-                #     painter.end()
-                #     # hand over the OpenGL context
-                #     self.doneCurrent()
-                # else:
-                #     print('invalid OpenGL context: Qt cannot overpaint viewer')
 
     def wheelEvent(self, event):
         delta = event.angleDelta().y()
@@ -399,7 +400,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         else:
             self.zoom_factor = 0.7
         self.current_action = ON_ZOOM_FACTOR
-        self.point_on_mouse_move = event
+        # self.point_on_mouse_move = event
 
         self.update()
 
@@ -458,8 +459,9 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         dx = pt.x - self.dragStartPos.x
         dy = pt.y - self.dragStartPos.y
         if abs(dx) <= tolerance and abs(dy) <= tolerance:
-            return
-        self._drawbox = [self.dragStartPos.x, self.dragStartPos.y, dx, dy]
+            pass
+        else:
+            self._drawbox = [self.dragStartPos.x, self.dragStartPos.y, dx, dy]
         self.window().update()
 
     @pyqtSlot(int, int, int)
@@ -490,7 +492,6 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         self.update()
 
     def sync(self):
-        print("OMG, sync, do something....")
         if not self._renderer_bound:
             win = self.window()
             win.beforeSynchronizing.connect(self.paint, Qt.DirectConnection)

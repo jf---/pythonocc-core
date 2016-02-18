@@ -67,6 +67,8 @@ Item {
 
         MouseArea {
             id: occMouseArea
+            width: parent.width
+            height: parent.height
             anchors.fill: parent
             hoverEnabled: true
             acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MidButton
