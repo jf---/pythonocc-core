@@ -29,9 +29,9 @@ log = logging.getLogger(__name__)
 
 from OCC.Display import OCCViewer
 
-from PyQt5.QtCore import Qt, QUrl, pyqtSlot, QObject, QMutex
+from PyQt5.QtCore import Qt, QUrl, pyqtSlot, QMutex
 from PyQt5.QtGui import QGuiApplication
-from PyQt5.QtQml import qmlRegisterType, QQmlApplicationEngine
+from PyQt5.QtQml import qmlRegisterType
 from PyQt5.QtQuick import QQuickItem, QQuickView, QQuickWindow
 
 # --------------------------------------------------------------------------
@@ -77,6 +77,7 @@ class Mutex(QMutex):
         print("unlock")
         self.unlock()
 
+
 class qtQmlBaseViewer(QQuickItem):
     ''' The base Qt Widget for an OCC viewer
     '''
@@ -85,7 +86,7 @@ class qtQmlBaseViewer(QQuickItem):
         QQuickItem.__init__(self, parent)
         self.windowChanged.connect(self.handleWindowChanged)
 
-        self.setFlag(self.ItemHasContents, True)
+        # self.setFlag(self.ItemHasContents, True)
         self.setFlag(self.ItemAcceptsDrops, True)
 
         self._display = None
@@ -355,6 +356,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
     def update(self):
         window = self.window()
         if window:
+            print ("update")
             self.window().update()
 
     # def paint(self):
@@ -382,15 +384,13 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         mouseMoveEvent method
 
         """
-
-
         if self._inited:
-            with self.mutex:
-                action = self._dispatch_camera_command_actions()
-                # if not action:
-                #     # print ("extra redraw???")
-                #     self._display.View.Redraw()
-
+            # with self.mutex:
+            print("paint")
+            action = self._dispatch_camera_command_actions()
+            if not action:
+                # print ("extra redraw???")
+                self._display.View.Redraw()
 
     def wheelEvent(self, event):
         delta = event.angleDelta().y()
@@ -492,10 +492,17 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         self.update()
 
     def sync(self):
+
+        # view_size = self.window().size() * self.window().devicePixelRatio()
+
+        # with self.mutex:
         if not self._renderer_bound:
             win = self.window()
-            win.beforeSynchronizing.connect(self.paint, Qt.DirectConnection)
+            # win.beforeSynchronizing.connect(self.paint, Qt.DirectConnection)
+            win.beforeRendering.connect(self.paint, Qt.DirectConnection)
             self._renderer_bound = True
+
+        # self._display.OnResize()
 
     @pyqtSlot()
     def cleanup(self):
@@ -511,13 +518,16 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         """
         print("window changed")
         if win:
-            win.beforeSynchronizing.connect(self.sync, Qt.DirectConnection)
+            win.beforeRendering.connect(self.sync, Qt.DirectConnection)
+            # win.beforeSynchronizing.connect(self.sync, Qt.DirectConnection)
             # win.mousePressEvent.connect(self.mousePressEvent)
             win.setClearBeforeRendering(False)
 
-    def geometryChanged(self, QRectF, QRectF_1):
+    def geometryChanged(self, rec1, rec2):
         if self._inited:
             self._display.OnResize()
+
+        super(qtQmlViewer3d, self).geometryChanged(rec1, rec2)
 
 
 if __name__ == '__main__':
@@ -535,7 +545,6 @@ if __name__ == '__main__':
         QUrl.fromLocalFile(
             os.path.join(os.path.dirname(__file__), 'SimpleQml.qml')))
     view.show()
-
 
     # engine = QQmlApplicationEngine()
     # context = engine.rootContext()
