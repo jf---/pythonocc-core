@@ -401,7 +401,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
             self.zoom_factor = 0.7
         self.current_action = ON_ZOOM_FACTOR
         # self.point_on_mouse_move = event
-
+        self.paint()
         self.update()
 
     @pyqtSlot(int, int, int)
@@ -451,7 +451,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         self._select_area = False
 
         self.point_on_mouse_move = (x, y)
-        self.update()
+        # self.update()
 
     def drawBox(self, event):
         tolerance = 2
@@ -462,7 +462,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
             pass
         else:
             self._drawbox = [self.dragStartPos.x, self.dragStartPos.y, dx, dy]
-        self.window().update()
+        self.update()
 
     @pyqtSlot(int, int, int)
     def mouseMoveEvent(self, mouse_button, x, y):
@@ -489,10 +489,11 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         elif mouse_button == Qt.LeftButton:  # and modifiers == Qt.ShiftModifier:
             self.current_action = ON_SELECT_AREA
 
+        self.paint()
         self.update()
 
     def sync(self):
-
+        print ("sync")
         # view_size = self.window().size() * self.window().devicePixelRatio()
 
         # with self.mutex:
@@ -526,9 +527,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
     def geometryChanged(self, rec1, rec2):
         if self._inited:
             self._display.OnResize()
-
-        super(qtQmlViewer3d, self).geometryChanged(rec1, rec2)
-
+        super(qtQmlViewer3d, self).geometryChanged(rec1,rec2)
 
 if __name__ == '__main__':
     import os
