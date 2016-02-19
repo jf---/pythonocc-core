@@ -86,7 +86,7 @@ class qtQmlBaseViewer(QQuickItem):
         QQuickItem.__init__(self, parent)
         self.windowChanged.connect(self.handleWindowChanged)
 
-        # self.setFlag(self.ItemHasContents, True)
+        self.setFlag(self.ItemHasContents, True)
         self.setFlag(self.ItemAcceptsDrops, True)
 
         self._display = None
@@ -495,17 +495,12 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         self.update()
 
     def sync(self):
-        # print ("sync")
-        # view_size = self.window().size() * self.window().devicePixelRatio()
-
         # with self.mutex:
         if not self._renderer_bound:
             win = self.window()
             # win.beforeSynchronizing.connect(self.paint, Qt.DirectConnection)
             win.beforeRendering.connect(self.paint, Qt.DirectConnection)
             self._renderer_bound = True
-
-        # self._display.OnResize()
 
     @pyqtSlot()
     def cleanup(self):
@@ -522,13 +517,14 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         print("window changed")
         if win:
             win.beforeRendering.connect(self.sync, Qt.DirectConnection)
-            # win.beforeSynchronizing.connect(self.sync, Qt.DirectConnection)
+            win.sceneGraphInvalidated.connect(self.cleanup, Qt.DirectConnection)
             # win.mousePressEvent.connect(self.mousePressEvent)
             win.setClearBeforeRendering(False)
 
     def geometryChanged(self, rec1, rec2):
         if self._inited:
             self._display.OnResize()
+        # required to keep the mouse are synced
         super(qtQmlViewer3d, self).geometryChanged(rec1,rec2)
 
 if __name__ == '__main__':
