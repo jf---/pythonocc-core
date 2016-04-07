@@ -34,7 +34,10 @@ static Handle(Graphic3d_GraphicDriver)& GetGraphicDriver()
   return aGraphicDriver;
 }
 
-void Display3d::Init(long window_handle)
+void Display3d::Init(long window_handle,
+                     bool ffpEnabled,
+                     bool buffersNoSwapEnabled,
+                     bool glslWarningsEnabled)
 {
   printf(" ###### 3D rendering pipe initialisation #####\n");
 	printf("Display3d class initialization starting ...\n");
@@ -63,15 +66,17 @@ void Display3d::Init(long window_handle)
   Handle(OpenGl_GraphicDriver) aDriver = Handle(OpenGl_GraphicDriver)::DownCast (myV3dViewer->Driver());
   // Enables FFP (fixed-function pipeline), do not use built-in GLSL programs
   // (ON by default on desktop OpenGL and OFF on OpenGL ES)
-  aDriver->ChangeOptions().ffpEnable = Standard_False;
+  aDriver->ChangeOptions().ffpEnable = ffpEnabled;
   // Specify that driver should not swap back/front buffers at the end of frame
   // Useful when OCCT Viewer is integrated into existing OpenGL rendering pipeline as part
   // thus swapping part is performed outside ( eg, let Qt handle this )
-  // OFF by default.
-  aDriver->ChangeOptions().buffersNoSwap = Standard_True;
+  // Standard_False by default.
+  aDriver->ChangeOptions().buffersNoSwap = buffersNoSwapEnabled;
   // Print GLSL program compilation/linkage warnings, if any
-  aDriver->ChangeOptions().glslWarnings = Standard_True;
-//  aDriver->ChangeOptions().swapInterval = 0;
+  aDriver->ChangeOptions().glslWarnings = glslWarningsEnabled;
+  // swapInterval
+  // controls swap interval - 0 for VSync off and 1 for VSync on, 1 by default
+  // aDriver->ChangeOptions().swapInterval = swapIntervalEnabled;
 
   printf("V3d_Viewer created.\n");
   myV3dView = myV3dViewer->CreateView();	
