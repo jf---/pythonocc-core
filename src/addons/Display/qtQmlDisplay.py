@@ -22,6 +22,7 @@ from __future__ import print_function
 import logging
 import sys
 
+import time
 from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -31,7 +32,7 @@ from OCC.Display import OCCViewer
 
 from PyQt5.QtCore import Qt, QUrl, pyqtSlot, QMutex
 from PyQt5.QtGui import QGuiApplication
-from PyQt5.QtQml import qmlRegisterType
+from PyQt5.QtQml import qmlRegisterType, QQmlApplicationEngine
 from PyQt5.QtQuick import QQuickItem, QQuickView, QQuickWindow
 
 # --------------------------------------------------------------------------
@@ -52,7 +53,6 @@ ON_SHIFT_SELECT = "on_shift_select"
 ON_SELECT = "on_select"
 ON_SELECT_AREA = "on_select_area"
 
-frame_cntr = 0
 
 class point(object):
     def __init__(self, obj=None):
@@ -71,11 +71,11 @@ class Mutex(QMutex):
         QMutex.__init__(self)
 
     def __enter__(self):
-        # print("lock")
+        print("lock")
         self.lock()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        # print("unlock")
+        print("unlock")
         self.unlock()
 
 
@@ -87,7 +87,7 @@ class qtQmlBaseViewer(QQuickItem):
         QQuickItem.__init__(self, parent)
         self.windowChanged.connect(self.handleWindowChanged)
 
-        self.setFlag(self.ItemHasContents, True)
+        # self.setFlag(self.ItemHasContents, True)
         self.setFlag(self.ItemAcceptsDrops, True)
 
         self._display = None
@@ -96,7 +96,7 @@ class qtQmlBaseViewer(QQuickItem):
         self.mutex = Mutex()
 
         # -----
-        # STATE 
+        # STATE
         # -----
 
         self._inited = False
@@ -120,7 +120,7 @@ class qtQmlBaseViewer(QQuickItem):
         self._is_left_mouse_button_surpressed = False
 
         # -----
-        # STATE 
+        # STATE
         # -----
 
     @property
@@ -206,8 +206,6 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         box = BRepPrimAPI_MakeBox(1, 1, 1).Shape()
         self._display.DisplayShape(box)
         self._display.FitAll()
-
-        self.frame_cntr = 0
 
     def on_zoom_area(self):
         dx, dy = self.delta_mouse_event_pos
@@ -315,7 +313,6 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         try:
             if self.current_action is not None:
                 action = getattr(self, self.current_action)
-                print ("action: {}".format(action))
                 action()
         except Exception:
             log.exception("could not invoke camera command action {0}".format(self.current_action))
@@ -360,18 +357,14 @@ class qtQmlViewer3d(qtQmlBaseViewer):
     def update(self):
         window = self.window()
         if window:
-            self.frame_cntr += 1
-            print("render frame nr: {}".format(self.frame_cntr))
-            # print ("update")
+            print ("update")
             self.window().update()
-        else:
-            print ("no window" )
 
     # def paint(self):
-    # 
+    #
     #     sender = self.sender()
     #     print("sender painter: ", sender)
-    # 
+    #
     #     if self._inited:
     #         print("repainting....")
     #         self._display.Context.UpdateCurrentViewer()
@@ -392,14 +385,14 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         mouseMoveEvent method
 
         """
-        #print("sender: ", self.sender())
-
         if self._inited:
-            print("paint; rendering OCC OGL")
-            action = self._dispatch_camera_command_actions()
-            if not action:
-                print ("extra redraw???")
-                self._display.Context.UpdateCurrentViewer()
+            # with self.mutex:
+            print("paint")
+            # action = self._dispatch_camera_command_actions()
+            # if not action:
+            #     # print ("extra redraw???")
+            #     self._display.View.Redraw()
+            # time.sleep(.1)
 
     def wheelEvent(self, event):
         delta = event.angleDelta().y()
@@ -440,7 +433,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
 
     @pyqtSlot(int, int, int)
     def mouseReleaseEvent(self, mouse_button, x, y):
-
+        print("mouse release")
         if mouse_button == Qt.RightButton:
             self.is_right_mouse_button_surpressed = False
             # if modifiers == Qt.ShiftModifier:
@@ -475,69 +468,53 @@ class qtQmlViewer3d(qtQmlBaseViewer):
 
     @pyqtSlot(int, int, int)
     def mouseMoveEvent(self, mouse_button, x, y):
-
+        self.sync()
         self.point_on_mouse_move = (x, y)
-        #
-        # # rotate
-        # if mouse_button == Qt.LeftButton:  # and not modifiers == Qt.ShiftModifier:
-        #     self.current_action = ON_DYN_ROT
-        #
-        # # dynamic zoom
-        # elif mouse_button == Qt.RightButton:  # and not modifiers == Qt.ShiftModifier:
-        #     self.current_action = ON_DYN_ZOOM
-        #
-        # # dynamic panning
-        # elif mouse_button == Qt.MidButton:
-        #     self.current_action = ON_DYN_PAN
-        #
-        # # zoom window, overpaints rectangle
-        # elif mouse_button == Qt.RightButton:  # and modifiers == Qt.ShiftModifier:
-        #     self.current_action = ON_ZOOM_AREA
-        #
-        # # select area
-        # elif mouse_button == Qt.LeftButton:  # and modifiers == Qt.ShiftModifier:
-        #     self.current_action = ON_SELECT_AREA
-        with self.mutex:
-            # if self._inited:
-            #     print("geom resized")
-            #     self._display.OnResize()
+
+        # rotate
+        if mouse_button == Qt.LeftButton:  # and not modifiers == Qt.ShiftModifier:
+            self.current_action = ON_DYN_ROT
             self.on_dyn_rot()
 
-            self.window().beforeSynchronizing.emit()
-            self.window().afterSynchronizing.emit()
-            self.window().beforeRendering.emit()
-            # self.paint()
-            self.window().afterRendering.emit()
-            self.window().frameSwapped.emit()
-            # self.update()
+        # dynamic zoom
+        elif mouse_button == Qt.RightButton:  # and not modifiers == Qt.ShiftModifier:
+            self.current_action = ON_DYN_ZOOM
+
+        # dynamic panning
+        elif mouse_button == Qt.MidButton:
+            self.current_action = ON_DYN_PAN
+
+        # zoom window, overpaints rectangle
+        elif mouse_button == Qt.RightButton:  # and modifiers == Qt.ShiftModifier:
+            self.current_action = ON_ZOOM_AREA
+
+        # select area
+        elif mouse_button == Qt.LeftButton:  # and modifiers == Qt.ShiftModifier:
+            self.current_action = ON_SELECT_AREA
+
+
+
+        # self.on_dyn_rot()
+        # self.paint()
+        self.window().update()
 
     def sync(self):
+        print ("sync")
+        # view_size = self.window().size() * self.window().devicePixelRatio()
+
         # with self.mutex:
-        print ("beforeRendering")
         if not self._renderer_bound:
             win = self.window()
             # win.beforeSynchronizing.connect(self.paint, Qt.DirectConnection)
             win.beforeRendering.connect(self.paint, Qt.DirectConnection)
             self._renderer_bound = True
 
+        # self._display.OnResize()
+
     @pyqtSlot()
     def cleanup(self):
         print("OMG, cleanup, do something....")
         pass
-
-
-    def on_frame_swap(self):
-        print("frame swap \n")
-
-    def on_after_rendering(self):
-        print("after rendering")
-
-    def on_after_sync(self):
-        print("after sync")
-
-
-    def on_before_sync(self):
-        print("before sync")
 
     def handleWindowChanged(self, win):
         """
@@ -548,21 +525,15 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         """
         print("window changed")
         if win:
-            win.beforeSynchronizing.connect(self.on_before_sync, Qt.DirectConnection)
-            win.afterSynchronizing.connect(self.on_after_sync, Qt.DirectConnection)
             win.beforeRendering.connect(self.sync, Qt.DirectConnection)
-            win.sceneGraphInvalidated.connect(self.cleanup, Qt.DirectConnection)
-            win.frameSwapped.connect(self.on_frame_swap, Qt.DirectConnection)
-            win.afterRendering.connect(self.on_after_rendering, Qt.DirectConnection)
+            # win.beforeSynchronizing.connect(self.sync, Qt.DirectConnection)
             # win.mousePressEvent.connect(self.mousePressEvent)
             win.setClearBeforeRendering(False)
 
     def geometryChanged(self, rec1, rec2):
-        super(qtQmlViewer3d, self).geometryChanged(rec1,rec2)
         if self._inited:
-            print ("geom resized")
             self._display.OnResize()
-        # required to keep the mouse are synced
+        super(qtQmlViewer3d, self).geometryChanged(rec1,rec2)
 
 if __name__ == '__main__':
     import os
