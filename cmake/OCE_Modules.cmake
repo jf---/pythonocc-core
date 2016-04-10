@@ -217,6 +217,7 @@ LIST(APPEND OCE_TOOLKIT_VISUALIZATION
         Image
         InterfaceGraphic
         TColQuantity
+        Font
 # TKV3d
         V3d
         Graphic3d

@@ -48,6 +48,15 @@ find_package(PythonInterp)
 find_package(PythonLibs)
 include_directories(${PYTHON_INCLUDE_PATH})
 
+################################
+# freetype, for handling fonts #
+################################
+
+find_package(Freetype REQUIRED)
+#set(FREETYPE_INCLUDE_DIR_freetype2 ${OCE_BUNDLE_ROOT_PATH}/include/freetype CACHE PATH "" FORCE)
+#set(FREETYPE_INCLUDE_DIR_ft2build ${OCE_BUNDLE_ROOT_PATH}/include/freetype CACHE PATH "" FORCE)
+
+
 ##############################################################
 # 32/64 bit detection
 ###############################################################
@@ -227,6 +236,9 @@ if(PYTHONOCC_WRAP_VISU)
   execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory src/Visualization)
   set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/src/Visualization/Visualization.i PROPERTIES CPLUSPLUS ON)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/Visualization)
+
+  #add_dependencies( freetype )
+
   set(VISUALIZATION_SOURCE_FILES
   	${CMAKE_CURRENT_SOURCE_DIR}/src/Visualization/Visualization.i
   	${CMAKE_CURRENT_SOURCE_DIR}/src/Visualization/Display3d.cpp
