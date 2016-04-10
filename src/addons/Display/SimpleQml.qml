@@ -29,9 +29,9 @@ Item {
         MouseArea {
             id: occMouseArea
             anchors.fill: parent
-            hoverEnabled: false;
+            hoverEnabled: true;
             acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MidButton
-
+            //preventStealing: true
 
             // open button
             Rectangle {
@@ -70,13 +70,13 @@ Item {
             }
 
             onPositionChanged: {
-                if (occMouseArea.pressed === true) {
-                    occView.mouseMoveEvent(pressedButtons, mouseX, mouseY)
-                }
+                //if (occMouseArea.pressed === true) {
+                occView.mouseMoveEvent(occMouseArea.pressed, mouseX, mouseY)
+                //}
             }
 
             onReleased: {
-                occView.mouseReleaseEvent(pressedButtons, mouseX, mouseY)
+                occView.mouseReleaseEvent(mouseX, mouseY)
             }
 
             onEntered: {

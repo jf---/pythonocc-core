@@ -431,28 +431,32 @@ class qtQmlViewer3d(qtQmlBaseViewer):
 
         self.is_right_mouse_button_surpressed = True
 
-    @pyqtSlot(int, int, int)
-    def mouseReleaseEvent(self, mouse_button, x, y):
+    @pyqtSlot(int, int)
+    def mouseReleaseEvent(self, x, y):
+        self.sync()
+        self.point_on_mouse_move = (x, y)
         print("mouse release")
-        if mouse_button == Qt.RightButton:
-            self.is_right_mouse_button_surpressed = False
-            # if modifiers == Qt.ShiftModifier:
-            #     self.current_action = ON_ZOOM_AREA
+        self.on_select()
 
-        if mouse_button == Qt.LeftButton:
-            self.is_left_mouse_button_surpressed = False
-
-            if self._select_area:
-                self.current_action = ON_SELECT_AREA
-            # elif modifiers == mouse_buttonQt.ShiftModifier:
-            #     self.current_action = ON_SHIFT_SELECT
-            else:
-                self.current_action = ON_SELECT
+        # if mouse_button == Qt.RightButton:
+        #     self.is_right_mouse_button_surpressed = False
+        #     # if modifiers == Qt.ShiftModifier:
+        #     #     self.current_action = ON_ZOOM_AREA
+        #
+        # if mouse_button == Qt.LeftButton:
+        #     self.is_left_mouse_button_surpressed = False
+        #     self.on_select()
+        #
+        #     if self._select_area:
+        #         self.current_action = ON_SELECT_AREA
+        #     # elif modifiers == mouse_buttonQt.ShiftModifier:
+        #     #     self.current_action = ON_SHIFT_SELECT
+        #     else:
+        #         self.current_action = ON_SELECT
 
         self._drawbox = False
         self._select_area = False
 
-        self.point_on_mouse_move = (x, y)
         # self.update()
 
     def drawBox(self, event):
@@ -468,35 +472,45 @@ class qtQmlViewer3d(qtQmlBaseViewer):
 
     @pyqtSlot(int, int, int)
     def mouseMoveEvent(self, mouse_button, x, y):
-        self.sync()
+        # self.sync()
         self.point_on_mouse_move = (x, y)
 
         # rotate
         if mouse_button == Qt.LeftButton:  # and not modifiers == Qt.ShiftModifier:
-            self.current_action = ON_DYN_ROT
+            # self.current_action = ON_DYN_ROT
             self.on_dyn_rot()
 
         # dynamic zoom
         elif mouse_button == Qt.RightButton:  # and not modifiers == Qt.ShiftModifier:
-            self.current_action = ON_DYN_ZOOM
+            # self.current_action = ON_DYN_ZOOM
+            self.on_dyn_zoom()
 
         # dynamic panning
         elif mouse_button == Qt.MidButton:
-            self.current_action = ON_DYN_PAN
+            # self.current_action = ON_DYN_PAN
+            self.on_dyn_pan()
 
         # zoom window, overpaints rectangle
         elif mouse_button == Qt.RightButton:  # and modifiers == Qt.ShiftModifier:
-            self.current_action = ON_ZOOM_AREA
+            # self.current_action = ON_ZOOM_AREA
+            # self.on_dyn
+            pass
 
         # select area
         elif mouse_button == Qt.LeftButton:  # and modifiers == Qt.ShiftModifier:
-            self.current_action = ON_SELECT_AREA
+            # self.current_action = ON_SELECT_AREA
+            self.on_select_area()
 
+        else:
+            # print("moveto...")
+            self._display.MoveTo(x,y)
+            self._display.Context.InitSelected()
+            if not self._display.Context.HasNextDetected():
+                return
 
+            print ("detection!")
 
-        # self.on_dyn_rot()
-        # self.paint()
-        self.window().update()
+        self.update()
 
     def sync(self):
         print ("sync")
