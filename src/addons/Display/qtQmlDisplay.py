@@ -387,6 +387,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         """
         if self._inited:
             # with self.mutex:
+            # glViewport()
             print("paint")
             # action = self._dispatch_camera_command_actions()
             # if not action:
@@ -502,13 +503,15 @@ class qtQmlViewer3d(qtQmlBaseViewer):
             self.on_select_area()
 
         else:
+            # Live selection...
             # print("moveto...")
             self._display.MoveTo(x,y)
-            self._display.Context.InitSelected()
-            if not self._display.Context.HasNextDetected():
-                return
-
-            print ("detection!")
+            return
+            # self._display.Context.InitSelected()
+            # if not self._display.Context.HasNextDetected():
+            #     return
+            #
+            # print ("detection!")
 
         self.update()
 
@@ -547,6 +550,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
     def geometryChanged(self, rec1, rec2):
         if self._inited:
             self._display.OnResize()
+            print("r1, r2: {}, {}".format(rec1, rec2))
         super(qtQmlViewer3d, self).geometryChanged(rec1,rec2)
 
 if __name__ == '__main__':
