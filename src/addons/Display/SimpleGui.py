@@ -141,7 +141,7 @@ def init_display(backend_str=None, size=(1024, 768)):
             app = QtWidgets.QApplication(sys.argv)
         win = MainWindow()
         win.show()
-        win.canva.InitDriver()
+        win.canva.InitDriver(buffersNoSwapEnabled=False)
         display = win.canva._display
         if sys.platform != "linux2":
             display.EnableAntiAliasing()
@@ -163,7 +163,7 @@ def init_display(backend_str=None, size=(1024, 768)):
 
 
 if __name__ == '__main__':
-    display, start_display, add_menu, add_function_to_menu = init_display("qt-pyside")
+    display, start_display, add_menu, add_function_to_menu = init_display("qt-pyqt5")
     from OCC.BRepPrimAPI import BRepPrimAPI_MakeSphere, BRepPrimAPI_MakeBox
 
     def sphere(event=None):
