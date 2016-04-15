@@ -29,7 +29,7 @@ log = logging.getLogger(__name__)
 
 from OCC.Display import OCCViewer
 
-from PyQt5.QtCore import Qt, QUrl, pyqtSlot, QMutex, pyqtProperty, pyqtSignal, QObject
+from PyQt5.QtCore import Qt, QUrl, pyqtSlot, QMutex, pyqtProperty
 from PyQt5.QtGui import QGuiApplication
 from PyQt5.QtQml import qmlRegisterType
 from PyQt5.QtQuick import QQuickItem, QQuickView, QQuickWindow
@@ -122,7 +122,11 @@ class qtQmlBaseViewer(QQuickItem):
         # STATE
         # -----
 
-    @pyqtProperty("QVariantList") #, notify=sigUpdateMouseDelta)
+        # MoveTo
+        self._prev_selection_on_hover_changed = -1
+        self._selection_on_hover_changed = -1
+
+    @pyqtProperty("QVariantList")  # , notify=sigUpdateMouseDelta)
     def point_on_mouse_press(self):
         # print("on mouse press {}".format(self._point_on_mouse_press))
         return self._point_on_mouse_press
@@ -179,7 +183,6 @@ class qtQmlBaseViewer(QQuickItem):
 
 
 class qtQmlViewer3d(qtQmlBaseViewer):
-
     # sigUpdateMouseDelta = pyqtSignal()
 
 
@@ -253,10 +256,10 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         through the shift + right mouse button
 
         """
-        self._display.DynamicZoom(self.point_on_mouse_press[0],
-                                  self.point_on_mouse_press[1],
-                                  self.point_on_mouse_move[0],
-                                  self.point_on_mouse_move[1]
+        self._display.DynamicZoom(abs(self.point_on_mouse_press[0]),
+                                  abs(self.point_on_mouse_press[1]),
+                                  abs(self.point_on_mouse_move[0]),
+                                  abs(self.point_on_mouse_move[1]),
                                   )
         self.point_on_mouse_press = self._point_on_mouse_move
 
@@ -264,10 +267,9 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         """ handle rotation of the viewport
 
         """
-        print ("rotate view, start: {}, current: {}".format(self.point_on_mouse_press, self.point_on_mouse_move))
+        print("rotate view, start: {}, current: {}".format(self.point_on_mouse_press, self.point_on_mouse_move))
         self._display.Rotation(*self.point_on_mouse_move)
         # self.point_on_mouse_press = self.point_on_mouse_move
-
 
     def on_dyn_pan(self):
         """ handle panning of the viewport
@@ -409,22 +411,23 @@ class qtQmlViewer3d(qtQmlBaseViewer):
             # time.sleep(.1)
 
     def wheelEvent(self, event):
+        print("wheel event!!!")
+
         delta = event.angleDelta().y()
 
         if delta > 0:
             self.zoom_factor = 1.3
         else:
             self.zoom_factor = 0.7
-        self.current_action = ON_ZOOM_FACTOR
-        # self.point_on_mouse_move = event
-        # self.paint()
+
+        self.on_zoom_factor()
         self.update()
 
     @pyqtSlot(int, int, int)
     def mousePressEvent(self, mouse_button, x, y):
         self.point_on_mouse_press = [x, y]
-        print("start rotation at {}, {}".format(x,y))
-        self._display.StartRotation(x,y)
+        print("start rotation at {}, {}".format(x, y))
+        self._display.StartRotation(x, y)
 
         if mouse_button == Qt.RightButton:
             self.is_right_mouse_button_surpressed = True
@@ -489,7 +492,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
     @pyqtSlot(int, int, int)
     def mouseMoveEvent(self, mouse_button, x, y):
 
-        print( "mouse button: {}".format(mouse_button))
+        print("mouse button: {}".format(mouse_button))
 
         # self.sync()
         self.point_on_mouse_move = [x, y]
@@ -503,6 +506,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         elif mouse_button == Qt.RightButton:  # and not modifiers == Qt.ShiftModifier:
             # self.current_action = ON_DYN_ZOOM
             self.on_dyn_zoom()
+
 
         # dynamic panning
         elif mouse_button == Qt.MidButton:
@@ -523,13 +527,12 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         else:
             # Live selection...
             # print("moveto...")
-            self._display.MoveTo(x, y)
-            return
-            # self._display.Context.InitSelected()
-            # if not self._display.Context.HasNextDetected():
-            #     return
-            #
-            # print ("detection!")
+            self._prev_selection_on_hover_changed = self._selection_on_hover_changed
+            self._selection_on_hover_changed = self._display.MoveTo(x, y)
+            print("Status of detection: {}".format(self._selection_on_hover_changed))
+            if self._prev_selection_on_hover_changed != self._selection_on_hover_changed:
+                # now, still you need to do; like selecting which elements are being hovered over...
+                print("selection state has changed!")
 
         self.update()
 

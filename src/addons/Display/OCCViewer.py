@@ -125,7 +125,7 @@ class Viewer3d(OCC.Visualization.Display3d):
             self._select_callbacks.remove(callback)
 
     def MoveTo(self, X, Y):
-        self.Context.MoveTo(X, Y, self.View_handle)
+        return self.Context.MoveTo(X, Y, self.View_handle, True)
 
     def FitAll(self):
         self.View.ZFitAll()
