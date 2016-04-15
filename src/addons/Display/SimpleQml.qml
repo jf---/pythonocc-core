@@ -39,7 +39,7 @@ Item {
 
             onPositionChanged: {
                 //if (occMouseArea.pressed === true) {
-                occView.mouseMoveEvent(occMouseArea.pressed, mouseX, mouseY)
+                occView.mouseMoveEvent(pressedButtons, mouseX, mouseY)
                 //}
             }
 

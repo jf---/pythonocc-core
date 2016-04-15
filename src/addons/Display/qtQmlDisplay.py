@@ -22,7 +22,6 @@ from __future__ import print_function
 import logging
 import sys
 
-import time
 from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -30,9 +29,9 @@ log = logging.getLogger(__name__)
 
 from OCC.Display import OCCViewer
 
-from PyQt5.QtCore import Qt, QUrl, pyqtSlot, QMutex
+from PyQt5.QtCore import Qt, QUrl, pyqtSlot, QMutex, pyqtProperty, pyqtSignal, QObject
 from PyQt5.QtGui import QGuiApplication
-from PyQt5.QtQml import qmlRegisterType, QQmlApplicationEngine
+from PyQt5.QtQml import qmlRegisterType
 from PyQt5.QtQuick import QQuickItem, QQuickView, QQuickWindow
 
 # --------------------------------------------------------------------------
@@ -84,7 +83,7 @@ class qtQmlBaseViewer(QQuickItem):
     '''
 
     def __init__(self, parent=None):
-        QQuickItem.__init__(self, parent)
+        super(qtQmlBaseViewer, self).__init__(parent)
         self.windowChanged.connect(self.handleWindowChanged)
 
         # self.setFlag(self.ItemHasContents, True)
@@ -106,10 +105,10 @@ class qtQmlBaseViewer(QQuickItem):
         self._renderer_bound = False
 
         # QPoint stored on mouse press
-        self._point_on_mouse_press = (0, 0)
+        self._point_on_mouse_press = [0, 0]
 
         # QPoint stored on mouse move
-        self._point_on_mouse_move = (0, 0)
+        self._point_on_mouse_move = [0, 0]
 
         # stores the delta between self._point_on_mouse_press and self._point_on_mouse_move
         self._delta_event_pos = None
@@ -123,15 +122,17 @@ class qtQmlBaseViewer(QQuickItem):
         # STATE
         # -----
 
-    @property
+    @pyqtProperty("QVariantList") #, notify=sigUpdateMouseDelta)
     def point_on_mouse_press(self):
+        # print("on mouse press {}".format(self._point_on_mouse_press))
         return self._point_on_mouse_press
 
     @point_on_mouse_press.setter
     def point_on_mouse_press(self, coord):
+        print("point_on_mouse_press was set to: {}".format(coord))
         self._point_on_mouse_press = coord
 
-    @property
+    @pyqtProperty("QVariantList")
     def point_on_mouse_move(self):
         return self._point_on_mouse_move
 
@@ -139,15 +140,17 @@ class qtQmlBaseViewer(QQuickItem):
     def point_on_mouse_move(self, val):
         self._point_on_mouse_move = val
 
-    @property
+    @pyqtProperty("QVariantList")
     def delta_mouse_event_pos(self):
         """delta between previous_event and next_event"""
         pos_a = self._point_on_mouse_press
         pos_b = self._point_on_mouse_move
-
-        dX = pos_a.x() - pos_b.x()
-        dY = pos_a.y() - pos_b.y()
-        return dX, dY
+        try:
+            dX = pos_a.x() - pos_b.x()
+            dY = pos_a.y() - pos_b.y()
+            return [dX, dY]
+        except AttributeError:
+            return [-1, -1]
 
     @property
     def is_right_mouse_button_surpressed(self):
@@ -176,8 +179,12 @@ class qtQmlBaseViewer(QQuickItem):
 
 
 class qtQmlViewer3d(qtQmlBaseViewer):
+
+    # sigUpdateMouseDelta = pyqtSignal()
+
+
     def __init__(self, *kargs):
-        qtQmlBaseViewer.__init__(self, *kargs)
+        super(qtQmlViewer3d, self).__init__()
         self._drawbox = False
         self._zoom_area = False
         self._select_area = False
@@ -188,6 +195,10 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         self._selection = None
         self._drawtext = True
         self.dragStartPos = point()
+        # self.sigUpdateMouseDelta.connect(self.on_update_mouse_delta)
+
+    def on_update_mouse_delta(self):
+        print("updated mouse delta!!!!")
 
     @pyqtSlot()
     def InitDriver(self):
@@ -253,9 +264,10 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         """ handle rotation of the viewport
 
         """
-        self._display.StartRotation(*self.point_on_mouse_press)
+        print ("rotate view, start: {}, current: {}".format(self.point_on_mouse_press, self.point_on_mouse_move))
         self._display.Rotation(*self.point_on_mouse_move)
-        self.point_on_mouse_press = self._point_on_mouse_move
+        # self.point_on_mouse_press = self.point_on_mouse_move
+
 
     def on_dyn_pan(self):
         """ handle panning of the viewport
@@ -357,7 +369,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
     def update(self):
         window = self.window()
         if window:
-            print ("update")
+            # print("update")
             self.window().update()
 
     # def paint(self):
@@ -386,9 +398,10 @@ class qtQmlViewer3d(qtQmlBaseViewer):
 
         """
         if self._inited:
+            pass
             # with self.mutex:
             # glViewport()
-            print("paint")
+            # print("paint")
             # action = self._dispatch_camera_command_actions()
             # if not action:
             #     # print ("extra redraw???")
@@ -409,7 +422,9 @@ class qtQmlViewer3d(qtQmlBaseViewer):
 
     @pyqtSlot(int, int, int)
     def mousePressEvent(self, mouse_button, x, y):
-        self.point_on_mouse_press = (x, y)
+        self.point_on_mouse_press = [x, y]
+        print("start rotation at {}, {}".format(x,y))
+        self._display.StartRotation(x,y)
 
         if mouse_button == Qt.RightButton:
             self.is_right_mouse_button_surpressed = True
@@ -435,8 +450,8 @@ class qtQmlViewer3d(qtQmlBaseViewer):
     @pyqtSlot(int, int)
     def mouseReleaseEvent(self, x, y):
         self.sync()
-        self.point_on_mouse_move = (x, y)
-        print("mouse release")
+        # self.point_on_mouse_move = [x, y]
+        # print("mouse release")
         self.on_select()
 
         # if mouse_button == Qt.RightButton:
@@ -473,8 +488,11 @@ class qtQmlViewer3d(qtQmlBaseViewer):
 
     @pyqtSlot(int, int, int)
     def mouseMoveEvent(self, mouse_button, x, y):
+
+        print( "mouse button: {}".format(mouse_button))
+
         # self.sync()
-        self.point_on_mouse_move = (x, y)
+        self.point_on_mouse_move = [x, y]
 
         # rotate
         if mouse_button == Qt.LeftButton:  # and not modifiers == Qt.ShiftModifier:
@@ -505,7 +523,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         else:
             # Live selection...
             # print("moveto...")
-            self._display.MoveTo(x,y)
+            self._display.MoveTo(x, y)
             return
             # self._display.Context.InitSelected()
             # if not self._display.Context.HasNextDetected():
@@ -516,7 +534,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         self.update()
 
     def sync(self):
-        print ("sync")
+        # print("sync")
         # view_size = self.window().size() * self.window().devicePixelRatio()
 
         # with self.mutex:
@@ -526,7 +544,7 @@ class qtQmlViewer3d(qtQmlBaseViewer):
             win.beforeRendering.connect(self.paint, Qt.DirectConnection)
             self._renderer_bound = True
 
-        # self._display.OnResize()
+            # self._display.OnResize()
 
     @pyqtSlot()
     def cleanup(self):
@@ -551,7 +569,8 @@ class qtQmlViewer3d(qtQmlBaseViewer):
         if self._inited:
             self._display.OnResize()
             print("r1, r2: {}, {}".format(rec1, rec2))
-        super(qtQmlViewer3d, self).geometryChanged(rec1,rec2)
+        super(qtQmlViewer3d, self).geometryChanged(rec1, rec2)
+
 
 if __name__ == '__main__':
     import os
