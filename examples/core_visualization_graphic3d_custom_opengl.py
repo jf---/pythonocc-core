@@ -76,7 +76,6 @@ def draw_lines(pnt_list, nr_of_points, display):
                                     0,  # maxEdges
                                     False,  # hasVColors
                                     True,  # hasBColors
-                                    False,  # hasEdgeInfos
                                     )
 
     try:
