@@ -28,6 +28,7 @@ log = logging.getLogger(__name__)
 
 from OCC.Display import OCCViewer
 from OCC.Display.backend import get_qt_modules
+from OCC.AIS import AIS_InteractiveObject
 
 QtCore, QtGui, QtWidgets, QtOpenGL = get_qt_modules()
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
@@ -100,6 +101,10 @@ class qtViewer3d(qtBaseViewer):
     # emit signal when selection is changed
     # is a list of TopoDS_*
     sig_topods_selected = QtCore.pyqtSignal(list)
+
+
+    # emit signal when selection is changed
+    sig_interactive_selected = QtCore.pyqtSignal(AIS_InteractiveObject)
 
     def __init__(self, *kargs):
         qtBaseViewer.__init__(self, *kargs)
@@ -273,6 +278,10 @@ class qtViewer3d(qtBaseViewer):
 
                     if self._display.selected_shapes is not None:
                         self.sig_topods_selected.emit(self._display.selected_shapes)
+
+                    if self._display.selected_interactive is not None:
+                        print ("self._display.selected_interactive", self._display.selected_interactive)
+                        self.sig_interactive_selected.emit(self._display.selected_interactive)
 
 
         elif event.button() == QtCore.Qt.RightButton:

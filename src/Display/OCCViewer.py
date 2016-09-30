@@ -104,7 +104,10 @@ class Viewer3d(OCC.Visualization.Display3d):
         self.Context = None
         self.Viewer = None
         self.View = None
+
         self.selected_shape = None
+        self.selected_interactive = None
+
         self.default_drawer = None
         self._struc_mgr = None
         self.selected_shapes = []
@@ -133,8 +136,9 @@ class Viewer3d(OCC.Visualization.Display3d):
         self.View.ZFitAll()
         self.View.FitAll()
 
-    def Create(self, create_default_lights=True, draw_face_boundaries=True, phong_shading=True):
-        self.Init(self._window_handle)
+    def Create(self, create_default_lights=True, ffpEnabled=False, buffersNoSwapEnabled=False,
+               glslWarningsEnabled=True):
+        self.Init(self._window_handle, ffpEnabled, buffersNoSwapEnabled, glslWarningsEnabled)
         self.Context_handle = self.GetContext()
         self.Viewer_handle = self.GetViewer()
         self.View_handle = self.GetView()
@@ -508,6 +512,13 @@ class Viewer3d(OCC.Visualization.Display3d):
         if self.Context.MoreSelected():
             if self.Context.HasSelectedShape():
                 self.selected_shapes.append(self.Context.SelectedShape())
+
+            else:  # AIS_InteractiveObject
+                interactive = self.Context.DetectedInteractive()
+                if not interactive.IsNull():
+                    self.selected_interactive = interactive.GetObject()
+                    print ( "fuck yeah! ", self.selected_interactive)
+
         # callbacks
         for callback in self._select_callbacks:
             callback(self.selected_shapes, X, Y)
