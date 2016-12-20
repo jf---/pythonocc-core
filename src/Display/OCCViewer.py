@@ -32,7 +32,7 @@ from OCC.BRepBuilderAPI import (BRepBuilderAPI_MakeVertex,
                                 BRepBuilderAPI_MakeEdge2d,
                                 BRepBuilderAPI_MakeFace)
 from OCC.TopAbs import (TopAbs_FACE, TopAbs_EDGE, TopAbs_VERTEX,
-                        TopAbs_SHELL, TopAbs_SOLID)
+                        TopAbs_SHELL, TopAbs_SOLID, TopAbs_COMPOUND, TopAbs_COMPSOLID)
 from OCC.Geom import Handle_Geom_Curve, Handle_Geom_Surface
 from OCC.Geom2d import Handle_Geom2d_Curve
 import OCC.Visualization
@@ -49,6 +49,20 @@ from OCC.Prs3d import (Prs3d_Arrow, Prs3d_Presentation, Prs3d_Text,
 from OCC.Graphic3d import Graphic3d_NOM_NEON_GNC
 from OCC.V3d import V3d_ZBUFFER
 from OCC.Aspect import Aspect_TOTP_RIGHT_LOWER
+
+import logging
+
+log = logging.getLogger(__name__)
+
+
+hash_topology = {TopAbs_FACE: "face",
+                 TopAbs_EDGE: "edge",
+                 TopAbs_VERTEX: "vertex",
+                 TopAbs_SHELL: "shell",
+                 TopAbs_SOLID: "solid",
+                 TopAbs_COMPSOLID: "compsolid",
+                 TopAbs_COMPOUND: "compound"
+                 }
 
 #
 # On Windows, the CSF_GraphicShr env variable must be set up
@@ -87,9 +101,7 @@ def to_string(_string):
     return TCollection_ExtendedString(_string)
 
 # some thing we'll need later
-modes = itertools.cycle([TopAbs_FACE, TopAbs_EDGE,
-                         TopAbs_VERTEX,
-                         TopAbs_SHELL, TopAbs_SOLID])
+modes = itertools.cycle(hash_topology.keys())
 
 
 class Viewer3d(OCC.Visualization.Display3d):
@@ -136,9 +148,16 @@ class Viewer3d(OCC.Visualization.Display3d):
         self.View.ZFitAll()
         self.View.FitAll()
 
-    def Create(self, create_default_lights=True, ffpEnabled=False, buffersNoSwapEnabled=False,
-               glslWarningsEnabled=True):
-        self.Init(self._window_handle, ffpEnabled, buffersNoSwapEnabled, glslWarningsEnabled)
+    def Create(self, create_default_lights=True,
+                     draw_face_boundaries=True,
+                     phong_shading=True,
+                     # opengl
+                     ffpEnabled=False,
+                     buffersNoSwapEnabled=False,
+                     glslWarningsEnabled=True
+
+               ):
+        self.Init(self._window_handle) #, ffpEnabled, buffersNoSwapEnabled, glslWarningsEnabled)
         self.Context_handle = self.GetContext()
         self.Viewer_handle = self.GetViewer()
         self.View_handle = self.GetView()
@@ -458,13 +477,22 @@ class Viewer3d(OCC.Visualization.Display3d):
         self.View.Pan(dx, dy)
 
     def SetSelectionMode(self, mode=None):
-        self.Context.CloseAllContexts()
-        self.Context.OpenLocalContext()
+        if self.Context.HasOpenedContext():
+            self.Context.CloseAllContexts()
+
+        # try:
+        #     self.Context.OpenLocalContext()
+        # except RuntimeError:
+        #     # since 0.17.1?
+        #     log.exception("could not open local context")
+
         topo_level = next(modes)
         if mode is None:
             self.Context.ActivateStandardMode(topo_level)
+            log.info("selection set to {}".format(hash_topology[topo_level]))
         else:
             self.Context.ActivateStandardMode(mode)
+            log.info("selection set to {}".format(hash_topology[mode]))
         self.Context.UpdateSelected()
 
     def SetSelectionModeVertex(self):
@@ -514,10 +542,10 @@ class Viewer3d(OCC.Visualization.Display3d):
                 self.selected_shapes.append(self.Context.SelectedShape())
 
             else:  # AIS_InteractiveObject
-                interactive = self.Context.DetectedInteractive()
+                interactive = self.Context.SelectedInteractive()
                 if not interactive.IsNull():
                     self.selected_interactive = interactive.GetObject()
-                    print ( "fuck yeah! ", self.selected_interactive)
+                    print("omg")
 
         # callbacks
         for callback in self._select_callbacks:

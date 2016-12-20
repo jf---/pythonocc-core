@@ -35,6 +35,25 @@ logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
 
+def get_occ_viewer():
+    """
+
+    Returns
+    -------
+
+    qtViewer3d
+
+    """
+    app = QtWidgets.QApplication.instance()  # checks if QApplication already exists
+    if not app:
+        app = QtWidgets.QApplication(sys.argv)
+    widgets = app.topLevelWidgets()
+    for wi in widgets:
+        if hasattr(wi, "_menus"):  # OCC.Display.SimpleGui.MainWindow
+            viewer = wi.findChild(qtViewer3d, "qt_viewer_3d")
+            return viewer
+
+
 class point(object):
     def __init__(self, obj=None):
         self.x = 0
@@ -217,7 +236,8 @@ class qtViewer3d(qtBaseViewer):
             self.doneCurrent()
 
     def resizeGL(self, width, height):
-        self.setupViewport(width, height)
+        pass
+        #self.setupViewport(width, height)
 
     def ZoomAll(self, evt):
         self._display.FitAll()
@@ -280,7 +300,6 @@ class qtViewer3d(qtBaseViewer):
                         self.sig_topods_selected.emit(self._display.selected_shapes)
 
                     if self._display.selected_interactive is not None:
-                        print ("self._display.selected_interactive", self._display.selected_interactive)
                         self.sig_interactive_selected.emit(self._display.selected_interactive)
 
 

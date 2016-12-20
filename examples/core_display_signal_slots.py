@@ -10,31 +10,14 @@ from OCC.TopAbs import TopAbs_SOLID, TopAbs_EDGE, TopAbs_FACE
 from OCC.TopLoc import TopLoc_Location
 from OCC.gp import gp_Trsf, gp_Vec
 
+from OCC.Display.qtDisplay import get_occ_viewer
+
 display, start_display, add_menu, add_function_to_menu = init_display("qt-pyqt5")
 QtCore, QtGui, QtWidgets, QtOpenGL = get_qt_modules()
 
-from OCC.Display.qtDisplay import qtViewer3d
 
 print("Usage: press G to find the linear properties for volume, face, edge, vertex...")
 
-
-def get_occ_viewer():
-    """
-
-    Returns
-    -------
-
-    qtViewer3d
-
-    """
-    app = QtWidgets.QApplication.instance()  # checks if QApplication already exists
-    if not app:
-        app = QtWidgets.QApplication(sys.argv)
-    widgets = app.topLevelWidgets()
-    for wi in widgets:
-        if hasattr(wi, "_menus"):  # OCC.Display.SimpleGui.MainWindow
-            viewer = wi.findChild(qtViewer3d, "qt_viewer_3d")
-            return viewer
 
 
 def on_select(shapes):
